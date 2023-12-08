@@ -5,4 +5,16 @@ name: zigbee2mqtt
 description: Zigbee to MQTT bridge chart
 type: application
 icon: https://www.zigbee2mqtt.io/logo.png
-version: 0.0.2
+version: 0.0.3
+kubeVersion: ">=1.16.0-0"
+keywords:
+  - zigbee
+  - mqtt
+  - home-assistant
+home: https://github.com/JacekZubielik/helm-charts/tree/master/charts/zigbee2mqtt
+icon: https://www.zigbee2mqtt.io/logo.png
+sources:
+  - https://github.com/Koenkk/zigbee2mqtt
+maintainers:
+  - name: Jacek Zubielik
+    email: jack.zu@protonmail.com
