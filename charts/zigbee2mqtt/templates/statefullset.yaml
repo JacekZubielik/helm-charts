@@ -4,12 +4,15 @@ metadata:
   name: {{ include "zigbee2mqtt.fullname" . }}
   labels:
 {{- include "zigbee2mqtt.labels" . | nindent 4 }}
+
 spec:
   replicas: 1
+    podManagementPolicy: Parallel
   selector:
     matchLabels:
       {{- include "zigbee2mqtt.selectorLabels" . | nindent 6 }}
   serviceName: {{ include "zigbee2mqtt.name" . }}
+
   template:
     metadata:
     {{- with .Values.podAnnotations }}
@@ -18,20 +21,23 @@ spec:
     {{- end }}
       labels:
         {{- include "zigbee2mqtt.selectorLabels" . | nindent 8 }}
+
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "zigbee2mqtt.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      serviceAccountName: {{ include "zigbee2mqtt.serviceAccountName" . }}
+
       containers:
       - name: {{ .Chart.Name }}
         securityContext:
           {{- toYaml .Values.securityContext | nindent 12 }}
-        image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }} #| default .Chart.AppVersion }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
+
         env:
         - name: ZIGBEE2MQTT_DATA
           value: "/data"
@@ -41,8 +47,10 @@ spec:
         - name: DEBUG
           value: {{ .Values.debug }}
         {{- end }}
+
         resources:
           {{- toYaml .Values.resources | nindent 12 }}
+
         volumeMounts:
         - name: zigbee2mqtt
           mountPath: /app/configuration.yaml
@@ -52,13 +60,18 @@ spec:
         - name: sniffer
           mountPath: {{ .Values.config.serial.port }}
       {{- if .Values.assistant.enabled }}
+
       - name: {{ .Chart.Name }}assistant
         image: "{{ .Values.assistant.image.repository }}:{{ .Values.assistant.image.tag | default "latest" }}"
-        imagePullPolicy: {{ .Values.assistant.image.pullPolicy }}        
+        imagePullPolicy: {{ .Values.assistant.image.pullPolicy }} 
+
         ports:
         - name: http
-          containerPort: 80
+          containerPort: {{ .Values.service.port }}
           protocol: TCP
+        resources:
+          {{- toYaml .Values.resources | nindent 12 }}
+
         livenessProbe:
           httpGet:
             path: /
@@ -79,6 +92,7 @@ spec:
         - configMapRef:
             name: {{ include "zigbee2mqtt.fullname" . }}assistant
       {{- end }}
+
       volumes:
       - name: zigbee2mqtt
         configMap:
@@ -91,10 +105,13 @@ spec:
         emptyDir: {}
       {{- end }}
       {{- if and .Values.persistence.enabled .Values.persistence.existingClaim }}
+
       - name: data
         persistentVolumeClaim:
           claimName: {{ .Values.persistence.existingClaim }}
       {{- end }}
+
+      
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -107,6 +124,11 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+
+
+
+
+
   volumeClaimTemplates:
   {{- if and .Values.persistence.enabled (not .Values.persistence.existingClaim) }}
   - metadata:
