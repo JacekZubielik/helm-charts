@@ -59,11 +59,13 @@ spec:
           mountPath: /data
         - name: sniffer
           mountPath: {{ .Values.config.serial.port }}
-      {{- if .Values.assistant.enabled }}
 
-      - name: {{ .Chart.Name }}assistant
-        image: "{{ .Values.assistant.image.repository }}:{{ .Values.assistant.image.tag | default "latest" }}"
-        imagePullPolicy: {{ .Values.assistant.image.pullPolicy }} 
+
+      - name: {{ .Chart.Name }}
+        securityContext:
+          {{- toYaml .Values.podSecurityContext | nindent 12 }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
 
         ports:
         - name: http
@@ -74,24 +76,31 @@ spec:
 
         livenessProbe:
           httpGet:
-            path: /
-            port: http
-            scheme: HTTP
-          initialDelaySeconds: {{ .Values.assistant.probes.liveness.initialDelaySeconds }}
-          failureThreshold: {{ .Values.assistant.probes.liveness.failureThreshold }}
-          timeoutSeconds: {{ .Values.assistant.probes.liveness.timeoutSeconds }}
+            path:              /
+            port:              {{ .Values.service.port }}
+            scheme:            HTTP
+          periodSeconds:       60
+          timeoutSeconds:      10
+          successThreshold:    1
+          failureThreshold:    6
+          initialDelaySeconds: 30
         readinessProbe:
           httpGet:
-            path: /
-            port: http
-            scheme: HTTP
-          initialDelaySeconds: {{ .Values.assistant.probes.readiness.initialDelaySeconds }}
-          failureThreshold: {{ .Values.assistant.probes.readiness.failureThreshold }}
-          timeoutSeconds: {{ .Values.assistant.probes.readiness.timeoutSeconds }}
+            path:              /
+            port:              {{ .Values.service.port }}
+            scheme:            HTTP
+          periodSeconds:       60
+          timeoutSeconds:      10
+          successThreshold:    1
+          failureThreshold:    2
+          initialDelaySeconds: 30
+
+
+
+
         envFrom:
         - configMapRef:
-            name: {{ include "zigbee2mqtt.fullname" . }}assistant
-      {{- end }}
+            name: {{ include "zigbee2mqtt.fullname" . }}
 
       volumes:
       - name: zigbee2mqtt
@@ -111,7 +120,7 @@ spec:
           claimName: {{ .Values.persistence.existingClaim }}
       {{- end }}
 
-      
+
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
