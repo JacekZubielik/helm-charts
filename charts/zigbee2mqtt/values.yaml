@@ -3,6 +3,7 @@ image:
   pullPolicy: IfNotPresent
   tag: 1.33.2
 
+timezone: "UTC"
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
@@ -21,51 +22,40 @@ service:
 resources: {}
 
 nodeSelector:
-  kubernetes.io/hostname: k3s-node-0
+  kubernetes.io/hostname: dev-k3s-master-2
 
 tolerations: []
 
 affinity: {}
 
-username: mqtt
-password: secret
+# username: mqtt
+# password: secret
 
 persistence:
   storageClassName: local-path
   size: 2Gi
 
-device: /dev/ttyUSB0
+#device: /dev/ttyUSB0
 
-ingress:
-  enabled: true
-  ingressClassName: traefik
-  domainName: anotherlife.pl
-  secretName: cluster-tls
+# ingress:
+#   enabled: true
+#   ingressClassName: traefik
+#   domainName: anotherlife.pl
+#   secretName: cluster-tls
 
 
 config:
   # These will be applied ONLY on first run
-  # Home Assistant integration (MQTT discovery)
-  homeassistant: false
-
-  # allow new devices to join
+  homeassistant: true
   permit_join: true
-
-  # MQTT settings
   mqtt:
-    # MQTT base topic for zigbee2mqtt MQTT messages
     base_topic: zigbee2mqtt
-    # MQTT server URL
     server: 'mqtt://localhost'
-    # MQTT server authentication, uncomment if required:
     # user: my_user
     # password: my_password
-
-  # Serial settings
   serial:
     # Location of CC2531 USB sniffer
     port: /dev/ttyUSB0
-
   advanced:
     network_key: GENERATE
     log_output:
