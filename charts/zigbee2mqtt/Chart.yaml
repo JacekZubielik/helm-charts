@@ -1,11 +1,12 @@
 annotations:
   category: Application
 apiVersion: v2
+appVersion: 1.33.2
+version: 0.0.5
 name: zigbee2mqtt
 description: Zigbee to MQTT bridge chart
 type: application
 icon: https://www.zigbee2mqtt.io/logo.png
-version: 0.0.4
 kubeVersion: ">=1.16.0-0"
 keywords:
   - zigbee
