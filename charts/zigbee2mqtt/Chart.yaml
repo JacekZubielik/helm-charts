@@ -5,7 +5,7 @@ name: zigbee2mqtt
 description: Zigbee to MQTT bridge chart
 type: application
 icon: https://www.zigbee2mqtt.io/logo.png
-version: 0.0.3
+version: 0.0.4
 kubeVersion: ">=1.16.0-0"
 keywords:
   - zigbee
