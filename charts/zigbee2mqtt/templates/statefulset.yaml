@@ -77,13 +77,12 @@ spec:
 
       volumes:
       - name: zigbee2mqtt
-        configMap:
+        persistentVolumeClaim:
           name: {{ include "zigbee2mqtt.fullname" . }}
-      #- name: data
-        #configMap:
-        #persistentVolumeClaim:
+      - name: data
+        persistentVolumeClaim:
           #claimName: {{ include "zigbee2mqtt.fullname" . }} #{{ .Values.persistence.existingClaim }}
-          #name: {{ include "zigbee2mqtt.fullname" . }}
+          name: {{ include "zigbee2mqtt.fullname" . }}
       - name: tty-usb
         hostPath:
           path: {{ .Values.config.serial.port }} #{{ .Values.device }}
