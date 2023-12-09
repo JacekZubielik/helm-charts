@@ -80,8 +80,11 @@ spec:
         configMap:
           name: {{ include "zigbee2mqtt.fullname" . }}
       - name: data
+          emptyDir: {}
+        {{- end }}
+      - name: data
         persistentVolumeClaim:
-          claimName: {{ include "zigbee2mqtt.fullname" . }}
+          claimName: {{ .Values.persistence.existingClaim }} #{{ include "zigbee2mqtt.fullname" . }}
       - name: tty-usb
         hostPath:
           path: {{ .Values.config.serial.port }} #{{ .Values.device }}
