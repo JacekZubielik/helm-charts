@@ -62,7 +62,7 @@ spec:
 
         env:
         - name:   ZIGBEE2MQTT_DATA
-          value:  "/data"
+          value:  "/app/data"
         - name:   TZ
           value:  {{ .Values.timezone }}
 
@@ -70,8 +70,8 @@ spec:
         - name:      zigbee2mqtt
           mountPath: /app/configuration.yaml
           subPath:   configuration.yaml
-        - name:      data
-          mountPath: /data #/app/data
+        # - name:      data
+        #   mountPath: /data #/app/data
         - name:      tty-usb
           mountPath: {{ .Values.config.serial.port }} #/dev/ttyUSB0
 
@@ -79,11 +79,11 @@ spec:
       - name: zigbee2mqtt
         configMap:
           name: {{ include "zigbee2mqtt.fullname" . }}
-      - name: data
-        configMap:
+      #- name: data
+        #configMap:
         #persistentVolumeClaim:
           #claimName: {{ include "zigbee2mqtt.fullname" . }} #{{ .Values.persistence.existingClaim }}
-          name: {{ include "zigbee2mqtt.fullname" . }}
+          #name: {{ include "zigbee2mqtt.fullname" . }}
       - name: tty-usb
         hostPath:
           path: {{ .Values.config.serial.port }} #{{ .Values.device }}
