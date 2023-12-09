@@ -81,7 +81,6 @@ spec:
           name: {{ include "zigbee2mqtt.fullname" . }}
       - name: data
           emptyDir: {}
-        {{- end }}
       - name: data
         persistentVolumeClaim:
           claimName: {{ .Values.persistence.existingClaim }} #{{ include "zigbee2mqtt.fullname" . }}
