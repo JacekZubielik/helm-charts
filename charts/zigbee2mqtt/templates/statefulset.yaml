@@ -68,12 +68,12 @@ spec:
 
         volumeMounts:
         - name:      configuration
-          mountPath: /app/configuration.yaml
-          subPath:   configuration.yaml
+          # mountPath: /app/configuration.yaml
+          # subPath:   configuration.yaml
         - name:      data
           mountPath: /app/data
-        - name:      tty-usb
-          mountPath: {{ .Values.config.serial.port }} 
+        # - name:      tty-usb
+        #   mountPath: {{ .Values.config.serial.port }} 
 
       volumes:
       - name: tty-usb
@@ -82,8 +82,8 @@ spec:
       - name: data
         persistentVolumeClaim:
           claimName: zigbee2mqtt #{{ include "zigbee2mqtt.fullname" . }} # data #
-        persistentVolumeClaim:
-          claimName: zigbee2mqtt #{{ include "zigbee2mqtt.fullname" . }} # configuration #
+        # persistentVolumeClaim:
+        #   claimName: zigbee2mqtt #{{ include "zigbee2mqtt.fullname" . }} # configuration #
 #####################
   # volumeClaimTemplates:
   # - metadata:
