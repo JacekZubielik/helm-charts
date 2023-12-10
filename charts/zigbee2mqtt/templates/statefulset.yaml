@@ -67,11 +67,11 @@ spec:
           value:  {{ .Values.timezone }}
 
         volumeMounts:
-        - name:      zigbee2mqtt
+        - name:      configuration
           mountPath: /app/configuration.yaml
           subPath:   configuration.yaml
-        # - name:      data
-        #   mountPath: /app/data
+        - name:      data
+          mountPath: /app/data
         # - name:      tty-usb
         #   mountPath: {{ .Values.config.serial.port }} 
 
@@ -94,7 +94,7 @@ spec:
 
   volumeClaimTemplates:
   - metadata:
-      name: {{ include "zigbee2mqtt.fullname" . }} #zigbee2mqtt
+      name: {{ include "zigbee2mqtt.fullname" . }} 
     spec:
       accessModes: ["ReadWriteOnce"]
       storageClassName: "local-path"
