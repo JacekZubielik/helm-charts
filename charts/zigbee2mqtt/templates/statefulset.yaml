@@ -72,21 +72,21 @@ spec:
           subPath:   configuration.yaml
         - name:      data
           mountPath: /app/data
-        # - name:      tty-usb
-        #   mountPath: {{ .Values.config.serial.port }} 
+        - name:      tty-usb
+          mountPath: {{ .Values.config.serial.port }} 
 
 
   volumes:
   - name: configuration
     persistentVolumeClaim:
-      claimName: configuration-name #{{ include "zigbee2mqtt.fullname" . }}
-      #name: configuration-name #{{ include "zigbee2mqtt.fullname" . }}
+      claimName: configuration #{{ include "zigbee2mqtt.fullname" . }}
+      name: configuration #{{ include "zigbee2mqtt.fullname" . }}
   
 
   - name: data
     persistentVolumeClaim:
-      claimName: data-name # {{ include "zigbee2mqtt.fullname" . }} #{{ .Values.persistence.existingClaim }}
-      #name: data-name #{{ include "zigbee2mqtt.fullname" . }}
+      claimName: {{ include "zigbee2mqtt.fullname" . }} #{{ .Values.persistence.existingClaim }}
+      name: data #{{ include "zigbee2mqtt.fullname" . }}
   - name: tty-usb
     hostPath:
       path: {{ .Values.config.serial.port }} #{{ .Values.device }}
