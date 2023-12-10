@@ -5,6 +5,30 @@ entries:
       category: Application
     apiVersion: v2
     appVersion: 1.33.2
+    created: "2023-12-10T10:43:21.787642576Z"
+    description: Zigbee to MQTT bridge chart
+    digest: a00b569428a557f3aa6f024b5544c1a9d12aa19fddf501fd007cb33d2a3ce38a
+    home: https://github.com/JacekZubielik/helm-charts/tree/master/charts/zigbee2mqtt
+    icon: https://www.zigbee2mqtt.io/logo.png
+    keywords:
+    - zigbee
+    - mqtt
+    - home-assistant
+    kubeVersion: '>=1.16.0-0'
+    maintainers:
+    - email: jack.zu@protonmail.com
+      name: Jacek Zubielik
+    name: zigbee2mqtt
+    sources:
+    - https://github.com/Koenkk/zigbee2mqtt
+    type: application
+    urls:
+    - https://github.com/JacekZubielik/helm-charts/releases/download/zigbee2mqtt-0.0.17/zigbee2mqtt-0.0.17.tgz
+    version: 0.0.17
+  - annotations:
+      category: Application
+    apiVersion: v2
+    appVersion: 1.33.2
     created: "2023-12-09T01:12:13.13417996Z"
     description: Zigbee to MQTT bridge chart
     digest: 698919f13d75f1d1d9a6b1eea4afeb785019c5970979ee6071f3f9c413d3d0a7
@@ -372,4 +396,4 @@ entries:
     urls:
     - https://github.com/JacekZubielik/helm-charts/releases/download/zigbee2mqtt-0.0.1/zigbee2mqtt-0.0.1.tgz
     version: 0.0.1
-generated: "2023-12-09T01:12:13.134340064Z"
+generated: "2023-12-10T10:43:21.78776729Z"
