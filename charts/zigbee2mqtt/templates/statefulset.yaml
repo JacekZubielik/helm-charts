@@ -70,8 +70,8 @@ spec:
         - name:      configuration
           mountPath: /app/configuration.yaml
           subPath:   configuration.yaml
-        # - name:      data
-        #   mountPath: /app/data
+        - name:      data
+          mountPath: /app/data
         # - name:      tty-usb
         #   mountPath: {{ .Values.config.serial.port }} 
 
@@ -101,7 +101,14 @@ spec:
       resources:
         requests:
           storage: 2Gi
-
+  - metadata:
+      name: data #{{ include "zigbee2mqtt.fullname" . }} 
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      storageClassName: "local-path"
+      resources:
+        requests:
+          storage: 3Gi
 
 
 
