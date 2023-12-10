@@ -70,8 +70,8 @@ spec:
         - name:      zigbee2mqtt
           mountPath: /app/configuration.yaml
           subPath:   configuration.yaml
-        - name:      data
-          mountPath: /app/data
+        # - name:      data
+        #   mountPath: /app/data
         # - name:      tty-usb
         #   mountPath: {{ .Values.config.serial.port }} 
 
