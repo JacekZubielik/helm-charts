@@ -76,10 +76,10 @@ spec:
         #   mountPath: {{ .Values.config.serial.port }} 
 
 
-  volumes:
-  - name: zigbee2mqtt
-    persistentVolumeClaim:
-      name: {{ include "zigbee2mqtt.fullname" . }}
+  # volumes:
+  # - name: zigbee2mqtt
+  #   persistentVolumeClaim:
+  #     name: {{ include "zigbee2mqtt.fullname" . }}
   
 
   # - name: data
@@ -94,13 +94,13 @@ spec:
 
   volumeClaimTemplates:
   - metadata:
-      name: zigbee2mqtt
+      name: {{ include "zigbee2mqtt.fullname" . }} #zigbee2mqtt
     spec:
       accessModes: ["ReadWriteOnce"]
       storageClassName: "local-path"
       resources:
         requests:
-          storage: 1Gi
+          storage: 2Gi
 
 
 
