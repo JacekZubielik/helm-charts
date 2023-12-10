@@ -87,15 +87,15 @@ spec:
         # persistentVolumeClaim:
         #   claimName: configuration #{{ include "zigbee2mqtt.fullname" . }}
 #####################
-  # volumeClaimTemplates:
-  # - metadata:
-  #     name: data
-  #   spec:
-  #     accessModes: ["ReadWriteOnce"]
-  #     storageClassName: "local-path"
-  #     resources:
-  #       requests:
-  #         storage: 6Gi
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      storageClassName: "local-path"
+      resources:
+        requests:
+          storage: 6Gi
 
   # volumeClaimTemplates:
   # - metadata:
