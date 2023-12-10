@@ -94,7 +94,7 @@ spec:
 
   volumeClaimTemplates:
   - metadata:
-      name: {{ include "zigbee2mqtt.fullname" . }} 
+      name: configuration #{{ include "zigbee2mqtt.fullname" . }} 
     spec:
       accessModes: ["ReadWriteOnce"]
       storageClassName: "local-path"
