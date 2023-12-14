@@ -13,7 +13,7 @@ spec:
   project: default #home-automation
   source:
     repoURL: 'https://jacekzubielik.github.io/helm-charts'
-    targetRevision: 0.0.63
+    targetRevision: 0.0.64
     chart: zigbee2mqtt
     #path: zigbee2mqtt
   
