@@ -71,15 +71,14 @@ config:
     server: 'mqtt://localhost'
     # user: my_user
     # password: my_password
+    # Optional: Include device information to mqtt messages (default: false)
+    include_device_information: true
+
   serial:
-    # Location of CC2531 USB sniffer
     port: /dev/ttyUSB0
+    adapter: zstack
+    disable_led: true
   advanced:
     network_key: GENERATE
     log_output:
       - console
-
-# serviceAccount:
-#   create: true
-#   annotations: {}
-#   name: ""
