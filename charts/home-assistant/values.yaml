@@ -24,6 +24,9 @@ service:
       http:
         port: 8123
 
+nodeSelector:
+  kubernetes.io/hostname: dev-k3s-master-2
+
 ingress:
   # -- Enable and configure ingress settings for the chart under this key.
   # @default -- See values.yaml
@@ -40,17 +43,38 @@ securityContext:
   # -- (bool) Privileged securityContext may be required if USB devics are accessed directly through the host machine
   privileged:  # true
 
-# -- Configure persistence settings for the chart under this key.
-# @default -- See values.yaml
 persistence:
   config:
     enabled: true
-  # -- Configure a hostPathMount to mount a USB device in the container.
-  # @default -- See values.yaml
+    #type: pvc
+    mountPath: /data
+    readOnly: false
+    nameOverride:
+    storageClass: "local-path"
+    #existingClaim:  # your-claim
+    #subPath:  # some-subpath
+    accessMode: ReadWriteOnce
+    size: 2Gi
+    retain: false
   usb:
     enabled: true
     type: hostPath
-    hostPath: /dev/ttyUSB0
+    hostPath: /dev/serial/by-id/usb-1a86_USB_Serial-if00-port0 #/dev/serial/by-id/usb-1a86_USB_Serial-if00-port0 #/dev/ttyUSB0 
+
+
+volumeClaimTemplates:
+- name: data
+  mountPath: /data
+  accessMode: "ReadWriteOnce"
+  size: 4Gi
+  storageClass: "local-path"
+# - name: backup
+#   mountPath: /backup
+#   subPath: theSubPath
+#   accessMode: "ReadWriteOnce"
+#   size: 2Gi
+#   storageClass: "local-path"
+
 
 # -- Enable and configure mariadb database subchart under this key.
 #    For more options see [mariadb chart documentation](https://github.com/bitnami/charts/tree/master/bitnami/mariadb)

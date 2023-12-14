@@ -12,15 +12,15 @@ spec:
   project: default #home-automation
   source:
     repoURL: 'https://jacekzubielik.github.io/helm-charts'
-    targetRevision: 0.0.1
+    targetRevision: 0.0.3
     chart: home-assistant
   
     helm:
       parameters:
         - name: installCRDs
           value: 'false'
-      valueFiles:
-        - app-values.yaml
+      # valueFiles:
+      #   - app-values.yaml
   syncPolicy:
     retry:
       limit: 2

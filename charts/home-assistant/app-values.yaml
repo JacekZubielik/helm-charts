@@ -3,7 +3,7 @@
 
 # image:
 #   repository: ghcr.io/home-assistant/home-assistant
-#   tag: 2023.11.3
+#   tag: 2023.12.3
 #   pullPolicy: IfNotPresent
 
 env:
@@ -164,7 +164,7 @@ metrics:
       #     severity: critical
 
 mariadb:
-  enabled: true
+  enabled: false
   architecture: standalone
   auth:
     database: home-assistant
