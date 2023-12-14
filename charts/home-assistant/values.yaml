@@ -59,7 +59,7 @@ persistence:
   usb:
     enabled: true
     type: hostPath
-    hostPath: /dev/serial/by-id/usb-1a86_USB_Serial-if00-port0 #/dev/serial/by-id/usb-1a86_USB_Serial-if00-port0 #/dev/ttyUSB0 
+    hostPath: /dev/ttyUSB0 #/dev/serial/by-id/usb-1a86_USB_Serial-if00-port0 #/dev/ttyUSB0 
 
 
 volumeClaimTemplates:
@@ -89,8 +89,17 @@ mariadb:
     rootPassword: home-assistantrootpass
   primary:
     persistence:
-      enabled: false
-      # storageClass: ""
+      enabled: true
+      type: pvc
+      mountPath: /mariadb
+      readOnly: false
+      nameOverride:
+      storageClass: "local-path"
+      existingClaim: #data
+      subPath:  # some-subpath
+      accessMode: ReadWriteOnce
+      size: 2Gi
+      retain: false
 
 # -- Enable and configure postgresql database subchart under this key.
 #    For more options see [postgresql chart documentation](https://github.com/bitnami/charts/tree/master/bitnami/postgresql)
@@ -159,7 +168,7 @@ addons:
   #    This allows for easy access to configuration.yaml
   # @default -- See values.yaml
   codeserver:
-    enabled: false
+    enabled: true
     args:
       - --auth
       - none

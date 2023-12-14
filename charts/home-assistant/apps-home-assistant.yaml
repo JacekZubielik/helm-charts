@@ -12,7 +12,7 @@ spec:
   project: default #home-automation
   source:
     repoURL: 'https://jacekzubielik.github.io/helm-charts'
-    targetRevision: 0.0.3
+    targetRevision: 0.0.4
     chart: home-assistant
   
     helm:
