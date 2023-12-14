@@ -22,22 +22,22 @@ service:
 
 resources: {}
 
-# nodeSelector:
-#   kubernetes.io/hostname: dev-k3s-master-2
+nodeSelector:
+  kubernetes.io/hostname: dev-k3s-master-2
 
 tolerations: []
 
-#affinity: {}
+affinity: {}
 
-affinity:
-  nodeAffinity:
-    requiredDuringSchedulingIgnoredDuringExecution:
-      nodeSelectorTerms:
-      - matchExpressions:
-        - key: app
-          operator: In
-          values:
-          - zigbee-controller
+# affinity:
+#   nodeAffinity:
+#     requiredDuringSchedulingIgnoredDuringExecution:
+#       nodeSelectorTerms:
+#       - matchExpressions:
+#         - key: app
+#           operator: In
+#           values:
+#           - zigbee-controller
 
 
 # username: mqtt
