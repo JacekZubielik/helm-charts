@@ -21,8 +21,8 @@ service:
 
 resources: {}
 
-nodeSelector:
-  kubernetes.io/hostname: dev-k3s-master-2
+# nodeSelector:
+#   kubernetes.io/hostname: dev-k3s-master-2
 
 tolerations: []
 
