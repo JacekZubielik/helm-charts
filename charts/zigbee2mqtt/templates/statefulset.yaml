@@ -83,7 +83,7 @@ spec:
           path: {{ .Values.config.serial.port }} 
       - name: data
         persistentVolumeClaim:
-          claimName:  {{ include "zigbee2mqtt.fullname" . }} # data #zigbee2mqtt
+          claimName: {{ include "zigbee2mqtt.fullname" . }} # data #zigbee2mqtt
         # persistentVolumeClaim:
         #   claimName: zigbee2mqtt #{{ include "zigbee2mqtt.fullname" . }} # configuration
 #####################
