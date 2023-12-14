@@ -13,3 +13,4 @@ spec:
       name: http
   selector:
     {{- include "zigbee2mqtt.selectorLabels" . | nindent 4 }}
+
