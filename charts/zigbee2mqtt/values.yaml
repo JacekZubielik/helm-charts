@@ -15,7 +15,7 @@ podSecurityContext:
 
 securityContext:
   runAsNonRoot: true
-  privileged: true
+  #privileged: true
 
 service:
   port: 8080
@@ -119,6 +119,6 @@ config:
       protocol: tcp4
       type: '5424'
   experimental:
-    transmit_power: 20
+    transmit_power: 10
   device_options:
     legacy: false
