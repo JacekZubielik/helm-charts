@@ -2,7 +2,7 @@ annotations:
   category: Application
 apiVersion: v2
 appVersion: 1.33.2
-version: 0.0.42
+version: 0.0.43
 name: zigbee2mqtt
 description: Zigbee to MQTT bridge chart
 type: application
