@@ -50,13 +50,13 @@ app.kubernetes.io/name: {{ include "zigbee2mqtt.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
-{{/*
-Create the name of the service account to use
-*/}}
-{{- define "zigbee2mqtt.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create }}
-{{- default (include "zigbee2mqtt.fullname" .) .Values.serviceAccount.name }}
-{{- else }}
-{{- default "default" .Values.serviceAccount.name }}
-{{- end }}
-{{- end }}
+# {{/*
+# Create the name of the service account to use
+# */}}
+# {{- define "zigbee2mqtt.serviceAccountName" -}}
+# {{- if .Values.serviceAccount.create }}
+# {{- default (include "zigbee2mqtt.fullname" .) .Values.serviceAccount.name }}
+# {{- else }}
+# {{- default "default" .Values.serviceAccount.name }}
+# {{- end }}
+# {{- end }}
