@@ -1,0 +1,36 @@
+---
+apiVersion: v2
+appVersion: 2023.11.3
+description: Home Assistant
+name: home-assistant
+version: 0.0.1
+kubeVersion: ">=1.16.0-0"
+keywords:
+  - home-assistant
+  - hass
+  - homeassistant
+
+home: https://github.com/JacekZubielik/helm-charts/tree/master/charts/home-assistant
+icon: https://upload.wikimedia.org/wikipedia/en/4/49/Home_Assistant_logo_%282023%29.svg
+sources:
+  - https://github.com/home-assistant/home-assistant
+  - https://github.com/cdr/code-server
+maintainers:
+  - name: Jacek Zubielik
+    email: jack.zu@protonmail.com
+dependencies:
+  - name: postgresql
+    version: 11.6.12
+    repository: https://charts.bitnami.com/bitnami
+    condition: postgresql.enabled
+  - name: mariadb
+    version: 11.0.14
+    repository: https://charts.bitnami.com/bitnami
+    condition: mariadb.enabled
+  - name: influxdb
+    version: 5.3.5
+    repository: https://charts.bitnami.com/bitnami
+    condition: influxdb.enabled
+  - name: common
+    repository: https://library-charts.k8s-at-home.com
+    version: 4.5.2
