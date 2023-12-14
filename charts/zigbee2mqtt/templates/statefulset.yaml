@@ -10,6 +10,7 @@ spec:
   selector:
     matchLabels:
       {{- include "zigbee2mqtt.selectorLabels" . | nindent 6 }}
+  serviceName: {{ include "zigbee2mqtt.name" . }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -67,9 +68,9 @@ spec:
           value:  {{ .Values.timezone }}
 
         volumeMounts:
-        # - name:      configuration
-        #   mountPath: /app/configuration.yaml
-        #   subPath:   configuration.yaml
+        - name:      configuration
+          mountPath: /app/configuration.yaml
+          subPath:   configuration.yaml
         - name:      data
           mountPath: /app/data
         - name:      tty-usb

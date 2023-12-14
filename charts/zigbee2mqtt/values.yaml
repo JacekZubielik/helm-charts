@@ -55,7 +55,7 @@ config:
     # password: my_password
   serial:
     # Location of CC2531 USB sniffer
-    port: /dev/ttyUSB0
+    port: /dev/ttyACM0 #/dev/ttyUSB0
   advanced:
     network_key: GENERATE
     log_output:
