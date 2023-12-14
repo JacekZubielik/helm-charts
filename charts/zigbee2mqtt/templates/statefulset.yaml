@@ -69,9 +69,9 @@ spec:
           value:  {{ .Values.timezone }}
 
         volumeMounts:
-        # - name:      configuration
-        #   mountPath: /app/configuration.yaml
-        #   subPath:   configuration.yaml
+        - name:      configuration
+          mountPath: /app/configuration #.yaml
+          subPath:   configuration.yaml
         - name:      data
           mountPath: /app/data
         - name:      tty-usb
