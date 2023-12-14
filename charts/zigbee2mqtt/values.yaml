@@ -47,6 +47,12 @@ persistence:
   storageClassName: local-path
   size: 2Gi
 
+
+usb:
+  enabled: true
+  type: hostPath
+  hostPath: '/dev/serial/by-path/pci-0000\:07\:1b.0-usb-0\:1\:1.0-port0' 
+
 #device: /dev/ttyUSB0
 
 # ingress:

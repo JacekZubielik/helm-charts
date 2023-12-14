@@ -1,0 +1,37 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: zigbee2mqtt
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: zigbee2mqtt
+    server: https://kubernetes.default.svc
+  project: default #home-automation
+  source:
+    repoURL: 'https://jacekzubielik.github.io/helm-charts'
+    targetRevision: 0.0.56
+    chart: zigbee2mqtt
+    #path: zigbee2mqtt
+  
+    helm:
+      parameters:
+        - name: installCRDs
+          value: 'false'
+      # valueFiles:
+      #   - app-values.yaml
+  syncPolicy:
+    retry:
+      limit: 2
+    automated:
+      prune: false
+      selfHeal: false
+    syncOptions:
+      - CreateNamespace=true
+      - preserveResourcesOnDeletion=false
+      - Replace=false
+
+
