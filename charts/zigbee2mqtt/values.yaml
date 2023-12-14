@@ -18,6 +18,7 @@ securityContext:
 
 service:
   port: 8080
+  type: ClusterIP
 
 resources: {}
 
@@ -60,3 +61,8 @@ config:
     network_key: GENERATE
     log_output:
       - console
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
