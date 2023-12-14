@@ -80,7 +80,7 @@ volumeClaimTemplates:
 #    For more options see [mariadb chart documentation](https://github.com/bitnami/charts/tree/master/bitnami/mariadb)
 # @default -- See values.yaml
 mariadb:
-  enabled: false
+  enabled: true
   architecture: standalone
   auth:
     database: home-assistant
