@@ -75,12 +75,12 @@ spec:
         - name:      data
           mountPath: /app/data
         - name:      tty-usb
-          mountPath: /dev/ttyUSB0 #{{ .Values.config.serial.port }} 
+          mountPath: {{ .Values.config.serial.port }} #/dev/ttyUSB0 
 
       volumes:
       - name: tty-usb
         hostPath:
-          path: /dev/ttyUSB0 #{{ .Values.config.serial.port }} 
+          path: {{ .Values.config.serial.port }} #/dev/ttyUSB0 # /dev/serial/by-path/pci-0000\:07\:1b.0-usb-0\:1\:1.0-port0
       - name: data
         persistentVolumeClaim:
           claimName: {{ include "zigbee2mqtt.fullname" . }} # data #zigbee2mqtt

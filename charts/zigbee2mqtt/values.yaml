@@ -15,7 +15,7 @@ podSecurityContext:
 
 securityContext:
   runAsNonRoot: false
-
+  privileged: true
 service:
   port: 8080
   #type: ClusterIP
@@ -75,7 +75,7 @@ config:
     include_device_information: true
 
   serial:
-    port: /dev/ttyUSB0
+    port: /dev/serial/by-path/pci-0000\:07\:1b.0-usb-0\:1\:1.0-port0 #/dev/ttyUSB0
     adapter: zstack
     disable_led: true
   advanced:
