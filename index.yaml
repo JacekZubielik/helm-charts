@@ -3,6 +3,44 @@ entries:
   home-assistant:
   - apiVersion: v2
     appVersion: 2023.11.3
+    created: "2023-12-15T11:27:25.534428973Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 13.2.24
+    - condition: mariadb.enabled
+      name: mariadb
+      repository: https://charts.bitnami.com/bitnami
+      version: 14.1.4
+    - condition: influxdb.enabled
+      name: influxdb
+      repository: https://charts.bitnami.com/bitnami
+      version: 5.11.1
+    - name: common
+      repository: https://library-charts.k8s-at-home.com
+      version: 4.5.2
+    description: Home Assistant
+    digest: 7454c2a5581bc19cf0e19af87b05c5ca64dbb98f404c6dcd886740356fcf1431
+    home: https://github.com/JacekZubielik/helm-charts/tree/master/charts/home-assistant
+    icon: https://upload.wikimedia.org/wikipedia/en/4/49/Home_Assistant_logo_%282023%29.svg
+    keywords:
+    - home-assistant
+    - hass
+    - homeassistant
+    kubeVersion: '>=1.16.0-0'
+    maintainers:
+    - email: jack.zu@protonmail.com
+      name: Jacek Zubielik
+    name: home-assistant
+    sources:
+    - https://github.com/home-assistant/home-assistant
+    - https://github.com/cdr/code-server
+    urls:
+    - https://github.com/JacekZubielik/helm-charts/releases/download/home-assistant-0.0.11/home-assistant-0.0.11.tgz
+    version: 0.0.11
+  - apiVersion: v2
+    appVersion: 2023.11.3
     created: "2023-12-15T00:57:17.62243406Z"
     dependencies:
     - condition: postgresql.enabled
@@ -1891,4 +1929,4 @@ entries:
     urls:
     - https://github.com/JacekZubielik/helm-charts/releases/download/zigbee2mqtt-0.0.1/zigbee2mqtt-0.0.1.tgz
     version: 0.0.1
-generated: "2023-12-15T00:57:17.622598748Z"
+generated: "2023-12-15T11:27:25.534597209Z"
