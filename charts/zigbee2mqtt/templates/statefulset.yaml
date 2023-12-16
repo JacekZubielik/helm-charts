@@ -27,7 +27,7 @@ spec:
       {{- end }}
       securityContext:
         {{- toYaml .Values.securityContext | nindent 8 }}
-      automountServiceAccountToken: false
+      automountServiceAccountToken: true
 
       containers:
       - name: {{ .Chart.Name }}
@@ -83,7 +83,7 @@ spec:
           path: {{ .Values.config.serial.port }} #/dev/ttyUSB0 # /dev/serial/by-path/pci-0000\:07\:1b.0-usb-0\:1\:1.0-port0
       - name: data
         persistentVolumeClaim:
-          claimName: {{ include "zigbee2mqtt.fullname" . }} # data #zigbee2mqtt
+          claimName: zigbee2mqtt #{{ include "zigbee2mqtt.fullname" . }} # data #zigbee2mqtt
         # persistentVolumeClaim:
         #   claimName: zigbee2mqtt #{{ include "zigbee2mqtt.fullname" . }} # configuration
 #####################
