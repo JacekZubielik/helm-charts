@@ -3,7 +3,6 @@ image:
   pullPolicy: IfNotPresent
   tag: 1.33.2
 
-timezone: "UTC"
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
@@ -14,111 +13,31 @@ podSecurityContext:
   privileged: true
 
 securityContext:
-  runAsNonRoot: true
-  #privileged: true
+  runAsNonRoot: false
 
 service:
   port: 8080
-  #type: ClusterIP
 
 resources: {}
 
 nodeSelector:
-  kubernetes.io/hostname: dev-k3s-master-2
+  kubernetes.io/hostname: k3s-node-2
 
 tolerations: []
 
 affinity: {}
 
-# affinity:
-#   nodeAffinity:
-#     requiredDuringSchedulingIgnoredDuringExecution:
-#       nodeSelectorTerms:
-#       - matchExpressions:
-#         - key: app
-#           operator: In
-#           values:
-#           - zigbee-controller
-
-
+username: mqtt
+password: secret
 
 persistence:
   storageClassName: local-path
   size: 2Gi
 
-
-#device: /dev/ttyUSB0
+device: /dev/ttyUSB0
 
 # ingress:
 #   enabled: true
 #   ingressClassName: traefik
 #   domainName: anotherlife.pl
 #   secretName: cluster-tls
-
-
-config:
-  # These will be applied ONLY on first run
-  homeassistant: true
-  permit_join: true
-  mqtt:
-    base_topic: zigbee2mqtt
-    server: 'mqtt://localhost'
-    # user: my_user
-    # password: my_password
-    # Optional: Include device information to mqtt messages (default: false)
-    include_device_information: true
-    force_disable_retain: false
-    keepalive: 60
-    reject_unauthorized: true
-    version: 4
-
-  serial:
-    port: /dev/ttyUSB0
-    adapter: zstack
-    disable_led: true
-  advanced:
-    network_key: GENERATE
-    log_output:
-      - console
-
-  advanced:
-    network_key:
-      - 226
-      - 72
-      - 161
-      - 202
-      - 102
-      - 89
-      - 201
-      - 128
-      - 246
-      - 146
-      - 53
-      - 52
-      - 106
-      - 13
-      - 213
-      - 160
-    availability_timeout: 0
-    channel: 11
-    ikea_ota_use_test_url: false
-    log_level: info
-    homeassistant_status_topic: homeassistant/status
-    homeassistant_legacy_entity_attributes: false
-    legacy_api: false
-    homeassistant_legacy_triggers: true
-    last_seen: ISO_8601
-    log_syslog:
-      app_name: Zigbee2MQTT
-      eol: /n
-      host: localhost
-      localhost: localhost
-      path: /dev/log
-      pid: process.pid
-      port: 123
-      protocol: tcp4
-      type: '5424'
-  experimental:
-    transmit_power: 10
-  device_options:
-    legacy: false

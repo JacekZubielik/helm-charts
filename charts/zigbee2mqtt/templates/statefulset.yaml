@@ -1,17 +1,18 @@
----
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ include "zigbee2mqtt.fullname" . }}
   labels:
     {{- include "zigbee2mqtt.labels" . | nindent 4 }}
+
 spec:
   replicas: 1
-  podManagementPolicy: Parallel
+    podManagementPolicy: Parallel
   selector:
     matchLabels:
       {{- include "zigbee2mqtt.selectorLabels" . | nindent 6 }}
-  serviceName: {{ include "zigbee2mqtt.name" . }}
+      serviceName: {{ include "zigbee2mqtt.name" . }}
+
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -20,6 +21,7 @@ spec:
       {{- end }}
       labels:
         {{- include "zigbee2mqtt.selectorLabels" . | nindent 8 }}
+
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -27,7 +29,7 @@ spec:
       {{- end }}
       securityContext:
         {{- toYaml .Values.securityContext | nindent 8 }}
-      automountServiceAccountToken: true
+      automountServiceAccountToken: false
 
       containers:
       - name: {{ .Chart.Name }}
@@ -35,12 +37,14 @@ spec:
           {{- toYaml .Values.podSecurityContext | nindent 12 }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
+
         ports:
         - name: http
           containerPort: {{ .Values.service.port }}
           protocol: TCP
         resources:
           {{- toYaml .Values.resources | nindent 12 }}
+
         livenessProbe:
           httpGet:
             path:              /
@@ -62,85 +66,20 @@ spec:
           failureThreshold:    2
           initialDelaySeconds: 30
 
-        env:
-        - name:   ZIGBEE2MQTT_DATA
-          value:  "/app/data"
-        - name:   TZ
-          value:  {{ .Values.timezone }}
-
         volumeMounts:
-        #- name:      configuration
-          #mountPath: /app/configuration #.yaml
-          # subPath:   configuration.yaml
+        - name:      tty-usb
+          mountPath: /dev/ttyUSB0
         - name:      data
           mountPath: /app/data
-        - name:      tty-usb
-          mountPath: /dev/ttyUSB0  #{{ .Values.config.serial.port }} #
+
 
       volumes:
       - name: tty-usb
         hostPath:
-          path: /dev/ttyUSB0  #{{ .Values.config.serial.port }} #/dev/ttyUSB0 # /dev/serial/by-path/pci-0000\:07\:1b.0-usb-0\:1\:1.0-port0
+          path: {{ .Values.device }}
       - name: data
         persistentVolumeClaim:
-          claimName: zigbee2mqtt #{{ include "zigbee2mqtt.fullname" . }} # data #zigbee2mqtt
-        # persistentVolumeClaim:
-        #   claimName: zigbee2mqtt #{{ include "zigbee2mqtt.fullname" . }} # configuration
-#####################
-  # volumeClaimTemplates:
-  # - metadata:
-  #     name: data
-  #   spec:
-  #     accessModes: "ReadWriteOnce"
-  #     storageClassName: "local-path"
-  #     resources:
-  #       requests:
-  #         storage: 6Gi
-
-  # volumeClaimTemplates:
-  # - metadata:
-  #     name: configuration #{{ include "zigbee2mqtt.fullname" . }} 
-  #   spec:
-  #     accessModes: ["ReadWriteOnce"]
-  #     storageClassName: "local-path"
-  #     resources:
-  #       requests:
-  #         storage: 2Gi
-  # - metadata:
-  #     name: data #{{ include "zigbee2mqtt.fullname" . }} 
-  #   spec:
-  #     accessModes: ["ReadWriteOnce"]
-  #     storageClassName: "local-path"
-  #     resources:
-  #       requests:
-  #         storage: 3Gi
-
-
-  # volumes:
-  # - name: configuration
-  #   persistentVolumeClaim:
-  #     claimName: configuration #{{ include "zigbee2mqtt.fullname" . }}
-  #     name: configuration #{{ include "zigbee2mqtt.fullname" . }}
-  
-
-  # - name: data
-  #   persistentVolumeClaim:
-  #     claimName: {{ include "zigbee2mqtt.fullname" . }} #{{ .Values.persistence.existingClaim }}
-  #     name: data #{{ include "zigbee2mqtt.fullname" . }}
-  # - name: tty-usb
-  #   hostPath:
-  #     path: {{ .Values.config.serial.port }} #{{ .Values.device }}
-
-
-
-
-
-
-
-
-
-
-
+          claimName: {{ include "zigbee2mqtt.fullname" . }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -153,6 +92,3 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-
-
-
