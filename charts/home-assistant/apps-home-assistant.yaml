@@ -12,7 +12,7 @@ spec:
   project: default #home-automation
   source:
     repoURL: 'https://jacekzubielik.github.io/helm-charts'
-    targetRevision: 0.0.11
+    targetRevision: 0.0.13
     chart: home-assistant
   
     helm:
@@ -24,9 +24,9 @@ spec:
   syncPolicy:
     retry:
       limit: 2
-    automated:
-      prune: false
-      selfHeal: false
+    # automated:
+    #   prune: false
+    #   selfHeal: false
     syncOptions:
       - CreateNamespace=true
       - preserveResourcesOnDeletion=false

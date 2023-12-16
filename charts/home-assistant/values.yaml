@@ -25,7 +25,7 @@ service:
         port: 8123
 
 nodeSelector:
-  kubernetes.io/hostname: dev-k3s-master-2
+  kubernetes.io/hostname: dev-k3s-master-1
 
 ingress:
   # -- Enable and configure ingress settings for the chart under this key.
