@@ -1,0 +1,19 @@
+---
+apiVersion: v2
+appVersion: v0.43.0
+description: A management console for minio server and operator
+name: minio-console
+version: 0.0.1
+kubeVersion: ">=1.16.0-0"
+keywords:
+  - minio-console
+  - minio
+  - s3
+home: https://github.com/JacekZubielik/helm-charts/tree/master/charts/minio-console
+icon: https://min.io/resources/img/logo/MINIO_wordmark.png
+sources:
+  - https://github.com/minio/console
+maintainers:
+  - name: Jacek Zubielik
+    email: jack.zu@protonmail.com
+
