@@ -457,6 +457,28 @@ entries:
     urls:
     - https://github.com/JacekZubielik/helm-charts/releases/download/home-assistant-0.0.1/home-assistant-0.0.1.tgz
     version: 0.0.1
+  minio-console:
+  - apiVersion: v2
+    appVersion: v0.43.0
+    created: "2023-12-19T00:18:01.147175034Z"
+    description: A management console for minio server and operator
+    digest: 9b9cd812a94174ca0a75d75c7afa023f1a52fd0740faae23181d5953b2813022
+    home: https://github.com/JacekZubielik/helm-charts/tree/master/charts/minio-console
+    icon: https://min.io/resources/img/logo/MINIO_wordmark.png
+    keywords:
+    - minio-console
+    - minio
+    - s3
+    kubeVersion: '>=1.16.0-0'
+    maintainers:
+    - email: jack.zu@protonmail.com
+      name: Jacek Zubielik
+    name: minio-console
+    sources:
+    - https://github.com/minio/console
+    urls:
+    - https://github.com/JacekZubielik/helm-charts/releases/download/minio-console-0.0.1/minio-console-0.0.1.tgz
+    version: 0.0.1
   zigbee2mqtt:
   - annotations:
       category: Application
@@ -2101,4 +2123,4 @@ entries:
     urls:
     - https://github.com/JacekZubielik/helm-charts/releases/download/zigbee2mqtt-0.0.1/zigbee2mqtt-0.0.1.tgz
     version: 0.0.1
-generated: "2023-12-16T17:24:46.564079061Z"
+generated: "2023-12-19T00:18:01.147368482Z"
