@@ -30,7 +30,8 @@ tolerations: []
 affinity: {}
 
 persistence:
-  storageClassName: local-path
+  #storageClassName: local-path
+  hostPath: /mnt/volume-0/apps/home-assistant
   size: 2Gi
 
 ingress:

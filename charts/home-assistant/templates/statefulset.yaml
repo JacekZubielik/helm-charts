@@ -32,7 +32,9 @@ spec:
           {{- toYaml .Values.podSecurityContext | nindent 12 }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
-        # command: ["sleep", "600"]
+        envFrom:
+        - configMapRef:
+            name: {{ include "app.fullname" . }}
         ports:
         - name: http
           containerPort: {{ .Values.service.port }}
@@ -62,12 +64,22 @@ spec:
         volumeMounts:
         - name: data
           mountPath: /config
+
       volumes:
       - name: data
-        persistentVolumeClaim:
-          claimName: {{ include "app.fullname" . }}
+        hostPath:
+          path: {{ .Values.persistence.hostPath }}
       - mountPath: /etc/localtime
         name: localtime
+
+
+
+      # volumes:
+      # - name: data
+      #   persistentVolumeClaim:
+      #     claimName: {{ include "app.fullname" . }}
+      # - mountPath: /etc/localtime
+      #   name: localtime
 
       {{- with .Values.nodeSelector }}
       nodeSelector:
