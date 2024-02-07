@@ -37,7 +37,6 @@ spec:
         # - configMapRef:
         #     name: {{ include "app.fullname" . }}
 
-
         ports:
         - name: http
           containerPort: {{ .Values.service.port }}
@@ -64,16 +63,19 @@ spec:
           successThreshold:    1
           failureThreshold:    2
           initialDelaySeconds: 30
+
         volumeMounts:
         - name: data
           mountPath: /config
+        - name: localtime
+          mountPath: /etc/localtime
 
       volumes:
       - name: data
         hostPath:
           path: {{ .Values.persistence.hostPath }}
-      # - mountPath: /etc/localtime
-      #   name: localtime
+      - mountPath: /etc/localtime
+        name: localtime
 
       {{- with .Values.nodeSelector }}
       nodeSelector:
