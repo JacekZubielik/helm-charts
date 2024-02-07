@@ -32,9 +32,12 @@ spec:
           {{- toYaml .Values.podSecurityContext | nindent 12 }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
-        envFrom:
-        - configMapRef:
-            name: {{ include "app.fullname" . }}
+
+        # envFrom:
+        # - configMapRef:
+        #     name: {{ include "app.fullname" . }}
+
+
         ports:
         - name: http
           containerPort: {{ .Values.service.port }}
