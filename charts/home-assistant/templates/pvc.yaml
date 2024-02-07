@@ -5,6 +5,9 @@ metadata:
   name: {{ include "app.fullname" . }}
   labels:
     {{- include "app.labels" . | nindent 4 }}
+    helm.sh/chart: {{ include "app.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
 
   labels:
       app.kubernetes.io/name: {{ include "app.name" . }}

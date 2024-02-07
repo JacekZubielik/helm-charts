@@ -4,9 +4,12 @@ metadata:
   name: {{include "app.fullname" .}}
   labels:
     {{- include "app.labels" . | nindent 4 }}
+    helm.sh/chart: {{ include "app.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
   replicas: 1
-  #podManagementPolicy: Parallel
+  podManagementPolicy: Parallel
   selector:
     matchLabels:
       {{- include "app.selectorLabels" . | nindent 6 }}
@@ -33,9 +36,9 @@ spec:
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
 
-        # envFrom:
-        # - configMapRef:
-        #     name: {{ include "app.fullname" . }}
+        envFrom:
+        - configMapRef:
+            name: {{ include "app.fullname" . }}
 
         ports:
         - name: http
@@ -74,8 +77,8 @@ spec:
       - name: data
         hostPath:
           path: {{ .Values.persistence.hostPath }}
-      - mountPath: /etc/localtime
-        name: localtime
+      - name: localtime
+        mountPath: /etc/localtime
 
       {{- with .Values.nodeSelector }}
       nodeSelector:

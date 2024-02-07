@@ -30,7 +30,7 @@ tolerations: []
 affinity: {}
 
 persistence:
-  enabled: false
+  #enabled: false
   hostPath: /mnt/volume-0/apps/home-assistant
 
 ingress:
