@@ -1,7 +1,7 @@
 ---
 image:
   repository: homeassistant/home-assistant
-  pullPolicy: IfNotPresent
+  pullPolicy: Always #IfNotPresent
   tag: "2023.11.3"
 
 imagePullSecrets: []
