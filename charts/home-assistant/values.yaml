@@ -1,3 +1,4 @@
+---
 image:
   repository: homeassistant/home-assistant
   pullPolicy: IfNotPresent
@@ -21,7 +22,8 @@ service:
 resources: {}
 
 nodeSelector:
-  kubernetes.io/hostname: dev-k3s-master-0
+  #kubernetes.io/hostname: dev-k3s-master-0
+  kubernetes.io/os: linux
 
 tolerations: []
 

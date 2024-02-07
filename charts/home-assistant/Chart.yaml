@@ -3,18 +3,17 @@ annotations:
   category: Application
 apiVersion: v2
 appVersion: 2023.11.3
-version: 0.0.10
+version: 0.0.11
 name: home-assistant
 description: Home Assistant chart
 type: application
 icon: https://raw.githubusercontent.com/home-assistant/assets/master/misc/logo-icon_template.png
 kubeVersion: ">=1.16.0-0"
 keywords:
-- home-assistant
+  - home-assistant
 home: https://github.com/JacekZubielik/helm-charts/tree/master/charts/home-assistant
-icon: https://www.zigbee2mqtt.io/logo.png
 sources:
-- https://github.com/home-assistant/home-assistant
+  - https://github.com/home-assistant/home-assistant
 maintainers:
-- name: Jacek Zubielik
-  email: jack.zu@protonmail.com
+  - name: Jacek Zubielik
+    email: jack.zu@protonmail.com
