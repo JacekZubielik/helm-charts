@@ -75,15 +75,6 @@ spec:
       # - mountPath: /etc/localtime
       #   name: localtime
 
-
-
-      # volumes:
-      # - name: data
-      #   persistentVolumeClaim:
-      #     claimName: {{ include "app.fullname" . }}
-      # - mountPath: /etc/localtime
-      #   name: localtime
-
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

@@ -1,7 +1,7 @@
 ---
 image:
   repository: homeassistant/home-assistant
-  pullPolicy: Always #IfNotPresent
+  pullPolicy: IfNotPresent
   tag: "2023.11.3"
 
 imagePullSecrets: []
@@ -30,6 +30,7 @@ tolerations: []
 affinity: {}
 
 persistence:
+  enabled: false
   hostPath: /mnt/volume-0/apps/home-assistant
 
 ingress:
