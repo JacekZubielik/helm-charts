@@ -69,8 +69,8 @@ spec:
       - name: data
         hostPath:
           path: {{ .Values.persistence.hostPath }}
-      - mountPath: /etc/localtime
-        name: localtime
+      # - mountPath: /etc/localtime
+      #   name: localtime
 
 
 

@@ -30,12 +30,10 @@ tolerations: []
 affinity: {}
 
 persistence:
-  #storageClassName: local-path
   hostPath: /mnt/volume-0/apps/home-assistant
-  size: 2Gi
 
 ingress:
   enabled: false
-  ingressClassName: traefik
+  ingressClassName: traefik-external
   domainName: anotherlife.pl
   secretName: letsencrypt-production
