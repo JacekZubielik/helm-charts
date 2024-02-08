@@ -72,8 +72,8 @@ spec:
         volumeMounts:
         - name: data
           mountPath: /config
-        - name: localtime
-          mountPath: /etc/localtime
+        # - name: localtime
+        #   mountPath: /etc/localtime
 
       volumes:
       - name: data
