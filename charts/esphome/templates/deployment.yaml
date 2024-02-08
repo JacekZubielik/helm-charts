@@ -23,7 +23,7 @@ spec:
       {{- if .Values.podAnnotations }}
       annotations:
         {{- range $key, $value := .Values.podAnnotations }}
-        {{ $key }}: {{ $value | quote }}
+        {{ $key }}: {{ $value | }}
         {{- end }}
       {{- end }}
     spec:
@@ -80,8 +80,8 @@ spec:
           {{- end }}
           env:
             {{- range $key, $value := .Values.extraEnv }}
-            - name: {{ $key | quote }}
-              value: {{ $value | quote }}
+            - name: {{ $key | }}
+              value: {{ $value | }}
             {{- end }}
             {{- range $name, $opts := .Values.extraEnvSecrets }}
             - name: {{ $name }}
