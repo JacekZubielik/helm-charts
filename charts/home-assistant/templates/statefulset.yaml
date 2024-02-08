@@ -38,9 +38,9 @@ spec:
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
 
-        envFrom:
-        - configMapRef:
-            name: {{ include "app.fullname" . }}-configurator
+        # envFrom:
+        # - configMapRef:
+        #     name: {{ include "app.fullname" . }}-configurator
 
         ports:
         - name: http
