@@ -3,7 +3,7 @@ annotations:
   category: Application
 apiVersion: v2
 appVersion: 2023.11.3
-version: 0.0.35
+version: 0.0.36
 name: home-assistant
 description: Home Assistant chart
 type: application
