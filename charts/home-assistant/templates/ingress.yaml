@@ -38,17 +38,4 @@ spec:
       secretName: {{ .secretName }}
   {{- end }}
 {{- end }}
-
-
-
-{{- end }}
-
-
-
-
-
-
-    - secretName: {{ $.Values.ingress.secretName }}
-      hosts:
-        - {{ include "app.fullname" . }}.{{ $.Values.ingress.domainName }}
 {{- end }}

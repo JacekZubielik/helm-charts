@@ -1,6 +1,4 @@
 {{- if .Values.persistence.enabled -}}
-# {{- if not .Values.persistence.existingClaim -}}
-# {{- if .Values.persistence.storageClassName }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
