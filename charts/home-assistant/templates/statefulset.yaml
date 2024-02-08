@@ -79,9 +79,9 @@ spec:
       - name: data
         hostPath:
           path: {{ .Values.persistence.hostPath }}
-      - name: localtime
-        mountPath:
-          path: {{ .Values.persistence.mountPath }}
+      # - name: localtime
+      #   hostPath:
+      #     path: {{ .Values.persistence.hostPath: }}
 
       {{- with .Values.nodeSelector }}
       nodeSelector:
