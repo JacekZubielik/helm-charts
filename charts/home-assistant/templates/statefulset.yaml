@@ -81,6 +81,7 @@ spec:
           path: {{ .Values.persistence.hostPath }}
       - name: localtime
         mountPath: /etc/localtime
+          path: {{ .Values.persistence.mountPath }}
 
       {{- with .Values.nodeSelector }}
       nodeSelector:
