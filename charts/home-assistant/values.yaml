@@ -49,7 +49,7 @@ ingress:
   enabled: false
   annotations: {}
     # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
+    # kubernetes.io/tls-acme: "true"{{- if .Values.serviceMonitor.enabled }}
   path: /
   hosts:
     - home-assistant.local
