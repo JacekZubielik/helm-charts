@@ -1,4 +1,6 @@
-{{- if .Values.persistence.storageClassName }}
+{{- if .Values.persistence.enabled -}}
+# {{- if not .Values.persistence.existingClaim -}}
+# {{- if .Values.persistence.storageClassName }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -8,16 +10,14 @@ metadata:
     helm.sh/chart: {{ include "app.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
-
-  labels:
-      app.kubernetes.io/name: {{ include "app.name" . }}
-      app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/name: {{ include "app.name" . }}
 
 spec:
   storageClassName: {{ .Values.persistence.storageClassName }}
   accessModes:
-  - ReadWriteOnce
+    - {{ .Values.persistence.accessMode }}
   resources:
     requests:
       storage: {{ .Values.persistence.size }}
 {{- end }}
+{{- end -}}

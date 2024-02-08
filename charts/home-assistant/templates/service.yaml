@@ -8,13 +8,16 @@ metadata:
     helm.sh/chart: {{ include "app.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
-
+    app.kubernetes.io/name: {{ include "app.name" . }}
 
 spec:
   ports:
     - port: {{ .Values.service.port }}
-      targetPort: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.targetPort }}
       protocol: TCP
-      name: http
+      name: {{ .Values.service.portName }}
+
   selector:
     {{- include "app.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/name: {{ include "home-assistant.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}

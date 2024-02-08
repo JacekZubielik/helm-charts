@@ -16,8 +16,14 @@ podSecurityContext:
 securityContext:
   runAsNonRoot: false
 
+extraEnv: {}
+
 service:
+  type: ClusterIP
   port: 8123
+  targetPort: 8123
+  annotations: {}
+  labels: {}
 
 resources: {}
 
@@ -30,11 +36,31 @@ tolerations: []
 affinity: {}
 
 persistence:
-  #enabled: false
+  enabled: false
   hostPath: /mnt/volume-0/apps/home-assistant
+
+# ingress:
+#   enabled: false
+#   ingressClassName: traefik-external
+#   domainName: anotherlife.pl
+#   secretName: letsencrypt-production
 
 ingress:
   enabled: false
-  ingressClassName: traefik-external
-  domainName: anotherlife.pl
-  secretName: letsencrypt-production
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  path: /
+  hosts:
+    - home-assistant.local
+  tls: []
+  #  - secretName: letsencrypt-production
+  #    hosts:
+  #      - home-assistant.local
+
+monitoring:
+  enabled: false
+  serviceMonitor:
+    enabled: true
+    namespace: monitoring
+    interval: 30s
