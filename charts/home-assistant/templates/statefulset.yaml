@@ -4,10 +4,6 @@ metadata:
   name: {{ include "app.fullname" . }}
   labels:
     {{- include "app.labels" . | nindent 4 }}
-    # helm.sh/chart: {{ include "app.chart" . }}
-    # app.kubernetes.io/instance: {{ .Release.Name }}
-    # app.kubernetes.io/managed-by: {{ .Release.Service }}
-    # app.kubernetes.io/name: {{ include "app.name" . }}
 
 spec:
   replicas: 1
@@ -72,8 +68,6 @@ spec:
         volumeMounts:
         - name: data
           mountPath: /config
-        # - name: localtime
-        #   mountPath: /etc/localtime
 
       volumes:
       - name: data
