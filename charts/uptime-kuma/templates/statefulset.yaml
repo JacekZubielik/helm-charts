@@ -118,6 +118,4 @@ spec:
         persistentVolumeClaim:
           claimName: {{ .Values.persistence.existingClaim }}
       {{- end }}
-      # - name: uptime-kuma-storage
-      #   configMap:
-      #     name: {{ include "uptime-kuma.fullname" . }}
+{{- end -}}
