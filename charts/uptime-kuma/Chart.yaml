@@ -3,7 +3,7 @@ apiVersion: v2
 appVersion: 1.23.11
 description: Monitoring tool
 name: uptime-kuma
-version: 0.0.2
+version: 0.0.3
 type: application
 icon: https://raw.githubusercontent.com/louislam/uptime-kuma/master/public/icon.png
 home: https://github.com/dirsigler/uptime-kuma-helm
