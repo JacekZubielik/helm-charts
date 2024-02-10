@@ -1345,6 +1345,24 @@ entries:
     urls:
     - https://github.com/JacekZubielik/helm-charts/releases/download/minio-console-0.0.1/minio-console-0.0.1.tgz
     version: 0.0.1
+  uptime-kuma:
+  - apiVersion: v2
+    appVersion: 1.23.11
+    created: "2024-02-10T16:35:25.614952715Z"
+    description: Monitoring tool
+    digest: 1fab9ca4603635423dbed30221cdb95c9b5071d00cbae615dceec9b3ccf8491f
+    home: https://github.com/dirsigler/uptime-kuma-helm
+    icon: https://raw.githubusercontent.com/louislam/uptime-kuma/master/public/icon.png
+    maintainers:
+    - email: jack.zu@protonmail.com
+      name: Jacek Zubielik
+    name: uptime-kuma
+    sources:
+    - https://github.com/louislam/uptime-kuma
+    type: application
+    urls:
+    - https://github.com/JacekZubielik/helm-charts/releases/download/uptime-kuma-0.0.1/uptime-kuma-0.0.1.tgz
+    version: 0.0.1
   zigbee2mqtt:
   - annotations:
       category: Application
@@ -2989,4 +3007,4 @@ entries:
     urls:
     - https://github.com/JacekZubielik/helm-charts/releases/download/zigbee2mqtt-0.0.1/zigbee2mqtt-0.0.1.tgz
     version: 0.0.1
-generated: "2024-02-10T15:42:04.642727531Z"
+generated: "2024-02-10T16:35:25.615621692Z"
