@@ -1348,6 +1348,23 @@ entries:
   uptime-kuma:
   - apiVersion: v2
     appVersion: 1.23.11
+    created: "2024-02-10T19:36:40.673839193Z"
+    description: Monitoring tool
+    digest: b46af0cb89ab5c89ffd7439a3a9fc8bbe64e41c6b2636e45e0a05972b8a9a44e
+    home: https://github.com/dirsigler/uptime-kuma-helm
+    icon: https://raw.githubusercontent.com/louislam/uptime-kuma/master/public/icon.png
+    maintainers:
+    - email: jack.zu@protonmail.com
+      name: Jacek Zubielik
+    name: uptime-kuma
+    sources:
+    - https://github.com/louislam/uptime-kuma
+    type: application
+    urls:
+    - https://github.com/JacekZubielik/helm-charts/releases/download/uptime-kuma-0.0.5/uptime-kuma-0.0.5.tgz
+    version: 0.0.5
+  - apiVersion: v2
+    appVersion: 1.23.11
     created: "2024-02-10T19:29:02.037577935Z"
     description: Monitoring tool
     digest: 4ed570d81f89cc2d16353b4ed2d198ad99b92723286f901f9e38b3dd9f7409b9
@@ -3058,4 +3075,4 @@ entries:
     urls:
     - https://github.com/JacekZubielik/helm-charts/releases/download/zigbee2mqtt-0.0.1/zigbee2mqtt-0.0.1.tgz
     version: 0.0.1
-generated: "2024-02-10T19:29:02.037784649Z"
+generated: "2024-02-10T19:36:40.674039898Z"
