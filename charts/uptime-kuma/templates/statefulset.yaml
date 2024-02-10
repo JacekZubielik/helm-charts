@@ -96,12 +96,13 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.additionalVolumes }}
 
-      volumes:
-      - name: uptime-kuma-storage
-        configMap:
-          name: {{ include "uptime-kuma.fullname" . }}
+
+      # {{- with .Values.additionalVolumes }}
+      # volumes:
+      # - name: uptime-kuma-storage
+      #   configMap:
+      #     name: {{ include "uptime-kuma.fullname" . }}
 
       {{- if not .Values.persistence.enabled }}
       - name: uptime-kuma-storage
@@ -129,3 +130,4 @@ spec:
         storageClassName: {{ . }}
         {{- end }}
   {{- end -}}
+{{- end -}}
