@@ -11,16 +11,12 @@ fullnameOverride: ""
 
 
 
-# If this option is set to false a StateFulset instead of a Deployment is used
-useDeploy: true
+# If this option  set to false a StateFulset instead of a Deployment is used
+useDeploy: false
 
 serviceAccount:
-  # Specifies whether a service account should be created
   create: false
-  # Annotations to add to the service account
   annotations: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
   name: ""
 
 podAnnotations: {}
@@ -113,27 +109,16 @@ readinessProbe:
   enabled: true
   initialDelaySeconds: 5
 
+
+persistence:
+  enabled: false
+  hostPath: /mnt/volume-0/apps/uptime-kuma
+
 volume:
   enabled: false
   accessMode: ReadWriteOnce
   size: 4Gi
   existingClaim: ""
-
-additionalVolumes:
-  []
-  # - name: "additional-certificates"
-  #   configMap:
-  #     name: "additional-certificates"
-  #     optional: true
-  #     defaultMode: 420
-
-# -- A list of additional volumeMounts to be added to the pod
-additionalVolumeMounts:
-  []
-  # - name: "additional-certificates"
-  #   mountPath: "/etc/ssl/certs/additional/additional-ca.pem"
-  #   readOnly: true
-  #   subPath: "additional-ca.pem"
 
 strategy:
   type: Recreate

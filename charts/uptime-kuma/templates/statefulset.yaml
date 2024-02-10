@@ -55,20 +55,16 @@ spec:
           env:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+
           ports:
             - name: http
               containerPort: 3001
               protocol: TCP
-          {{ if or .Values.volume.enabled .Values.additionalVolumeMounts -}}
+
           volumeMounts:
-            {{- if .Values.volume.enabled }}
             - mountPath: /app/data
-              name: storage
-            {{- end -}}
-            {{ with .Values.additionalVolumeMounts }}
-              {{- toYaml . | nindent 12 }}
-            {{- end }}
-          {{- end }}
+              name: uptime-kuma-storage
+
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             exec:
@@ -87,6 +83,7 @@ spec:
           {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -100,13 +97,28 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- with .Values.additionalVolumes }}
+
       volumes:
-        {{- toYaml . | nindent 8 }}
+      - name: uptime-kuma-storage
+        configMap:
+          name: {{ include "uptime-kuma.fullname" . }}
+
+      {{- if not .Values.persistence.enabled }}
+      - name: uptime-kuma-storage
+        hostPath:
+          path: {{ .Values.persistence.hostPath }}
       {{- end }}
+      
+      {{- if and .Values.persistence.enabled .Values.persistence.existingClaim }}
+      - name: uptime-kuma-storage
+        persistentVolumeClaim:
+          claimName: {{ .Values.persistence.existingClaim }}
+      {{- end }}
+
   {{ if .Values.volume.enabled -}}
   volumeClaimTemplates:
     - metadata:
-        name: storage
+        name: uptime-kuma-storage
       spec:
         accessModes:
           - {{ .Values.volume.accessMode }}
