@@ -82,8 +82,8 @@ persistence:
   ##
   ## If you want to use a volume on the host machine instead of a PVC:
   # hostPath: /path/to/the/config/folder
-  accessMode: ReadWriteOnce
-  size: 1Gi
+  hostPath: /mnt/volume-0/apps/esphome
+
 
 ## Additional hass container environment variable
 ## For instance to add a http_proxy
@@ -133,7 +133,8 @@ resources: {}
   #  cpu: 100m
   #  memory: 128Mi
 
-nodeSelector: {}
+nodeSelector:
+  kubernetes.io/hostname: dev-k3s-master-0
 
 tolerations: []
 

@@ -1,8 +1,9 @@
-apiVersion: v1
+---
+apiVersion: v2
 appVersion: 2023.12.9
 description: ESPHome
 name: esphome
-version: 0.0.7
+version: 0.0.8
 keywords:
 - esphome
 home: https://github.com/JacekZubielik/helm-charts/tree/master/charts/esphome
