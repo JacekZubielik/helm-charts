@@ -46,43 +46,51 @@ spec:
       {{- end }}
 
       containers:
-        - name: {{ .Chart.Name }}
-          securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          {{- with .Values.podEnv }}
-          env:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
+      - name: {{ .Chart.Name }}
+        securityContext:
+          {{- toYaml .Values.securityContext | nindent 12 }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        {{- with .Values.podEnv }}
+        env:
+          {{- toYaml . | nindent 12 }}
+        {{- end }}
 
-          ports:
-            - name: http
-              containerPort: 3001
-              protocol: TCP
+        ports:
+        - name: http
+          containerPort: 3001
+          protocol: TCP
+        resources:
+          {{- toYaml .Values.resources | nindent 12 }}
 
-          volumeMounts:
-            - mountPath: /app/data
-              name: uptime-kuma-storage
+        # ports:
+        # - name: http
+        #   containerPort: {{ .Values.service.port }}
+        #   protocol: TCP
 
-          {{- if .Values.livenessProbe.enabled }}
-          livenessProbe:
-            exec:
-              command:
-                - extra/healthcheck
-            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds}}
-            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds}}
-          {{- end }}
-          {{- if .Values.readinessProbe.enabled }}
-          readinessProbe:
-            httpGet:
-              path: /
-              port: 3001
-              scheme: HTTP
-            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds}}
-          {{- end }}
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+        volumeMounts:
+        - mountPath: /app/data
+          name: uptime-kuma-storage
+
+        {{- if .Values.livenessProbe.enabled }}
+        livenessProbe:
+          exec:
+            command:
+              - extra/healthcheck
+          timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds}}
+          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds}}
+        {{- end }}
+
+        {{- if .Values.readinessProbe.enabled }}
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 3001
+            scheme: HTTP
+          initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds}}
+        {{- end }}
+        resources:
+          {{- toYaml .Values.resources | nindent 12 }}
 
       {{- with .Values.nodeSelector }}
       nodeSelector:
@@ -98,12 +106,7 @@ spec:
       {{- end }}
 
 
-      # {{- with .Values.additionalVolumes }}
-      # volumes:
-      # - name: uptime-kuma-storage
-      #   configMap:
-      #     name: {{ include "uptime-kuma.fullname" . }}
-
+      volumes:
       {{- if not .Values.persistence.enabled }}
       - name: uptime-kuma-storage
         hostPath:
@@ -115,19 +118,6 @@ spec:
         persistentVolumeClaim:
           claimName: {{ .Values.persistence.existingClaim }}
       {{- end }}
-
-  {{ if .Values.volume.enabled -}}
-  volumeClaimTemplates:
-    - metadata:
-        name: uptime-kuma-storage
-      spec:
-        accessModes:
-          - {{ .Values.volume.accessMode }}
-        resources:
-          requests:
-            storage: {{ .Values.volume.size }}
-        {{- with .Values.volume.storageClassName }}
-        storageClassName: {{ . }}
-        {{- end }}
-  {{- end -}}
-{{- end -}}
+      # - name: uptime-kuma-storage
+      #   configMap:
+      #     name: {{ include "uptime-kuma.fullname" . }}

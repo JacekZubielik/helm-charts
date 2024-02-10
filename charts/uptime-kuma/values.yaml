@@ -8,9 +8,6 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
-
-
-
 # If this option  set to false a StateFulset instead of a Deployment is used
 useDeploy: false
 
@@ -23,10 +20,10 @@ podAnnotations: {}
 podLabels:
   {}
   # app: uptime-kuma
-podEnv:
-  # a default port must be set. required by container
-  - name: "UPTIME_KUMA_PORT"
-    value: "3001"
+# podEnv:
+#   # a default port must be set. required by container
+#   - name: "UPTIME_KUMA_PORT"
+#     value: "3001"
 
 podSecurityContext:
   {}
@@ -40,6 +37,11 @@ securityContext:
   # readOnlyRootFilesystem: true
   # runAsNonRoot: true
   # runAsUser: 1000
+# dnsPolicy: ""
+# dnsConfig: {}
+
+
+
 
 service:
   type: ClusterIP
@@ -138,5 +140,3 @@ serviceMonitor:
   annotations: {}
 
 
-dnsPolicy: ""
-dnsConfig: {}
