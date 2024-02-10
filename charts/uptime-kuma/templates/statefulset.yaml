@@ -63,11 +63,6 @@ spec:
         resources:
           {{- toYaml .Values.resources | nindent 12 }}
 
-        # ports:
-        # - name: http
-        #   containerPort: {{ .Values.service.port }}
-        #   protocol: TCP
-
         volumeMounts:
         - mountPath: /app/data
           name: uptime-kuma-storage
