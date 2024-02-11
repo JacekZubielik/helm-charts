@@ -10,7 +10,7 @@ spec:
   selector:
     matchLabels:
       {{- include "app.selectorLabels" . | nindent 6 }}
-      serviceName: {{ include "app.name" . }}
+      # serviceName: {{ include "app.name" . }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -39,7 +39,7 @@ spec:
           protocol: TCP
         resources:
           {{- toYaml .Values.resources | nindent 12 }}
-        {{- if .Values.livenessProbe.enabled }}
+        # {{- if .Values.livenessProbe.enabled }}
         livenessProbe:
           httpGet:
             path:              /
