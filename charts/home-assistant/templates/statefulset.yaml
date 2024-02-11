@@ -7,10 +7,12 @@ metadata:
 
 spec:
   replicas: 1
-  podManagementPolicy: Parallel
+    podManagementPolicy: Parallel
   selector:
     matchLabels:
       {{- include "app.selectorLabels" . | nindent 6 }}
+      serviceName: {{ include "app.name" . }}
+
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -19,6 +21,7 @@ spec:
       {{- end }}
       labels:
         {{- include "app.selectorLabels" . | nindent 8 }}
+
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -27,6 +30,7 @@ spec:
       securityContext:
         {{- toYaml .Values.securityContext | nindent 8 }}
       automountServiceAccountToken: false
+
       containers:
       - name: {{ .Chart.Name }}
         securityContext:
@@ -34,16 +38,15 @@ spec:
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
 
-        # envFrom:
-        # - configMapRef:
-        #     name: {{ include "app.fullname" . }}-configurator
-
         ports:
         - name: http
           containerPort: {{ .Values.service.port }}
           protocol: TCP
         resources:
           {{- toYaml .Values.resources | nindent 12 }}
+
+        {{- if .Values.livenessProbe.enabled }}
+
         livenessProbe:
           httpGet:
             path:              /
@@ -73,6 +76,12 @@ spec:
       - name: data
         hostPath:
           path: {{ .Values.persistence.hostPath }}
+      # - name: data
+      #   persistentVolumeClaim:
+      #     claimName: {{ include "app.fullname" . }}
+
+
+
 
 
       {{- with .Values.nodeSelector }}

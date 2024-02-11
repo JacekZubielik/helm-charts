@@ -1,16 +1,11 @@
 ---
-annotations:
-  category: Application
 apiVersion: v2
 appVersion: 2023.11.3
-version: 0.0.46
-name: home-assistant
 description: Home Assistant chart
+name: home-assistant
+version: 0.0.47
 type: application
 icon: https://raw.githubusercontent.com/home-assistant/assets/master/misc/logo-icon_template.png
-kubeVersion: ">=1.16.0-0"
-keywords:
-- home-assistant
 home: https://github.com/JacekZubielik/helm-charts/tree/master/charts/home-assistant
 sources:
 - https://github.com/home-assistant/home-assistant
