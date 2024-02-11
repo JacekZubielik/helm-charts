@@ -112,4 +112,42 @@ spec:
           {{- toYaml . | nindent 6 }}
         {{- end }}
       {{- end -}}
+
+      volumes:
+      - name: uptime-kuma-storage
+      {{- if .Values.persistence.enabled }}
+        {{- if .Values.persistence.hostPath }}
+        hostPath:
+          path: {{.Values.persistence.hostPath}}
+        {{- else }}
+        persistentVolumeClaim:
+          claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ template "esphome.fullname" . }}{{- end }}
+        {{- end }}
+      {{- else }}
+        emptyDir: {}
+      {{ end }}
+      {{- range .Values.hostMounts }}
+      - name: {{ .name }}
+        hostPath:
+          path: {{.hostPath}}
+          {{- if .type }}
+          type: {{ .type }}
+          {{- end }}
+      {{- end }}
+      {{- if .Values.extraVolumes  }}{{ toYaml .Values.extraVolumes | trim | nindent 6 }}{{ end }}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 {{- end -}}

@@ -1,19 +1,28 @@
-{{- if and .Values.useDeploy (not .Values.volume.existingClaim) }}
-{{- if and .Values.volume.enabled (not .Values.volume.existingClaim) }}
+{{- if .Values.persistence.enabled -}}
+{{- if not .Values.persistence.existingClaim -}}
+{{- if not .Values.persistence.hostPath -}}
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ include "uptime-kuma.fullname" . }}-pvc
+  name: {{ template "uptime-kuma.fullname" . }}
   labels:
-    {{- include "uptime-kuma.labels" . | nindent 4 }}
+    app.kubernetes.io/name: {{ include "uptime-kuma.name" . }}
+    helm.sh/chart: {{ include "uptime-kuma.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
   accessModes:
-    - ReadWriteOnce
+    - {{ .Values.persistence.accessMode }}
   resources:
     requests:
-      storage: {{ .Values.volume.size | quote }}
-  {{- with .Values.volume.storageClassName }}
-  storageClassName: {{ . }}
-  {{- end }}
+      storage: {{ .Values.persistence.size }}
+{{- if .Values.persistence.storageClass }}
+{{- if (eq "-" .Values.persistence.storageClass) }}
+  storageClassName: ""
+{{- else }}
+  storageClassName: "{{ .Values.persistence.storageClass }}"
+{{- end }}
+{{- end }}
+{{- end -}}
 {{- end -}}
 {{- end -}}

@@ -1,15 +1,18 @@
 ---
 image:
   repository: louislam/uptime-kuma
-  pullPolicy: IfNotPresent
   tag: "1.23.11-debian"
+  pullPolicy: IfNotPresent
+  PullSecrets: []
 
-imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
 # If this option  set to false a StateFulset instead of a Deployment is used
 useDeploy: false
+
+# upgrade strategy type (e.g. Recreate or RollingUpdate)
+strategyType: Recreate
 
 serviceAccount:
   create: false
@@ -68,17 +71,14 @@ service:
 
 persistence:
   enabled: false
-  hostPath: /mnt/volume-0/apps/uptime-kuma
   #persistentVolumeClaim: {}
-
+  # hostPath: /path/to/the/config/folder
 # volume:
 #   enabled: false
 #   accessMode: ReadWriteOnce
 #   size: 4Gi
 #   existingClaim: ""
 
-# strategy:
-#   type: Recreate
 
 # serviceMonitor:
 #   enabled: false
