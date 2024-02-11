@@ -134,7 +134,7 @@ resources: {}
   #  memory: 128Mi
 
 nodeSelector:
-  kubernetes.io/hostname: dev-k3s-master-0
+  kubernetes.io/hostname: {}
 
 tolerations: []
 
