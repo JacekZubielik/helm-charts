@@ -82,7 +82,7 @@ persistence:
   ##
   ## If you want to use a volume on the host machine instead of a PVC:
   # hostPath: /path/to/the/config/folder
-  hostPath: /mnt/volume-0/apps/esphome
+  # hostPath: /mnt/volume-0/apps/esphome
 
 
 ## Additional hass container environment variable
