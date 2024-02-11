@@ -141,6 +141,23 @@ entries:
     - https://github.com/JacekZubielik/helm-charts/releases/download/ha-0.0.1/ha-0.0.1.tgz
     version: 0.0.1
   home-assistant:
+  - apiVersion: v2
+    appVersion: 2023.11.3
+    created: "2024-02-11T01:34:55.747668195Z"
+    description: Home Assistant chart
+    digest: 5876c7e17ced1142217ef3ec8e275b8f5fcf57dbf7b873aa1947f9f4de8c3c72
+    home: https://github.com/JacekZubielik/helm-charts/tree/master/charts/home-assistant
+    icon: https://raw.githubusercontent.com/home-assistant/assets/master/misc/logo-icon_template.png
+    maintainers:
+    - email: jack.zu@protonmail.com
+      name: Jacek Zubielik
+    name: home-assistant
+    sources:
+    - https://github.com/home-assistant/home-assistant
+    type: application
+    urls:
+    - https://github.com/JacekZubielik/helm-charts/releases/download/home-assistant-0.0.47/home-assistant-0.0.47.tgz
+    version: 0.0.47
   - annotations:
       category: Application
     apiVersion: v2
@@ -3262,4 +3279,4 @@ entries:
     urls:
     - https://github.com/JacekZubielik/helm-charts/releases/download/zigbee2mqtt-0.0.1/zigbee2mqtt-0.0.1.tgz
     version: 0.0.1
-generated: "2024-02-11T01:27:11.685417284Z"
+generated: "2024-02-11T01:34:55.748674005Z"
