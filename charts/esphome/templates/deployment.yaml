@@ -116,7 +116,7 @@ spec:
           {{- end }}
           {{- end }}
           {{- end }}
-          resources:k
+          resources:
 {{ toYaml .Values.resources | indent 12 }}
           {{- if .Values.hostMounts }}
           securityContext:
