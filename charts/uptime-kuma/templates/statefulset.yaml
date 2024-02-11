@@ -22,6 +22,7 @@ spec:
       annotations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+
       labels:
         {{- include "uptime-kuma.selectorLabels" . | nindent 8 }}
         {{- if .Values.podLabels }}
@@ -102,15 +103,15 @@ spec:
 
 
       volumes:
-      {{- if not .Values.persistence.enabled }}
+      # {{- if not .Values.persistence.enabled }}
       - name: uptime-kuma-storage
         hostPath:
           path: {{ .Values.persistence.hostPath }}
-      {{- end }}
+      # {{- end }}
       
-      {{- if and .Values.persistence.enabled .Values.persistence.existingClaim }}
-      - name: uptime-kuma-storage
-        persistentVolumeClaim:
-          claimName: {{ .Values.persistence.existingClaim }}
-      {{- end }}
+      # {{- if and .Values.persistence.enabled .Values.persistence.existingClaim }}
+      # - name: uptime-kuma-storage
+      #   persistentVolumeClaim:
+      #     claimName: {{ .Values.persistence.existingClaim }}
+      # {{- end }}
 {{- end -}}
