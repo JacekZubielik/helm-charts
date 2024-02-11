@@ -68,7 +68,7 @@ tolerations: []
 
 persistence:
   enabled: false
-  hostPath: {}
+  hostPath: /mnt/volume-0/apps/uptime-kuma
   #persistentVolumeClaim: {}
 
 # volume:

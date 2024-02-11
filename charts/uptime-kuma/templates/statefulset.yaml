@@ -109,9 +109,9 @@ spec:
           path: {{ .Values.persistence.hostPath }}
       {{- end }}
       
-      # {{- if and .Values.persistence.enabled .Values.persistence.existingClaim }}
+      {{/* # {{- if and .Values.persistence.enabled .Values.persistence.existingClaim }}
       # - name: uptime-kuma-storage
       #   persistentVolumeClaim:
       #     claimName: {{ .Values.persistence.existingClaim }}
-      # {{- end }}
+      # {{- end }} */}}
 {{- end -}}
