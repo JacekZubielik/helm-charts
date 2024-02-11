@@ -5,7 +5,6 @@ metadata:
   name: {{ include "uptime-kuma.fullname" . }}
   labels:
     {{- include "uptime-kuma.labels" . | nindent 4 }}
-
 spec:
   serviceName: {{ include "uptime-kuma.fullname" . }}
   replicas: 1
@@ -15,20 +14,17 @@ spec:
       {{- if .Values.podLabels }}
         {{- toYaml .Values.podLabels | nindent 6 }}
       {{- end }}
-
   template:
     metadata:
       {{- with .Values.podAnnotations }}
       annotations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-
       labels:
         {{- include "uptime-kuma.selectorLabels" . | nindent 8 }}
         {{- if .Values.podLabels }}
           {{- toYaml .Values.podLabels | nindent 8 }}
         {{- end }}
-
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -45,7 +41,6 @@ spec:
       dnsConfig:
         {{- toYaml .Values.dnsConfig | nindent 8 }}
       {{- end }}
-
       containers:
       - name: {{ .Chart.Name }}
         securityContext:
@@ -56,18 +51,15 @@ spec:
         env:
           {{- toYaml . | nindent 12 }}
         {{- end }}
-
         ports:
         - name: http
           containerPort: 3001
           protocol: TCP
         resources:
           {{- toYaml .Values.resources | nindent 12 }}
-
         volumeMounts:
         - mountPath: /app/data
           name: uptime-kuma-storage
-
         {{- if .Values.livenessProbe.enabled }}
         livenessProbe:
           exec:
@@ -76,7 +68,6 @@ spec:
           timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds}}
           initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds}}
         {{- end }}
-
         {{- if .Values.readinessProbe.enabled }}
         readinessProbe:
           httpGet:
@@ -87,7 +78,6 @@ spec:
         {{- end }}
         resources:
           {{- toYaml .Values.resources | nindent 12 }}
-
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -100,15 +90,12 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-
-
       volumes:
       {{- if not .Values.persistence.enabled }}
       - name: uptime-kuma-storage
         hostPath:
           path: {{ .Values.persistence.hostPath }}
       {{- end }}
-      
       {{/* # {{- if and .Values.persistence.enabled .Values.persistence.existingClaim }}
       # - name: uptime-kuma-storage
       #   persistentVolumeClaim:
