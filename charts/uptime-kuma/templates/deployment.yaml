@@ -61,7 +61,7 @@ spec:
           volumeMounts:
             {{- if .Values.volume.enabled }}
             - mountPath: /app/data
-              name: storage
+              name: uptime-kuma-storage
             {{- end -}}
             {{ with .Values.additionalVolumeMounts }}
               {{- toYaml . | nindent 12 }}
@@ -100,7 +100,7 @@ spec:
       {{ if or .Values.volume.enabled .Values.additionalVolumes -}}
       volumes:
         {{- if .Values.volume.enabled }}
-      - name: storage
+      - name: uptime-kuma-storage
         persistentVolumeClaim:
           {{- if not .Values.volume.existingClaim }}
           claimName: {{ include "uptime-kuma.fullname" . }}-pvc
