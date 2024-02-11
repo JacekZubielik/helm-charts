@@ -49,6 +49,72 @@ service:
   nodePort:
   annotations: {}
 
+
+
+resources:
+  {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+
+
+livenessProbe:
+  enabled: true
+  timeoutSeconds: 2
+  initialDelaySeconds: 15
+
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 5
+
+nodeSelector: {}
+affinity: {}
+tolerations: []
+
+
+persistence:
+  enabled: false
+  hostPath: {}
+  persistentVolumeClaim: {}
+
+
+
+
+
+
+
+# volume:
+#   enabled: false
+#   accessMode: ReadWriteOnce
+#   size: 4Gi
+#   existingClaim: ""
+
+strategy:
+  type: Recreate
+
+serviceMonitor:
+  enabled: false
+  interval: 60s
+  scrapeTimeout: 10s
+  scheme: ~
+  tlsConfig: {}
+  relabelings: []
+  metricRelabelings: []
+  selector: {}
+
+  namespace: ~
+  additionalLabels: {}
+  annotations: {}
+
+
 ingress:
   enabled: false
   # className: ""
@@ -82,68 +148,3 @@ ingress:
     # - secretName: chart-example-tls
     #   hosts:
     #     - chart-example.local
-
-resources:
-  {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
-
-
-
-livenessProbe:
-  enabled: true
-  timeoutSeconds: 2
-  initialDelaySeconds: 15
-
-readinessProbe:
-  enabled: true
-  initialDelaySeconds: 5
-
-nodeSelector: {}
-affinity: {}
-tolerations: []
-
-
-persistence:
-  enabled: false
-  hostPath: /mnt/volume-0/apps/uptime-kuma
-  persistentVolumeClaim: uptime-kuma
-
-
-
-
-
-
-
-# volume:
-#   enabled: false
-#   accessMode: ReadWriteOnce
-#   size: 4Gi
-#   existingClaim: ""
-
-strategy:
-  type: Recreate
-
-serviceMonitor:
-  enabled: false
-  interval: 60s
-  scrapeTimeout: 10s
-  scheme: ~
-  tlsConfig: {}
-  relabelings: []
-  metricRelabelings: []
-  selector: {}
-
-  namespace: ~
-  additionalLabels: {}
-  annotations: {}
-
-
