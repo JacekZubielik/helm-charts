@@ -20,10 +20,10 @@ podAnnotations: {}
 podLabels:
   {}
   # app: uptime-kuma
-# podEnv:
-#   # a default port must be set. required by container
-#   - name: "UPTIME_KUMA_PORT"
-#     value: "3001"
+podEnv:
+  # a default port must be set. required by container
+  - name: "UPTIME_KUMA_PORT"
+    value: "3001"
 
 podSecurityContext: {}
   # fsGroup: 2000
@@ -82,20 +82,20 @@ strategy:
 
 serviceMonitor:
   enabled: false
-#   interval: 60s
-#   scrapeTimeout: 10s
-#   scheme: ~
-#   tlsConfig: {}
-#   relabelings: []
-#   metricRelabelings: []
-#   selector: {}
+  interval: 60s
+  scrapeTimeout: 10s
+  scheme: ~
+  tlsConfig: {}
+  relabelings: []
+  metricRelabelings: []
+  selector: {}
 
-#   namespace: ~
-#   additionalLabels: {}
-#   annotations: {}
+  namespace: ~
+  additionalLabels: {}
+  annotations: {}
 
-# ingress:
-#   enabled: false
+ingress:
+  enabled: false
 #   # className: ""
 #   extraLabels:
 #     {}

@@ -72,7 +72,7 @@ spec:
         livenessProbe:
           exec:
             command:
-              - extra/healthcheck
+            - extra/healthcheck
           timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds}}
           initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds}}
         {{- end }}
