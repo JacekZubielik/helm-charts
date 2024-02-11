@@ -103,11 +103,11 @@ spec:
 
 
       volumes:
-      # {{- if not .Values.persistence.enabled }}
+      {{- if not .Values.persistence.enabled }}
       - name: uptime-kuma-storage
         hostPath:
           path: {{ .Values.persistence.hostPath }}
-      # {{- end }}
+      {{- end }}
       
       # {{- if and .Values.persistence.enabled .Values.persistence.existingClaim }}
       # - name: uptime-kuma-storage
