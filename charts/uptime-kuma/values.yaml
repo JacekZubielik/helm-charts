@@ -20,10 +20,10 @@ podAnnotations: {}
 podLabels:
   {}
   # app: uptime-kuma
-podEnv:
-  # a default port must be set. required by container
-  - name: "UPTIME_KUMA_PORT"
-    value: "3001"
+# podEnv:
+#   # a default port must be set. required by container
+#   - name: "UPTIME_KUMA_PORT"
+#     value: "3001"
 
 podSecurityContext: {}
   # fsGroup: 2000
