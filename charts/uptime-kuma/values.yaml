@@ -25,12 +25,11 @@ podLabels:
 #   - name: "UPTIME_KUMA_PORT"
 #     value: "3001"
 
-podSecurityContext:
-  {}
+podSecurityContext: {}
   # fsGroup: 2000
-
-securityContext:
-  {}
+# dnsPolicy: ""
+# dnsConfig: {}
+securityContext: {}
   # capabilities:
   #   drop:
   #   - ALL
@@ -40,16 +39,10 @@ securityContext:
 # dnsPolicy: ""
 # dnsConfig: {}
 
-
-
-
 service:
   type: ClusterIP
   port: 3001
-  nodePort:
   annotations: {}
-
-
 
 resources:
   {}
@@ -64,8 +57,6 @@ resources:
   #   cpu: 100m
   #   memory: 128Mi
 
-
-
 livenessProbe:
   enabled: true
   timeoutSeconds: 2
@@ -79,17 +70,10 @@ nodeSelector: {}
 affinity: {}
 tolerations: []
 
-
 persistence:
   enabled: false
   hostPath: {}
   persistentVolumeClaim: {}
-
-
-
-
-
-
 
 # volume:
 #   enabled: false
@@ -113,7 +97,6 @@ serviceMonitor:
   namespace: ~
   additionalLabels: {}
   annotations: {}
-
 
 ingress:
   enabled: false
