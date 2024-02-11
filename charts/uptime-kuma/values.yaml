@@ -44,8 +44,8 @@ service:
   port: 3001
   annotations: {}
 
-resources:
-  {}
+# resources:
+#   {}
   # limits:
   #   cpu: 100m
   #   memory: 128Mi
@@ -53,18 +53,18 @@ resources:
   #   cpu: 100m
   #   memory: 128Mi
 
-livenessProbe:
-  enabled: true
-  timeoutSeconds: 2
-  initialDelaySeconds: 15
+# livenessProbe:
+#   enabled: true
+#   timeoutSeconds: 2
+#   initialDelaySeconds: 15
 
-readinessProbe:
-  enabled: true
-  initialDelaySeconds: 5
+# readinessProbe:
+#   enabled: true
+#   initialDelaySeconds: 5
 
-nodeSelector: {}
-affinity: {}
-tolerations: []
+# nodeSelector: {}
+# affinity: {}
+# tolerations: []
 
 persistence:
   enabled: false
@@ -77,25 +77,25 @@ persistence:
 #   size: 4Gi
 #   existingClaim: ""
 
-strategy:
-  type: Recreate
+# strategy:
+#   type: Recreate
 
-serviceMonitor:
-  enabled: false
-  interval: 60s
-  scrapeTimeout: 10s
-  scheme: ~
-  tlsConfig: {}
-  relabelings: []
-  metricRelabelings: []
-  selector: {}
+# serviceMonitor:
+#   enabled: false
+#   interval: 60s
+#   scrapeTimeout: 10s
+#   scheme: ~
+#   tlsConfig: {}
+#   relabelings: []
+#   metricRelabelings: []
+#   selector: {}
 
-  namespace: ~
-  additionalLabels: {}
-  annotations: {}
+#   namespace: ~
+#   additionalLabels: {}
+#   annotations: {}
 
-ingress:
-  enabled: false
+# ingress:
+#   enabled: false
 #   # className: ""
 #   extraLabels:
 #     {}

@@ -60,22 +60,18 @@ spec:
         volumeMounts:
         - mountPath: /app/data
           name: uptime-kuma-storage
-        {{- if .Values.livenessProbe.enabled }}
         livenessProbe:
           exec:
             command:
             - extra/healthcheck
           timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds}}
           initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds}}
-        {{- end }}
-        {{- if .Values.readinessProbe.enabled }}
         readinessProbe:
           httpGet:
             path: /
             port: 3001
             scheme: HTTP
           initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds}}
-        {{- end }}
         resources:
           {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
