@@ -1,3 +1,4 @@
+---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -10,7 +11,6 @@ spec:
   selector:
     matchLabels:
       {{- include "app.selectorLabels" . | nindent 6 }}
-      # serviceName: {{ include "app.name" . }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -39,7 +39,6 @@ spec:
           protocol: TCP
         resources:
           {{- toYaml .Values.resources | nindent 12 }}
-        # {{- if .Values.livenessProbe.enabled }}
         livenessProbe:
           httpGet:
             path:              /
@@ -67,19 +66,14 @@ spec:
       - name: data
         hostPath:
           path: {{ .Values.persistence.hostPath }}
-      # - name: data
-      #   persistentVolumeClaim:
-      #     claimName: {{ include "app.fullname" . }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-
       {{- with .Values.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-
       {{- with .Values.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}

@@ -12,13 +12,11 @@ metadata:
   annotations:
 {{ toYaml . | indent 4 }}
 {{- end }}
-
 spec:
   ports:
     - port: {{ .Values.service.port }}
       targetPort: {{ .Values.service.targetPort }}
       protocol: TCP
       name: {{ .Values.service.portName }}
-
   selector:
     {{- include "app.selectorLabels" . | nindent 4 }}

@@ -17,8 +17,6 @@ spec:
 {{- if .Values.monitoring.serviceMonitor.interval }}
     interval: {{ .Values.monitoring.serviceMonitor.interval }}
 {{- end }}
-
-
   jobLabel: {{ template "app.fullname" . }}-prometheus-exporter
   namespaceSelector:
     matchNames:
