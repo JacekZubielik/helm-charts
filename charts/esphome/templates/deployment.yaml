@@ -128,7 +128,6 @@ spec:
         {{- if .Values.persistence.hostPath }}
         hostPath:
           path: {{.Values.persistence.hostPath}}
-          type: Directory
         {{- else }}
         persistentVolumeClaim:
           claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ template "esphome.fullname" . }}{{- end }}
