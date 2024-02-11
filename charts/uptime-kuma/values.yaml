@@ -5,14 +5,14 @@ image:
   pullPolicy: IfNotPresent
   PullSecrets: []
 
-nameOverride: ""
-fullnameOverride: ""
-
 # If this option  set to false a StateFulset instead of a Deployment is used
 useDeploy: false
 
 # upgrade strategy type (e.g. Recreate or RollingUpdate)
 strategyType: Recreate
+
+nameOverride: ""
+fullnameOverride: ""
 
 serviceAccount:
   create: false
@@ -22,8 +22,8 @@ serviceAccount:
 podAnnotations: {}
 podLabels:
   {}
-  # app: uptime-kuma
-# podEnv:
+podEnv:
+  {}
 #   # a default port must be set. required by container
 #   - name: "UPTIME_KUMA_PORT"
 #     value: "3001"
@@ -56,18 +56,18 @@ service:
   #   cpu: 100m
   #   memory: 128Mi
 
-# livenessProbe:
-#   enabled: true
-#   timeoutSeconds: 2
-#   initialDelaySeconds: 15
+livenessProbe:
+  enabled: true
+  timeoutSeconds: 2
+  initialDelaySeconds: 15
 
-# readinessProbe:
-#   enabled: true
-#   initialDelaySeconds: 5
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 5
 
-# nodeSelector: {}
-# affinity: {}
-# tolerations: []
+nodeSelector: {}
+affinity: {}
+tolerations: []
 
 persistence:
   enabled: false
@@ -80,50 +80,49 @@ persistence:
 #   existingClaim: ""
 
 
-# serviceMonitor:
-#   enabled: false
-#   interval: 60s
-#   scrapeTimeout: 10s
-#   scheme: ~
-#   tlsConfig: {}
-#   relabelings: []
-#   metricRelabelings: []
-#   selector: {}
+serviceMonitor:
+  enabled: false
+  interval: 60s
+  scrapeTimeout: 10s
+  scheme: ~
+  tlsConfig: {}
+  relabelings: []
+  metricRelabelings: []
+  selector: {}
+  namespace: ~
+  additionalLabels: {}
+  annotations: {}
 
-#   namespace: ~
-#   additionalLabels: {}
-#   annotations: {}
+ingress:
+  enabled: false
+  # className: ""
+  extraLabels:
+    {}
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    nginx.ingress.kubernetes.io/server-snippets: |
+      location / {
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_http_version 1.1;
+        proxy_set_header X-Forwarded-Host $http_host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_set_header Host $host;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header   Upgrade $http_upgrade;
+        proxy_cache_bypass $http_upgrade;
+      }
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
 
-# ingress:
-#   enabled: false
-#   # className: ""
-#   extraLabels:
-#     {}
-#   annotations:
-#     nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
-#     nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
-#     nginx.ingress.kubernetes.io/server-snippets: |
-#       location / {
-#         proxy_set_header Upgrade $http_upgrade;
-#         proxy_http_version 1.1;
-#         proxy_set_header X-Forwarded-Host $http_host;
-#         proxy_set_header X-Forwarded-Proto $scheme;
-#         proxy_set_header X-Forwarded-For $remote_addr;
-#         proxy_set_header Host $host;
-#         proxy_set_header Connection "upgrade";
-#         proxy_set_header X-Real-IP $remote_addr;
-#         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-#         proxy_set_header   Upgrade $http_upgrade;
-#         proxy_cache_bypass $http_upgrade;
-#       }
-#   hosts:
-#     - host: chart-example.local
-#       paths:
-#         - path: /
-#           pathType: ImplementationSpecific
-
-#   tls:
-#     []
-#     # - secretName: chart-example-tls
-#     #   hosts:
-#     #     - chart-example.local
+  tls:
+    []
+    # - secretName: chart-example-tls
+    #   hosts:
+    #     - chart-example.local
