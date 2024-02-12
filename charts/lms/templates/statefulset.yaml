@@ -77,8 +77,6 @@ spec:
         {{- else }}
         persistentVolumeClaim:
           claimName: {{ .Values.persistence.config.existingClaim | default (include "logitech-media-server.fullname" .) }}
-        {{- else }}
-          emptyDir: {}
         {{- end }}
         - name: music
         {{- if .Values.persistence.music.enabled }}
