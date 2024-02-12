@@ -73,7 +73,7 @@ spec:
       volumes:
       - name: config
       {{- if .Values.persistence.enabled }}
-        {{- if .Values.persistence.hostPath }}
+        {{- if .Values.persistence.config.hostPath }}
         hostPath:
           path: {{.Values.persistence.hostPath}}
         {{- else }}
@@ -94,7 +94,7 @@ spec:
 
       - name: music
       {{- if .Values.persistence.enabled }}
-        {{- if .Values.persistence.hostPath }}
+        {{- if .Values.persistence.music.hostPath }}
         hostPath:
           path: {{.Values.persistence.hostPath}}
         {{- else }}
