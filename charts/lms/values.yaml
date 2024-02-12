@@ -36,23 +36,19 @@ ingress:
   #      logitech-media-server
 
 persistence:
-  enabled: false
-  ## esphome data Persistent Volume Storage Class
-  ## If defined, storageClassName: <storageClass>
-  ## If set to "-", storageClassName: "", which disables dynamic provisioning
-  ## If undefined (the default) or set to null, no storageClassName spec is
-  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-  ##   GKE, AWS & OpenStack)
-  ##
-  # storageClass: "-"
-  ##
-  ## If you want to reuse an existing claim, you can pass the name of the PVC using
-  ## the existingClaim variable
-  # existingClaim: your-claim
-  ##
-  ## If you want to use a volume on the host machine instead of a PVC:
-  # hostPath: /path/to/the/config/folder
-  # hostPath: /mnt/volume-0/apps/lms
+  config:
+    enabled: true
+    existingClaim:
+    ## config data Persistent Volume Storage Class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    storageClass:
+    accessMode: ReadWriteMany
+    size: 1Gi
+  music:
 
 # resources:
 #   requests:
