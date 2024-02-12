@@ -87,9 +87,3 @@ spec:
       {{- else }}
         emptyDir: {}
       {{ end }}
-      {{- range .Values.hostMounts }}
-      - name: {{ .name }}
-        hostPath:
-          path: {{.hostPath}}
-          {{- if .type }}
-          type: {{ .type }}
