@@ -68,19 +68,47 @@ spec:
         {{- toYaml .Values.affinity | nindent 8 }}
       tolerations:
         {{- toYaml .Values.tolerations | nindent 8 }}
+
+
       volumes:
-        - name: config
-        {{- if .Values.persistence.config.enabled }}
-        {{- if .Values.persistence.config.hostPath }}
+      - name: config
+      {{- if .Values.persistence.enabled }}
+        {{- if .Values.persistence.hostPath }}
         hostPath:
-          path: {{.Values.persistence.config.hostPath}}
+          path: {{.Values.persistence.hostPath}}
         {{- else }}
         persistentVolumeClaim:
-          claimName: {{ .Values.persistence.config.existingClaim | default (include "logitech-media-server.fullname" .) }}
+          claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ template "logitech-media-server.fullname" . }}{{- end }}
         {{- end }}
-        - name: music
-        {{- if .Values.persistence.music.enabled }}
-        {{- if .Values.persistence.music.hostPath }}
+      {{- else }}
+        emptyDir: {}
+      {{ end }}
+      {{- range .Values.hostMounts }}
+      - name: {{ .name }}
         hostPath:
-          path: {{.Values.persistence.music.hostPath}}
+          path: {{.hostPath}}
+          {{- if .type }}
+          type: {{ .type }}
+          {{- end }}
+      {{- end }}
+
+      - name: music
+      {{- if .Values.persistence.enabled }}
+        {{- if .Values.persistence.hostPath }}
+        hostPath:
+          path: {{.Values.persistence.hostPath}}
+        {{- else }}
+        persistentVolumeClaim:
+          claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ template "logitech-media-server.fullname" . }}{{- end }}
         {{- end }}
+      {{- else }}
+        emptyDir: {}
+      {{ end }}
+      {{- range .Values.hostMounts }}
+      - name: {{ .name }}
+        hostPath:
+          path: {{.hostPath}}
+          {{- if .type }}
+          type: {{ .type }}
+          {{- end }}
+      {{- end }}
