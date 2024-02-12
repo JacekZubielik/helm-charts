@@ -93,4 +93,3 @@ spec:
           path: {{.hostPath}}
           {{- if .type }}
           type: {{ .type }}
-          {{- end }}
