@@ -70,16 +70,19 @@ spec:
         {{- toYaml .Values.tolerations | nindent 8 }}
       volumes:
         - name: config
-          {{- if .Values.persistence.config.enabled }}
-          persistentVolumeClaim:
-            claimName: {{ .Values.persistence.config.existingClaim | default (include "logitech-media-server.fullname" .) }}
-          {{- else }}
-            emptyDir: {}
-          {{- end }}
-        - name: music
-          {{- if .Values.persistence.music }}
-          {{- toYaml .Values.persistence.music | nindent 10 }}
-          {{- else }}
+        {{- if .Values.persistence.config.enabled }}
+        {{- if .Values.persistence.config.hostPath }}
+        hostPath:
+          path: {{.Values.persistence.config.hostPath}}
+        {{- else }}
+        persistentVolumeClaim:
+          claimName: {{ .Values.persistence.config.existingClaim | default (include "logitech-media-server.fullname" .) }}
+        {{- else }}
           emptyDir: {}
-          {{- end }}
-
+        {{- end }}
+        - name: music
+        {{- if .Values.persistence.music.enabled }}
+        {{- if .Values.persistence.music.hostPath }}
+        hostPath:
+          path: {{.Values.persistence.music.hostPath}}
+        {{- end }}
