@@ -16,10 +16,8 @@ spec:
         {{- include "lms.labels" . | nindent 8 }}
 
     spec:
-      #serviceAccountName: {{ include "lms.serviceAccountName" . }}
       initContainers:
         - name: init-config
-          #image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: ["sh", "-c", "mkdir -pv /config/playlists /config/config; chown -Rc 1000:1000 /config"]
