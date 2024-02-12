@@ -92,7 +92,7 @@ spec:
           path: {{.Values.persistence.hostPath}}
         {{- else }}
         persistentVolumeClaim:
-          claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ template "esphome.fullname" . }}{{- end }}
+          claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ template "uptime-kuma.fullname" . }}{{- end }}
         {{- end }}
       {{- else }}
         emptyDir: {}
