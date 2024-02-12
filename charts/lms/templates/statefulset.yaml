@@ -1,0 +1,97 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name:  {{ template "logitech-media-server.fullname" . }}
+  labels:
+    {{- include "logitech-media-server.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  serviceName: {{ template "logitech-media-server.fullname" . }}
+  selector:
+    matchLabels:
+      {{- include "logitech-media-server.labels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "logitech-media-server.labels" . | nindent 8 }}
+    spec:
+      initContainers:
+        - name: init-config
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["sh", "-c", "mkdir -pv /config/playlists /config/config; chown -Rc 1000:1000 /config"]
+          volumeMounts:
+            - mountPath: /config
+              name: config
+      containers:
+        - name: logitech-media-server
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 9000
+            - name: control
+              containerPort: 3483
+              protocol: TCP
+            - name: discovery
+              containerPort: 3483
+              protocol: UDP
+          volumeMounts:
+            - mountPath: /srv/squeezebox
+              name: config
+              subPath: config
+            - mountPath: /playlists
+              name: config
+              subPath: playlists
+            - mountPath: /music
+              name: music
+              readOnly: true
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 90
+            periodSeconds: 5
+            failureThreshold: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 2
+            periodSeconds: 2
+            failureThreshold: 5
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      nodeSelector:
+        {{- toYaml .Values.nodeSelector | nindent 8 }}
+      affinity:
+        {{- toYaml .Values.affinity | nindent 8 }}
+      tolerations:
+        {{- toYaml .Values.tolerations | nindent 8 }}
+      volumes:
+      - name: config
+      {{- if .Values.persistence.enabled }}
+        {{- if .Values.persistence.hostPath }}
+        hostPath:
+          path: {{.Values.persistence.hostPath}}
+        {{- else }}
+      - name: music
+      {{- if .Values.persistence.enabled }}
+        {{- if .Values.persistence.hostPath }}
+        hostPath:
+          path: {{.Values.persistence.hostPath}}
+        {{- else }}
+        persistentVolumeClaim:
+          claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ template "logitech-media-server.fullname" . }}{{- end }}
+        {{- end }}
+      {{- else }}
+        emptyDir: {}
+      {{ end }}
+      {{- range .Values.hostMounts }}
+      - name: {{ .name }}
+        hostPath:
+          path: {{.hostPath}}
+          {{- if .type }}
+          type: {{ .type }}
+          {{- end }}
+      {{- end }}
