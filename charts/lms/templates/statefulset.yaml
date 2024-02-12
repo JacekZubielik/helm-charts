@@ -75,7 +75,7 @@ spec:
       {{- if .Values.persistence.enabled }}
         {{- if .Values.persistence.config.hostPath }}
         hostPath:
-          path: {{.Values.persistence.hostPath}}
+          path: {{.Values.persistence.config.hostPath}}
         {{- else }}
         persistentVolumeClaim:
           claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ template "lms.fullname" . }}{{- end }}
@@ -96,7 +96,7 @@ spec:
       {{- if .Values.persistence.enabled }}
         {{- if .Values.persistence.music.hostPath }}
         hostPath:
-          path: {{.Values.persistence.hostPath}}
+          path: {{.Values.persistence.music.hostPath}}
         {{- else }}
         persistentVolumeClaim:
           claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ template "lms.fullname" . }}{{- end }}
