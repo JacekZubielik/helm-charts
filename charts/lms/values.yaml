@@ -5,12 +5,15 @@ image:
 
 extraLabels: {}
 
+replicaCount: 1
+
 settings:
 
 service:
   annotations: {}
   clusterIP: ""
   httpPort: "9000"
+  dlnaPort: "9090"
   controlPort: "3483"
   externalIPs: []
 
@@ -32,9 +35,9 @@ ingress:
 
 persistence:
   enabled: true
-  config:
+  configstorage:
     hostPath: /mnt/volume-0/apps/lms
-  music:
+  musicstorage:
     hostPath: /mnt/volume-0/media/music
 
 # resources:
