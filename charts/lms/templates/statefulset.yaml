@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name:  {{ template "logitech-media-server.fullname" . }}
+  name:  {{ template "lms.fullname" . }}
   labels:
-    {{- include "logitech-media-server.labels" . | nindent 4 }}
+    {{- include "lms.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
-  serviceName: {{ template "logitech-media-server.fullname" . }}
+  serviceName: {{ template "lms.fullname" . }}
   selector:
     matchLabels:
-      {{- include "logitech-media-server.labels" . | nindent 6 }}
+      {{- include "lms.labels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "logitech-media-server.labels" . | nindent 8 }}
+        {{- include "lms.labels" . | nindent 8 }}
     spec:
       initContainers:
         - name: init-config
@@ -24,7 +24,7 @@ spec:
             - mountPath: /config
               name: config
       containers:
-        - name: logitech-media-server
+        - name: lms
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
@@ -78,7 +78,7 @@ spec:
           path: {{.Values.persistence.hostPath}}
         {{- else }}
         persistentVolumeClaim:
-          claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ template "logitech-media-server.fullname" . }}{{- end }}
+          claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ template "lms.fullname" . }}{{- end }}
         {{- end }}
       {{- else }}
         emptyDir: {}
@@ -99,7 +99,7 @@ spec:
           path: {{.Values.persistence.hostPath}}
         {{- else }}
         persistentVolumeClaim:
-          claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ template "logitech-media-server.fullname" . }}{{- end }}
+          claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ template "lms.fullname" . }}{{- end }}
         {{- end }}
       {{- else }}
         emptyDir: {}

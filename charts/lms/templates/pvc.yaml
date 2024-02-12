@@ -2,9 +2,9 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ template "logitech-media-server.fullname" . }}
+  name: {{ template "lms.fullname" . }}
   labels:
-    {{- include "logitech-media-server.labels" . | nindent 4 }}
+    {{- include "lms.labels" . | nindent 4 }}
 spec:
   accessModes:
     - {{ .Values.persistence.config.accessMode | quote }}

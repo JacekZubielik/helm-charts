@@ -29,11 +29,11 @@ ingress:
   annotations: {}
   path: /
   hosts:
-    - logitech-media-server
+    - lms
   tls: []
-  #  - secretName: logitech-media-server-tls
+  #  - secretName: lms-tls
   #    hosts:
-  #      logitech-media-server
+  #      lms
 
 persistence:
   enabled: true

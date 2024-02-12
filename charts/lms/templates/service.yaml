@@ -5,9 +5,9 @@ metadata:
   annotations:
     {{- toYaml .Values.service.annotations | nindent 4 }}
   {{- end }}
-  name: {{ template "logitech-media-server.fullname" . }}
+  name: {{ template "lms.fullname" . }}
   labels:
-    {{- include "logitech-media-server.labels" . | nindent 4 }}
+    {{- include "lms.labels" . | nindent 4 }}
 spec:
   clusterIP: {{ .Values.service.clusterIP | quote }}
   {{- if .Values.service.externalIPs }}
@@ -35,5 +35,5 @@ spec:
       port: {{ .Values.service.controlPort }}
       targetPort: discovery
   selector:
-    {{- include "logitech-media-server.labels" . | nindent 4 }}
+    {{- include "lms.labels" . | nindent 4 }}
   type: {{ .Values.service.type }}
