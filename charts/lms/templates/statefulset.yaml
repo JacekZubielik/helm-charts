@@ -15,14 +15,14 @@ spec:
       labels:
         {{- include "lms.labels" . | nindent 8 }}
     spec:
-      initContainers:
-      - name: init-config
-        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-        imagePullPolicy: {{ .Values.image.pullPolicy }}
-        command: ["sh", "-c", "mkdir -pv /config/playlists /config/config; chown -Rc 1000:1000 /config"]
-        volumeMounts:
-          - mountPath: /config
-            name: config
+      # initContainers:
+      # - name: init-config
+      #   image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+      #   imagePullPolicy: {{ .Values.image.pullPolicy }}
+      #   command: ["sh", "-c", "mkdir -pv /config/playlists /config/config; chown -Rc 1000:1000 /config"]
+      #   volumeMounts:
+      #     - mountPath: /config
+      #       name: config
       containers:
       - name: lms
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -39,13 +39,13 @@ spec:
         volumeMounts:
         - mountPath: /srv/squeezebox
           name: config
-          subPath: config
+          #subPath: config
         # - mountPath: /playlists
         #   name: config
         #   subPath: playlists
-        # - mountPath: /music
-        #   name: music
-        #   readOnly: true
+        - mountPath: /music
+          name: music
+          readOnly: true
         livenessProbe:
           httpGet:
             path: /
