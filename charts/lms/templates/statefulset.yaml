@@ -94,4 +94,3 @@ spec:
           {{- if .type }}
           type: {{ .type }}
           {{- end }}
-      {{- end }}
