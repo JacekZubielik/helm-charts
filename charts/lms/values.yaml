@@ -3,7 +3,6 @@ image:
   tag: 8.4.0
   pullPolicy: IfNotPresent
 
-## Add additional labels to all resources
 extraLabels: {}
 
 settings:
@@ -11,12 +10,8 @@ settings:
 service:
   annotations: {}
   clusterIP: ""
-
   httpPort: "9000"
   controlPort: "3483"
-  ## List of IP addresses at which the service is available
-  ## Ref: https://kubernetes.io/docs/user-guide/services/#external-ips
-  ##
   externalIPs: []
 
   loadBalancerIP: ""
@@ -39,21 +34,8 @@ persistence:
   enabled: true
   config:
     hostPath: /mnt/volume-0/apps/lms
-  #   existingClaim:
-  #   ## config data Persistent Volume Storage Class
-  #   ## If defined, storageClassName: <storageClass>
-  #   ## If set to "-", storageClassName: "", which disables dynamic provisioning
-  #   ## If undefined (the default) or set to null, no storageClassName spec is
-  #   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-  #   ##   GKE, AWS & OpenStack)
-  #   storageClass:
-  #   accessMode: ReadWriteOnce
-  #   size: 1Gi
   music:
-    #enabled: true
     hostPath: /mnt/volume-0/media/music
-
-
 
 # resources:
 #   requests:
