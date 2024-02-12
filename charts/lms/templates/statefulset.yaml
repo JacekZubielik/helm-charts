@@ -83,14 +83,6 @@ spec:
       {{- else }}
         emptyDir: {}
       {{ end }}
-      {{- range .Values.hostMounts }}
-      - name: {{ .name }}
-        hostPath:
-          path: {{.hostPath}}
-          {{- if .type }}
-          type: {{ .type }}
-          {{- end }}
-      {{- end }}
 
       - name: music
       {{- if .Values.persistence.enabled }}
@@ -105,6 +97,7 @@ spec:
         emptyDir: {}
       {{ end }}
       {{- range .Values.hostMounts }}
+
       - name: {{ .name }}
         hostPath:
           path: {{.hostPath}}
