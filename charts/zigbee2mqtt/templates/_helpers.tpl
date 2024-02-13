@@ -1,3 +1,4 @@
+{{/* vim: set filetype=mustache: */}}
 {{/*
 Expand the name of the chart.
 */}}
@@ -48,4 +49,15 @@ Selector labels
 {{- define "zigbee2mqtt.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "zigbee2mqtt.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+{{/*
+Create the name of the service account to use
+*/}}
+{{- define "zigbee2mqtt.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create }}
+{{- default (include "zigbee2mqtt.fullname" .) .Values.serviceAccount.name }}
+{{- else }}
+{{- default "default" .Values.serviceAccount.name }}
+{{- end }}
 {{- end }}

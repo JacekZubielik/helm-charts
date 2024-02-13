@@ -1,21 +1,16 @@
-annotations:
-  category: Application
 apiVersion: v2
-appVersion: 1.33.2
-version: 0.0.70
 name: zigbee2mqtt
-description: Zigbee to MQTT bridge chart
 type: application
-icon: https://www.zigbee2mqtt.io/logo.png
-kubeVersion: ">=1.16.0-0"
+description: Bridges events and allows you to control your Zigbee devices via MQTT
+appVersion: 1.35.3
+version: 0.0.1
 keywords:
   - zigbee
   - mqtt
-  - home-assistant
 home: https://github.com/JacekZubielik/helm-charts/tree/master/charts/zigbee2mqtt
-icon: https://www.zigbee2mqtt.io/logo.png
+icon: https://www.zigbee2mqtt.io/images/logo.png
 sources:
   - https://github.com/Koenkk/zigbee2mqtt
 maintainers:
-  - name: Jacek Zubielik
-    email: jack.zu@protonmail.com
+- name: Jacek Zubielik
+  email: jack.zu@protonmail.com
