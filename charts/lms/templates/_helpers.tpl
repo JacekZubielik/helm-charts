@@ -31,14 +31,35 @@ Create chart name and version as used by the chart label.
 {{- end -}}
 
 {{/*
-Generate all the labels for chart-deployed resources
+Common labels
 */}}
 {{- define "lms.labels" -}}
-app.kubernetes.io/name: {{ template "lms.name" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
+helm.sh/chart: {{ include "lms.chart" . }}
+
+{{ include "lms.selectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion }}
+{{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
-helm.sh/chart: {{ template "lms.chart" . }}
-{{- if .Values.extraLabels -}}
-{{- toYaml .Values.extraLabels -}}
-{{- end -}}
-{{- end -}}
+{{- end }}
+
+{{/*
+Selector labels
+*/}}
+{{- define "lms.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "lms.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+{{/*
+Create the name of the service account to use
+*/}}
+{{- define "lms.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create }}
+{{- default (include "lms.fullname" .) .Values.serviceAccount.name }}
+{{- else }}
+{{- default "default" .Values.serviceAccount.name }}
+{{- end }}
+{{- end }}
+
+

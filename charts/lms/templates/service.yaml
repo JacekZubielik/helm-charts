@@ -5,7 +5,7 @@ metadata:
   annotations:
 {{- toYaml .Values.service.annotations | nindent 4 }}
 {{- end }}
-  name: {{ template "lms.fullname" . }}
+  name: {{ include "lms.fullname" . }}
   labels:
 {{- include "lms.labels" . | nindent 4 }}
 spec:

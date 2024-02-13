@@ -3,6 +3,35 @@ image:
   tag: 8.4.0
   pullPolicy: IfNotPresent
 
+strategyType: Recreate
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: false
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels:
+  {}
+podEnv:
+  {}
+#   - name: "exemple"
+#     value: "3001"
+
+podSecurityContext: {}
+  # fsGroup: 2000
+# dnsPolicy: ""
+# dnsConfig: {}
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
 service:
   annotations: {}
   type: ClusterIP
@@ -26,6 +55,62 @@ ingress:
   #    hosts:
   #      lms
 
+
+ingress:
+  enabled: false
+  # className: ""
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    nginx.ingress.kubernetes.io/server-snippets: |
+      location / {
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_http_version 1.1;
+        proxy_set_header X-Forwarded-Host $http_host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_set_header Host $host;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header   Upgrade $http_upgrade;
+        proxy_cache_bypass $http_upgrade;
+      }
+  hosts:
+    - host: lms.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+    []
+    # - secretName: letsencrypt-staging
+    #   hosts:
+    #     - lms.local
+
+
+# resources:
+#   requests:
+#     cpu: "1"
+#     memory: "256Mi"
+#   limits:
+#     cpu: "1"
+#     memory: "512Mi"
+
+
+livenessProbe:
+  enabled: true
+  timeoutSeconds: 2
+  initialDelaySeconds: 15
+
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 5
+
+nodeSelector:
+  kubernetes.io/hostname: {}
+affinity: {}
+tolerations: []
+
 persistence:
   enabled: false
   configstorage:
@@ -41,19 +126,15 @@ persistence:
     #     storage: 2Gi
     # storageClassName: ""
 
-# resources:
-#   requests:
-#     cpu: "1"
-#     memory: "256Mi"
-#   limits:
-#     cpu: "1"
-#     memory: "512Mi"
-
-nodeSelector:
-  kubernetes.io/hostname: dev-k3s-master-0
-
-# nodeSelector: {}
-
-tolerations: []
-
-affinity: {}
+serviceMonitor:
+  enabled: true
+  interval: 60s
+  scrapeTimeout: 10s
+  scheme: ~
+  tlsConfig: {}
+  relabelings: []
+  metricRelabelings: []
+  selector: {}
+  namespace: ~
+  additionalLabels: {}
+  annotations: {}
