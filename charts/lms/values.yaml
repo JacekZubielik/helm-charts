@@ -5,7 +5,7 @@ image:
 
 extraLabels: {}
 
-replicaCount: 1
+#replicaCount: 1
 
 settings:
 
@@ -39,6 +39,14 @@ persistence:
     hostPath: /mnt/volume-0/apps/lms
   musicstorage:
     hostPath: /mnt/volume-0/media/music
+  pvc:
+    enabled: false
+    # accessModes:
+    #   - {}
+    # resources:
+    #   requests:
+    #     storage: 2Gi
+    # storageClassName: ""
 
 # resources:
 #   requests:

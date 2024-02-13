@@ -41,7 +41,7 @@ spec:
           containerPort: 3483
           protocol: UDP
         volumeMounts:
-        - mountPath: /srv/squeezebox
+        - mountPath: /config #/srv/squeezebox
           name: config-storage
           subPath: config
         - mountPath: /playlists
@@ -99,8 +99,9 @@ spec:
       {{- else }}
         emptyDir: {}
       {{ end }}
-      {{- range .Values.hostMounts }}
 
+
+      {{- range .Values.hostMounts }}
       - name: {{ .name }}
         hostPath:
           path: {{.hostPath}}
