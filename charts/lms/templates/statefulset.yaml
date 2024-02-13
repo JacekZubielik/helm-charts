@@ -16,14 +16,14 @@ spec:
         {{- include "lms.labels" . | nindent 8 }}
 
     spec:
-      initContainers:
-        - name: init-config
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command: ["sh", "-c", "mkdir -pv /config/config/playlists /config/config; chown -Rc 1000:1000 /config"]
-          volumeMounts:
-            - mountPath: /config
-              name: config-storage
+      # initContainers:
+      #   - name: init-config
+      #     image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+      #     imagePullPolicy: {{ .Values.image.pullPolicy }}
+      #     command: ["sh", "-c", "mkdir -pv /config/config/playlists /config/config; chown -Rc 1000:1000 /config"]
+      #     volumeMounts:
+      #       - mountPath: /config
+      #         name: config-storage
       containers:
       - name: lms
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
