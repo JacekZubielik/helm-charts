@@ -79,18 +79,22 @@ spec:
         - mountPath: /music
           name: music-storage
           readOnly: true
+        {{- if .Values.livenessProbe.enabled }}
         livenessProbe:
           exec:
             command:
             - extra/healthcheck
           timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds}}
           initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds}}
+        {{- end }}
+        {{- if .Values.readinessProbe.enabled }}
         readinessProbe:
           httpGet:
             path: /
             port: http
             scheme: HTTP
           initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds}}
+        {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
