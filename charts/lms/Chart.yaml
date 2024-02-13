@@ -3,7 +3,7 @@ apiVersion: v2
 appVersion: 8.4.0
 description: lms
 name: lms
-version: 0.0.39
+version: 0.0.40
 keywords:
 - lms
 type: application

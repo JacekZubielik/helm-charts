@@ -35,26 +35,12 @@ securityContext: {}
 service:
   annotations: {}
   type: ClusterIP
-  #clusterIP: ""
   externalIPs: []
   loadBalancerIP: ""
   loadBalancerSourceRanges: []
   httpPort: "9000"
   dlnaPort: "9090"
   controlPort: "3483"
-
-ingress:
-  enabled: false
-  class:
-  annotations: {}
-  path: /
-  hosts:
-    - lms
-  tls: []
-  #  - secretName: lms-tls
-  #    hosts:
-  #      lms
-
 
 ingress:
   enabled: false
