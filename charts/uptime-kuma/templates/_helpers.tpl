@@ -37,7 +37,7 @@ Common labels
 helm.sh/chart: {{ include "uptime-kuma.chart" . }}
 {{ include "uptime-kuma.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
-app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+app.kubernetes.io/version: {{ .Chart.AppVersion }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
