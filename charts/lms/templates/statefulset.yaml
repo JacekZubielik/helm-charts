@@ -5,7 +5,7 @@ metadata:
   labels:
     {{- include "lms.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: 1
   serviceName: {{ template "lms.fullname" . }}
   selector:
     matchLabels:
@@ -20,7 +20,7 @@ spec:
         - name: init-config
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command: ["sh", "-c", "mkdir -pv /config/playlists /config/config; chown -Rc 1000:1000 /config"]
+          command: ["sh", "-c", "mkdir -pv /config/playlists /config/config /config/cache /config/logs /config/prefs; chown -Rc 1000:1000 /config"]
           volumeMounts:
             - mountPath: /config
               name: config-storage
