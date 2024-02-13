@@ -22,7 +22,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: ["sh", "-c", "mkdir -pv /config/playlists /config/config /config/cache /config/logs /config/prefs; chown -Rc 1000:1000 /config"]
           volumeMounts:
-            - mountPath: /
+            - mountPath: /config
               name: config-storage
       containers:
       - name: lms
