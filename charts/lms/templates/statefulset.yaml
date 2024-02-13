@@ -20,7 +20,7 @@ spec:
       #   - name: init-config
       #     image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
       #     imagePullPolicy: {{ .Values.image.pullPolicy }}
-      #     command: ["sh", "-c", "mkdir -pv /config/config/playlists /config/config; chown -Rc 1000:1000 /config"]
+      #     command: ["sh", "-c", "mkdir -pv /config/config; chown -Rc 1000:1000 /config"]
       #     volumeMounts:
       #       - mountPath: /config
       #         name: config-storage
@@ -47,6 +47,8 @@ spec:
         - mountPath: /config/playlists
           name: config-storage
           #subPath: playlists
+        - mountPath: /config/IR
+          name: config-storage
         - mountPath: /music
           name: music-storage
           readOnly: true
