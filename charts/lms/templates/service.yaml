@@ -9,6 +9,7 @@ metadata:
   labels:
     {{- include "lms.labels" . | nindent 4 }}
 spec:
+  type: {{ .Values.service.type }}
   clusterIP: {{ .Values.service.clusterIP }}
   {{- if .Values.service.externalIPs }}
   externalIPs:
@@ -40,4 +41,4 @@ spec:
       targetPort: discovery
   selector:
     {{- include "lms.labels" . | nindent 4 }}
-  type: {{ .Values.service.type }}
+
