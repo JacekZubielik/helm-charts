@@ -1,4 +1,4 @@
-{{- if and .Values.persistence.pvc.enabled (not .Values.persistence.config.existingClaim) }}
+{{- if and .Values.persistence.pvc.enabled (not .Values.persistence.configstorage.hostPath) }}
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
@@ -7,12 +7,12 @@ metadata:
     {{- include "lms.labels" . | nindent 4 }}
 spec:
   accessModes:
-    - {{ .Values.persistence.config.accessMode }}
+    - {{ .Values.persistence.pvc.accessMode }}
   resources:
     requests:
-      storage: {{ .Values.persistence.config.size }}
-  {{- if .Values.persistence.config.storageClass }}
-  {{- if (eq "-" .Values.persistence.config.storageClass) }}
+      storage: {{ .Values.persistence.pvc.size }}
+  {{- if .Values.persistence.pvc.storageClass }}
+  {{- if (eq "-" .Values.persistence.pvc.storageClass) }}
   storageClassName: ""
   {{- else }}
   storageClassName: "{{ .Values.persistence.pvc.storageClass }}"
