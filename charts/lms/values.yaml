@@ -3,22 +3,16 @@ image:
   tag: 8.4.0
   pullPolicy: IfNotPresent
 
-extraLabels: {}
-
-#replicaCount: 1
-
 settings:
 
 service:
-  annotations: {}
-  clusterIP: ""
   httpPort: "9000"
   dlnaPort: "9090"
   controlPort: "3483"
   externalIPs: []
-
   loadBalancerIP: ""
   loadBalancerSourceRanges: []
+  clusterIP: ""
   type: ClusterIP
 
 ingress:
