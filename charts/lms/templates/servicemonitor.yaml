@@ -2,13 +2,13 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ include "lms.fullname" . }}-prometheus-exporter
+  name: {{ template "lms.fullname" . }}-prometheus-exporter
+  namespace: {{ default .Release.Namespace .Values.serviceMonitor.namespace }}
   labels:
     {{- include "lms.labels" . | nindent 4 }}
     {{- with .Values.monitoring.serviceMonitor.selector }}
       {{- toYaml . | nindent 4 }}
     {{- end }}
-
   {{- with .Values.monitoring.serviceMonitor.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
@@ -21,12 +21,17 @@ spec:
       {{- if .Values.podLabels }}
         {{- toYaml .Values.podLabels | nindent 6 }}
       {{- end }}
+  namespaceSelector:
+    matchNames:
+    - namespace: {{ .Release.Namespace }}
 
   endpoints:
   - targetPort: {{ .Values.service.httpPort }}
     path: /api/prometheus
-    honorLabels: {{ .Values.monitoring.serviceMonitor.honorLabels }}
 
+    {{- with .Values.monitoring.serviceMonitor.honorLabels }}
+    honorLabels: {{ . }}
+    {{- end }}
 
     {{- if .Values.monitoring.serviceMonitor.interval }}
     interval: {{ .Values.monitoring.serviceMonitor.interval }}
@@ -68,9 +73,7 @@ spec:
       {{- end }}
     {{- end }}
 
-  jobLabel: {{ template "lms.fullname" . }}-prometheus-exporter
-  namespaceSelector:
-    matchNames:
-    - namespace: {{ .Release.Namespace }}
+  jobLabel: {{ include "lms.fullname" . }}-metrics
+
 
 {{- end }}
