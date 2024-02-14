@@ -72,6 +72,6 @@ spec:
   jobLabel: {{ template "lms.fullname" . }}-prometheus-exporter
   namespaceSelector:
     matchNames:
-    - namespace: {{ default .Release.Namespace .Values.monitoring.serviceMonitor.namespace }}
+    - namespace: {{ default .Release.Namespace }}
 
 {{- end }}
