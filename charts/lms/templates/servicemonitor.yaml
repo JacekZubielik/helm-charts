@@ -66,5 +66,5 @@ spec:
       optional: {{ .Values.monitoring.serviceMonitor.bearerTokenSecret.optional }}
       {{- end }}
     {{- end }}
-  jobLabel: {{ include "lms.fullname" . }}-metrics
+  jobLabel: {{ template "lms.fullname" . }}-prometheus-exporter
 {{- end }}
