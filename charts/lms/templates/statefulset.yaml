@@ -73,9 +73,10 @@ spec:
           #subPath: config
         - mountPath: /config/playlists
           name: config-storage
-          #subPath: playlists
+          subPath: playlists
         - mountPath: /config/IR
           name: config-storage
+          subPath: IR
         - mountPath: /music
           name: music-storage
           readOnly: true
