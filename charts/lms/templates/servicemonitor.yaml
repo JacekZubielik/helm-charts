@@ -3,6 +3,11 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: {{ template "lms.fullname" . }}-prometheus-exporter
+
+{{- if .Values.monitoring.serviceMonitor.namespace }}
+  namespace: {{ .Values.monitoring.serviceMonitor.namespace }}
+{{- end }}
+
   labels:
     {{- include "lms.labels" . | nindent 4 }}
     {{- with .Values.monitoring.serviceMonitor.selector }}

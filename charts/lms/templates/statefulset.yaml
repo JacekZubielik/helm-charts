@@ -45,42 +45,42 @@ spec:
             - mountPath: /config
               name: config-storage
       containers:
-      - name: {{ .Chart.Name }}
-        securityContext:
-          {{- toYaml .Values.securityContext | nindent 12 }}
-        image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-        imagePullPolicy: {{ .Values.image.pullPolicy }}
-        {{- with .Values.podEnv }}
-        env:
-          {{- toYaml . | nindent 12 }}
-        {{- end }}
-        resources:
-          {{- toYaml .Values.resources | nindent 12 }}
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- with .Values.podEnv }}
+          env:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
         ports:
-        - name: http
-          containerPort: 9000
-        - name: dlna
-          containerPort: 9090
-          protocol: TCP
-        - name: control
-          containerPort: 3483
-          protocol: TCP
-        - name: discovery
-          containerPort: 3483
-          protocol: UDP
-        volumeMounts:
-        - mountPath: /config
-          name: config-storage
-          #subPath: config
-        - mountPath: /config/playlists
-          name: config-storage
-          subPath: playlists
-        - mountPath: /config/IR
-          name: config-storage
-          subPath: IR
-        - mountPath: /music
-          name: music-storage
-          readOnly: true
+          - name: http
+            containerPort: 9000
+          - name: dlna
+            containerPort: 9090
+            protocol: TCP
+          - name: control
+            containerPort: 3483
+            protocol: TCP
+          - name: discovery
+            containerPort: 3483
+            protocol: UDP
+          volumeMounts:
+          - mountPath: /config
+            name: config-storage
+            #subPath: config
+          - mountPath: /config/playlists
+            name: config-storage
+            subPath: playlists
+          - mountPath: /config/IR
+            name: config-storage
+            subPath: IR
+          - mountPath: /music
+            name: music-storage
+            readOnly: true
 
         {{- if .Values.livenessProbe.enabled }}
         livenessProbe:
@@ -121,37 +121,37 @@ spec:
       {{- end }}
 
       volumes:
-      - name: config-storage
-      {{- if .Values.persistence.enabled }}
-        {{- if .Values.persistence.configstorage.hostPath }}
-        hostPath:
-          path: {{.Values.persistence.configstorage.hostPath}}
-        {{- else }}
-        persistentVolumeClaim:
-          claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ template "lms.fullname" . }}{{- end }}
-        {{- end }}
-      {{- else }}
-        emptyDir: {}
-      {{ end }}
-
-      - name: music-storage
-      {{- if .Values.persistence.enabled }}
-        {{- if .Values.persistence.musicstorage.hostPath }}
-        hostPath:
-          path: {{.Values.persistence.musicstorage.hostPath}}
-        {{- else }}
-        persistentVolumeClaim:
-          claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ template "lms.fullname" . }}{{- end }}
-        {{- end }}
-      {{- else }}
-        emptyDir: {}
-      {{ end }}
-
-      {{- range .Values.hostMounts }}
-      - name: {{ .name }}
-        hostPath:
-          path: {{.hostPath}}
-          {{- if .type }}
-          type: {{ .type }}
+        - name: config-storage
+        {{- if .Values.persistence.enabled }}
+          {{- if .Values.persistence.configstorage.hostPath }}
+          hostPath:
+            path: {{.Values.persistence.configstorage.hostPath}}
+          {{- else }}
+          persistentVolumeClaim:
+            claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ template "lms.fullname" . }}{{- end }}
           {{- end }}
-      {{- end }}
+        {{- else }}
+          emptyDir: {}
+        {{ end }}
+
+        - name: music-storage
+        {{- if .Values.persistence.enabled }}
+          {{- if .Values.persistence.musicstorage.hostPath }}
+          hostPath:
+            path: {{.Values.persistence.musicstorage.hostPath}}
+          {{- else }}
+          persistentVolumeClaim:
+            claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ template "lms.fullname" . }}{{- end }}
+          {{- end }}
+        {{- else }}
+          emptyDir: {}
+        {{ end }}
+
+        {{- range .Values.hostMounts }}
+        - name: {{ .name }}
+          hostPath:
+            path: {{.hostPath}}
+            {{- if .type }}
+            type: {{ .type }}
+            {{- end }}
+        {{- end }}
