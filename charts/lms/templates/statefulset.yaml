@@ -6,7 +6,7 @@ metadata:
     {{- include "lms.labels" . | nindent 4 }}
 spec:
   replicas: 1
-  revisionHistoryLimit: 3
+  revisionHistoryLimit:  {{ .Values.revisionHistoryLimit }}
   serviceName: {{ include "lms.fullname" . }}
   selector:
     matchLabels:

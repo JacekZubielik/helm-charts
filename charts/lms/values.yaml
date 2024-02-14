@@ -6,6 +6,7 @@ image:
 strategyType: Recreate
 nameOverride: ""
 fullnameOverride: ""
+revisionHistoryLimit: 2
 
 serviceAccount:
   create: false
