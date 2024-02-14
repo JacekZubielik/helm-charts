@@ -57,30 +57,30 @@ spec:
         resources:
           {{- toYaml .Values.resources | nindent 12 }}
         ports:
-          - name: http
-            containerPort: 9000
-          - name: dlna
-            containerPort: 9090
-            protocol: TCP
-          - name: control
-            containerPort: 3483
-            protocol: TCP
-          - name: discovery
-            containerPort: 3483
-            protocol: UDP
-          volumeMounts:
-          - mountPath: /config
-            name: config-storage
-            #subPath: config
-          - mountPath: /config/playlists
-            name: config-storage
-            subPath: playlists
-          - mountPath: /config/IR
-            name: config-storage
-            subPath: IR
-          - mountPath: /music
-            name: music-storage
-            readOnly: true
+        - name: http
+          containerPort: 9000
+        - name: dlna
+          containerPort: 9090
+          protocol: TCP
+        - name: control
+          containerPort: 3483
+          protocol: TCP
+        - name: discovery
+          containerPort: 3483
+          protocol: UDP
+        volumeMounts:
+        - mountPath: /config
+          name: config-storage
+          #subPath: config
+        - mountPath: /config/playlists
+          name: config-storage
+          subPath: playlists
+        - mountPath: /config/IR
+          name: config-storage
+          subPath: IR
+        - mountPath: /music
+          name: music-storage
+          readOnly: true
 
         {{- if .Values.livenessProbe.enabled }}
         livenessProbe:
