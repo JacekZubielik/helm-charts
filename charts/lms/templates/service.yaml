@@ -25,19 +25,19 @@ spec:
   ports:
     - name: http
       protocol: TCP
-      port: {{ .Values.service.httpPort }}
+      port: {{ .Values.service.http }}
       targetPort: http
     - name: dlna
       protocol: TCP
-      port: {{ .Values.service.dlnaPort }}
+      port: {{ .Values.service.dlna }}
       targetPort: dlna
     - name: control
       protocol: TCP
-      port: {{ .Values.service.controlPort }}
+      port: {{ .Values.service.control }}
       targetPort: control
     - name: discovery
       protocol: UDP
-      port: {{ .Values.service.controlPort }}
+      port: {{ .Values.service.control }}
       targetPort: discovery
   selector:
 {{- include "lms.selectorLabels" . | nindent 4 }}

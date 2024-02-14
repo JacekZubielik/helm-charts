@@ -39,9 +39,9 @@ service:
   externalIPs: []
   loadBalancerIP: ""
   loadBalancerSourceRanges: []
-  httpPort: "9000"
-  dlnaPort: "9090"
-  controlPort: "3483"
+  http: "9000"
+  dlna: "9090"
+  control: "3483"
 
 ingress:
   enabled: false
