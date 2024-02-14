@@ -82,13 +82,19 @@ ingress:
 #     memory: "512Mi"
 
 livenessProbe:
-  enabled: false
-  timeoutSeconds: 2
-  initialDelaySeconds: 15
-
+  enabled: true
+  periodSeconds:       60
+  timeoutSeconds:      10
+  successThreshold:    1
+  failureThreshold:    6
+  initialDelaySeconds: 30
 readinessProbe:
-  enabled: false
-  initialDelaySeconds: 5
+  enabled: true
+  periodSeconds:       60
+  timeoutSeconds:      10
+  successThreshold:    1
+  failureThreshold:    6
+  initialDelaySeconds: 30
 
 nodeSelector:
   kubernetes.io/hostname: {}

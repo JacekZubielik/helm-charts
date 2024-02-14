@@ -80,22 +80,32 @@ spec:
         - mountPath: /music
           name: music-storage
           readOnly: true
+
         {{- if .Values.livenessProbe.enabled }}
         livenessProbe:
-          exec:
-            command:
-            - extra/healthcheck
-          timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds}}
+          httpGet:
+            path:              /
+            port:              {{ .Values.service.httpPort }}
+            scheme:            HTTP
+          periodSeconds:       {{ .Values.livenessProbe.periodSeconds }}
+          timeoutSeconds:      {{ .Values.livenessProbe.timeoutSeconds }}
+          successThreshold:    {{ .Values.livenessProbe.successThreshold }}
+          failureThreshold:    {{ .Values.livenessProbe.failureThreshold }}
           initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds}}
         {{- end }}
         {{- if .Values.readinessProbe.enabled }}
         readinessProbe:
           httpGet:
-            path: /
-            port: http
-            scheme: HTTP
+            path:              /
+            port:              {{ .Values.service.httpPort }}
+            scheme:            HTTP
+          periodSeconds:       {{ .Values.readinessProbe.periodSeconds }}
+          timeoutSeconds:      {{ .Values.readinessProbe.timeoutSeconds }}
+          successThreshold:    {{ .Values.readinessProbe.successThreshold }}
+          failureThreshold:    {{ .Values.readinessProbe.failureThreshold }}
           initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds}}
         {{- end }}
+
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
