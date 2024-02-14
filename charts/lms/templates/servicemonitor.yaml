@@ -26,7 +26,6 @@ spec:
   endpoints:
   - targetPort: {{ .Values.service.httpPort }}
     path: /api/prometheus
-    scheme: {{ .Values.monitoring.serviceMonitor.scheme }}
     honorLabels: {{ .Values.monitoring.serviceMonitor.honorLabels }}
 
 
