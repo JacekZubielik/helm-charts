@@ -1,6 +1,6 @@
 image:
   repository: lmscommunity/logitechmediaserver
-  tag: 8.4.0
+  tag: ""
   pullPolicy: IfNotPresent
 
 strategyType: Recreate
