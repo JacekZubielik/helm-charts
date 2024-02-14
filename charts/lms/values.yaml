@@ -117,15 +117,24 @@ persistence:
     #     storage: 2Gi
     # storageClassName: ""
 
-serviceMonitor:
+monitoring:
   enabled: true
-  interval: 60s
-  scrapeTimeout: 10s
-  scheme: ~
-  tlsConfig: {}
-  relabelings: []
-  metricRelabelings: []
-  selector: {}
-  namespace: ~
-  additionalLabels: {}
-  annotations: {}
+  serviceMonitor:
+    enabled: true
+    labels: {}
+    honorLabels: true
+    interval: 60s
+    selector: {}
+    namespace: monitoring
+    scrapeTimeout: 10s
+    scheme: http
+    tlsConfig: {}
+    relabelings: []
+    metricRelabelings: []
+    # (use long lived access tokens)
+    bearerTokenFile: {}
+    # (use long lived access tokens)
+    bearerTokenSecret: {}
+      # name:
+      # key:
+      # optional:
