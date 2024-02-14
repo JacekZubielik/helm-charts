@@ -125,7 +125,7 @@ monitoring:
     honorLabels: true
     interval: 60s
     selector: {}
-    namespace: {}
+    #namespace: {}
     scrapeTimeout: 10s
     scheme: http
     tlsConfig: {}
