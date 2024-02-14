@@ -4,9 +4,9 @@ kind: ServiceMonitor
 metadata:
   name: {{ template "lms.fullname" . }}-prometheus-exporter
 
-{{- if .Values.monitoring.serviceMonitor.namespace }}
+{{/* {{- if .Values.monitoring.serviceMonitor.namespace }}
   namespace: {{ .Values.monitoring.serviceMonitor.namespace }}
-{{- end }}
+{{- end }} */}}
 
   labels:
     {{- include "lms.labels" . | nindent 4 }}
@@ -25,50 +25,39 @@ spec:
       {{- if .Values.podLabels }}
         {{- toYaml .Values.podLabels | nindent 6 }}
       {{- end }}
-
-
-
-
-
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
   endpoints:
-  - targetPort: {{ .Values.service.httpPort }}
-    path: /api/prometheus
-
+  - targetPort: {{ .Values.service.http }}
+    path: /metrics
     {{- with .Values.monitoring.serviceMonitor.honorLabels }}
     honorLabels: {{ . }}
     {{- end }}
-
     {{- if .Values.monitoring.serviceMonitor.interval }}
     interval: {{ .Values.monitoring.serviceMonitor.interval }}
     {{- end }}
-
     {{- if .Values.monitoring.serviceMonitor.scrapeTimeout}}
     scrapeTimeout: {{ .Values.monitoring.serviceMonitor.scrapeTimeout }}
     {{- end }}
-
     {{- with .Values.monitoring.serviceMonitor.scheme }}
     scheme: {{ . }}
     {{- end }}
-
     {{- with .Values.monitoring.serviceMonitor.tlsConfig }}
     tlsConfig:
       {{- toYaml . | nindent 6 }}
     {{- end }}
-
     {{- with .Values.monitoring.serviceMonitor.relabelings }}
     relabelings:
       {{- toYaml . | nindent 6 }}
     {{- end }}
-
     {{- with .Values.monitoring.serviceMonitor.metricRelabelings }}
     metricRelabelings:
       {{- toYaml . | nindent 6 }}
     {{- end }}
-
     {{- if .Values.monitoring.serviceMonitor.bearerTokenFile }}
     bearerTokenFile: {{ .Values.monitoring.serviceMonitor.bearerTokenFile }}
     {{- end }}
-
     {{- if .Values.monitoring.serviceMonitor.bearerTokenSecret }}
     bearerTokenSecret:
       name: {{ .Values.monitoring.serviceMonitor.bearerTokenSecret.name }}
@@ -77,8 +66,5 @@ spec:
       optional: {{ .Values.monitoring.serviceMonitor.bearerTokenSecret.optional }}
       {{- end }}
     {{- end }}
-
   jobLabel: {{ include "lms.fullname" . }}-metrics
-
-
 {{- end }}
