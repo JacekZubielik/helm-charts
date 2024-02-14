@@ -84,12 +84,12 @@ ingress:
 
 
 livenessProbe:
-  enabled: true
+  enabled: false
   timeoutSeconds: 2
   initialDelaySeconds: 15
 
 readinessProbe:
-  enabled: true
+  enabled: false
   initialDelaySeconds: 5
 
 nodeSelector:
