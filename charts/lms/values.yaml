@@ -3,7 +3,7 @@ image:
   tag: ""
   pullPolicy: IfNotPresent
 
-strategyType: Recreate
+strategyType: RollingUpdate
 nameOverride: ""
 fullnameOverride: ""
 revisionHistoryLimit: 2
@@ -14,12 +14,10 @@ serviceAccount:
   name: ""
 
 podAnnotations: {}
-podLabels:
-  {}
-podEnv:
-  {}
-#   - name: "exemple"
-#     value: "3001"
+podLabels: {}
+podEnv: {}
+  # - name: "exemple"
+  #   value: "3001"
 
 podSecurityContext: {}
   # fsGroup: 2000

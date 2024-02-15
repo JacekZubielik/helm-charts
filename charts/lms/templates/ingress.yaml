@@ -1,6 +1,6 @@
 {{- if .Values.ingress.enabled -}} 
 {{- $fullName := include "lms.fullname" . -}}
-{{- $servicePort := .Values.service.httpPort -}} 
+{{- $servicePort := .Values.service.http -}} 
 {{- $ingressPath := .Values.ingress.path -}} 
 {{- $new := false }}
 {{- if .Capabilities.APIVersions.Has "networking.k8s.io/v1" -}}
@@ -16,14 +16,14 @@ metadata:
     {{- include "lms.labels" . | nindent 4 }}
   annotations:
     {{- if not $new }}
-    kubernetes.io/ingress.class: {{ required "If ingress.enabled is set to true, ingress.class is required" .Values.ingress.class | quote }}
+    kubernetes.io/ingress.class: {{ required "If ingress.enabled is set to true, ingress.class is required" .Values.ingress.class }}
     {{- end }}
     {{- if .Values.ingress.annotations }}
     {{- toYaml .Values.ingress.annotations | nindent 4 }}
     {{- end }}
 spec:
   {{- if $new }}
-  ingressClassName: {{ required "If ingress.enabled is set to true, ingress.class is required" .Values.ingress.class | quote }}
+  ingressClassName: {{ required "If ingress.enabled is set to true, ingress.class is required" .Values.ingress.class }}
   {{- end }}
   {{- if .Values.ingress.tls }}
   tls:

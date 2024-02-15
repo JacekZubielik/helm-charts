@@ -1,9 +1,9 @@
 ---
 apiVersion: v2
 appVersion: 8.4.1
-description: lms
+description: Logitech Media Server
 name: lms
-version: 0.0.68
+version: 0.0.69
 keywords:
 - lms
 type: application
