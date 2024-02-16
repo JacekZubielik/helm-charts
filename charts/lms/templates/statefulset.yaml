@@ -13,7 +13,7 @@ spec:
     {{- include "lms.selectorLabels" . | nindent 6 }}
   serviceName: {{ include "lms.fullname" . }}
 
-  strategy: {{ toYaml .Values.updateStrategy | nindent 4 }}
+{{/*  strategy: {{ toYaml .Values.updateStrategy | nindent 4 }} */}}
 
 
 
