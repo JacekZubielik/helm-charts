@@ -78,8 +78,8 @@ spec:
         - name: http
           containerPort: {{ .Values.service.httpPort }}
           protocol: TCP
-        - name: dlna
-          containerPort: {{ .Values.service.dlnaPort }}
+        - name: cli
+          containerPort: {{ .Values.service.cliPort }}
           protocol: TCP
         - name: control
           containerPort: {{ .Values.service.controlPort }}
@@ -95,7 +95,7 @@ spec:
         livenessProbe:
           httpGet:
             path:              /
-            port:              http
+            port:              metrics
             scheme:            {{ .Values.livenessProbe.scheme }}
           periodSeconds:       {{ .Values.livenessProbe.periodSeconds }}
           timeoutSeconds:      {{ .Values.livenessProbe.timeoutSeconds }}
@@ -107,7 +107,7 @@ spec:
         readinessProbe:
           httpGet:
             path:              /
-            port:              http
+            port:              metrics
             scheme:            {{ .Values.readinessProbe.scheme }}
           periodSeconds:       {{ .Values.readinessProbe.periodSeconds }}
           timeoutSeconds:      {{ .Values.readinessProbe.timeoutSeconds }}

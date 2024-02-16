@@ -40,16 +40,9 @@ extraEnvSecrets:
 extraSecretForEnvFrom: []
 # - esphome-secrets
 
-
-# podSecurityContext:
-#   privileged: true
-
-# securityContext:
-#   runAsNonRoot: false
-
-
 podSecurityContext: {}
-  # fsGroup: 1000
+  # fsGroup: 2000
+  # privileged: true
 
 securityContext: {}
   # capabilities:
@@ -58,7 +51,6 @@ securityContext: {}
   # readOnlyRootFilesystem: true
   # runAsNonRoot: true
   # runAsUser: 1000
-
 
 service:
   annotations: {}
@@ -78,9 +70,9 @@ service:
   metricsPort: "9113"
 
 monitoring:
-  enabled: true
+  enabled: false
   serviceMonitor:
-    enabled: true
+    enabled: false
     labels: {}
     honorLabels: true
     interval: 60s
@@ -163,8 +155,6 @@ resources: {}
 #     cpu: "1"
 #     memory: "512Mi"
 
-
-
 nodeSelector:
   kubernetes.io/hostname: {}
 affinity: {}
@@ -173,7 +163,7 @@ tolerations: []
 persistence:
   enabled: false
   configstorage:
-    hostPath: /mnt
+    hostPath: /mnt/
   musicstorage:
     hostPath: /mnt/
   pvc:

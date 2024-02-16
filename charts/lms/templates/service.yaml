@@ -34,7 +34,7 @@ spec:
     protocol: TCP
     targetPort: http
   - name: dlna
-    port:  {{ .Values.service.dlnaPort }}
+    port:  {{ .Values.service.cliPort }}
     protocol: TCP
     targetPort: dlna
   - name: control

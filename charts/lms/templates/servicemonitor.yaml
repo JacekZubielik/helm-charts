@@ -23,7 +23,7 @@ spec:
     matchNames:
       - {{ .Release.Namespace }}
   endpoints:
-  - targetPort: {{ .Values.service.http }}
+  - targetPort: {{ .Values.service.metricsPort }}
     path: /metrics
     {{- with .Values.monitoring.serviceMonitor.honorLabels }}
     honorLabels: {{ . }}
