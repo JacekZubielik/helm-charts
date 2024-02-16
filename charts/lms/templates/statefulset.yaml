@@ -38,8 +38,13 @@ spec:
       shareProcessNamespace: {{ .Values.sidecarSingleProcessNamespace }}
 
       serviceAccountName: {{ include "lms.serviceAccountName" . }}
+
+
       securityContext:
       {{- toYaml .Values.podSecurityContext | nindent 8 }}
+
+
+
       {{- if .Values.hostNetwork }}
       hostNetwork: {{ .Values.hostNetwork }}
       dnsPolicy: ClusterFirstWithHostNet
@@ -47,8 +52,8 @@ spec:
 
       initContainers:
         - name: init-config
-          securityContext:
-          {{- toYaml .Values.podSecurityContext | nindent 12 }}
+        securityContext:
+          {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: ["sh", "-c", "mkdir -pv /config /config/playlists /config/IR; chown -Rc 1000:1000 /config"]
@@ -58,7 +63,7 @@ spec:
       containers:
       - name: {{ .Chart.Name }}
         securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 12 }}
+          {{- toYaml .Values.securityContext | nindent 12 }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         env:
