@@ -33,10 +33,10 @@ spec:
     port:  {{ .Values.service.httpPort }}
     protocol: TCP
     targetPort: http
-  - name: dlna
+  - name: cli
     port:  {{ .Values.service.cliPort }}
     protocol: TCP
-    targetPort: dlna
+    targetPort: cli
   - name: control
     port:  {{ .Values.service.controlPort }}
     protocol: TCP
