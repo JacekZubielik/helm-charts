@@ -3,28 +3,22 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: {{ template "lms.fullname" . }}-prometheus-exporter
-
-{{/* {{- if .Values.monitoring.serviceMonitor.namespace }}
-  namespace: {{ .Values.monitoring.serviceMonitor.namespace }}
-{{- end }} */}}
-
   labels:
-    {{- include "lms.labels" . | nindent 4 }}
-    {{- with .Values.monitoring.serviceMonitor.selector }}
-      {{- toYaml . | nindent 4 }}
-    {{- end }}
+  {{- include "lms.labels" . | nindent 4 }}
+  {{- with .Values.monitoring.serviceMonitor.selector }}
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
   {{- with .Values.monitoring.serviceMonitor.annotations }}
   annotations:
-    {{- toYaml . | nindent 4 }}
+  {{- toYaml . | nindent 4 }}
   {{- end }}
-
 spec:
   selector:
     matchLabels:
-      {{- include "lms.selectorLabels" . | nindent 6 }}
-      {{- if .Values.podLabels }}
-        {{- toYaml .Values.podLabels | nindent 6 }}
-      {{- end }}
+    {{- include "lms.selectorLabels" . | nindent 6 }}
+    {{- if .Values.podLabels }}
+    {{- toYaml .Values.podLabels | nindent 6 }}
+    {{- end }}
   namespaceSelector:
     matchNames:
       - {{ .Release.Namespace }}
@@ -45,15 +39,15 @@ spec:
     {{- end }}
     {{- with .Values.monitoring.serviceMonitor.tlsConfig }}
     tlsConfig:
-      {{- toYaml . | nindent 6 }}
+    {{- toYaml . | nindent 6 }}
     {{- end }}
     {{- with .Values.monitoring.serviceMonitor.relabelings }}
     relabelings:
-      {{- toYaml . | nindent 6 }}
+    {{- toYaml . | nindent 6 }}
     {{- end }}
     {{- with .Values.monitoring.serviceMonitor.metricRelabelings }}
     metricRelabelings:
-      {{- toYaml . | nindent 6 }}
+    {{- toYaml . | nindent 6 }}
     {{- end }}
     {{- if .Values.monitoring.serviceMonitor.bearerTokenFile }}
     bearerTokenFile: {{ .Values.monitoring.serviceMonitor.bearerTokenFile }}

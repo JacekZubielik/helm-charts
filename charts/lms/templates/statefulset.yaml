@@ -1,43 +1,52 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name:  {{ include "lms.fullname" . }}
+  name:  {{ template "lms.fullname" . }}
   labels:
-    {{- include "lms.labels" . | nindent 4 }}
+  {{- include "lms.labels" . | nindent 4 }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.replicas }}
   revisionHistoryLimit:  {{ .Values.revisionHistoryLimit }}
-  serviceName: {{ include "lms.fullname" . }}
+
   selector:
     matchLabels:
-      {{- include "lms.selectorLabels" . | nindent 6 }}
-      {{- if .Values.podLabels }}
-        {{- toYaml .Values.podLabels | nindent 6 }}
-      {{- end }}
+    {{- include "lms.selectorLabels" . | nindent 6 }}
+  serviceName: {{ include "lms.fullname" . }}
+  strategy:
+    type: {{ .Values.strategyType }}
+
   template:
     metadata:
       {{- with .Values.podAnnotations }}
       annotations:
-        {{- toYaml . | nindent 8 }}
+      {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "lms.selectorLabels" . | nindent 8 }}
-        {{- if .Values.podLabels }}
-          {{- toYaml .Values.podLabels | nindent 8 }}
-        {{- end }}
-    spec:
-      {{- with .Values.imagePullSecrets }}
-      imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
+      {{- include "lms.selectorLabels" . | nindent 8 }}
+      {{- if .Values.podLabels }}
+      {{- toYaml .Values.podLabels | nindent 8 }}
       {{- end }}
+
+    spec:
+      {{- with .Values.image.PullSecrets }}
+      imagePullSecrets:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      automountServiceAccountToken: {{ .Values.serviceAccount.automountServiceAccountToken }}
+      shareProcessNamespace: {{ .Values.sidecarSingleProcessNamespace }}
+
       serviceAccountName: {{ include "lms.serviceAccountName" . }}
       securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{- if .Values.hostNetwork }}
+      hostNetwork: {{ .Values.hostNetwork }}
+      dnsPolicy: ClusterFirstWithHostNet
+      {{- end }}
 
       initContainers:
         - name: init-config
           securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
+          {{- toYaml .Values.podSecurityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: ["sh", "-c", "mkdir -pv /config /config/playlists /config/IR; chown -Rc 1000:1000 /config"]
@@ -47,27 +56,70 @@ spec:
       containers:
       - name: {{ .Chart.Name }}
         securityContext:
-          {{- toYaml .Values.securityContext | nindent 12 }}
+        {{- toYaml .Values.podSecurityContext | nindent 12 }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
-        {{- with .Values.podEnv }}
         env:
-          {{- toYaml . | nindent 12 }}
+          {{- range $key, $value := .Values.extraEnv }}
+          - name: {{ $key | }}
+            value: {{ $value | }}
+          {{- end }}
+          {{- range $name, $opts := .Values.extraEnvSecrets }}
+          - name: {{ $name }}
+            valueFrom:
+              secretKeyRef:
+                name: {{ $opts.secret }}
+                key: {{ $opts.key }}
+          {{- end }}
+        envFrom:
+        {{- range .Values.extraSecretForEnvFrom }}
+          - secretRef:
+              name: {{ . }}
         {{- end }}
+
         resources:
-          {{- toYaml .Values.resources | nindent 12 }}
+        {{- toYaml .Values.resources | nindent 12 }}
         ports:
         - name: http
-          containerPort: 9000
+          containerPort: {{ .Values.service.httpPort }}
         - name: dlna
-          containerPort: 9090
+          containerPort: {{ .Values.service.dlnaPort }}
           protocol: TCP
         - name: control
-          containerPort: 3483
+          containerPort: {{ .Values.service.controlPort }}
           protocol: TCP
         - name: discovery
-          containerPort: 3483
+          containerPort: {{ .Values.service.discoveryPort }}
           protocol: UDP
+        - name: metrics
+          containerPort: {{ .Values.service.metricsPort }}
+          protocol: TCP
+
+        {{- if .Values.livenessProbe.enabled }}
+        livenessProbe:
+          httpGet:
+            path:              /metrics
+            port:              metrics
+            scheme:            {{ .Values.livenessProbe.scheme }}
+          periodSeconds:       {{ .Values.livenessProbe.periodSeconds }}
+          timeoutSeconds:      {{ .Values.livenessProbe.timeoutSeconds }}
+          successThreshold:    {{ .Values.livenessProbe.successThreshold }}
+          failureThreshold:    {{ .Values.livenessProbe.failureThreshold }}
+          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds}}
+        {{- end }}
+        {{- if .Values.readinessProbe.enabled }}
+        readinessProbe:
+          httpGet:
+            path:              /metrics
+            port:              metrics
+            scheme:            {{ .Values.readinessProbe.scheme }}
+          periodSeconds:       {{ .Values.readinessProbe.periodSeconds }}
+          timeoutSeconds:      {{ .Values.readinessProbe.timeoutSeconds }}
+          successThreshold:    {{ .Values.readinessProbe.successThreshold }}
+          failureThreshold:    {{ .Values.readinessProbe.failureThreshold }}
+          initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds}}
+        {{- end }}
+
         volumeMounts:
         - mountPath: /config
           name: config-storage
@@ -82,76 +134,61 @@ spec:
           name: music-storage
           readOnly: true
 
-        {{- if .Values.livenessProbe.enabled }}
-        livenessProbe:
-          httpGet:
-            path:              /
-            port:              {{ .Values.service.httpPort }}
-            scheme:            HTTP
-          periodSeconds:       {{ .Values.livenessProbe.periodSeconds }}
-          timeoutSeconds:      {{ .Values.livenessProbe.timeoutSeconds }}
-          successThreshold:    {{ .Values.livenessProbe.successThreshold }}
-          failureThreshold:    {{ .Values.livenessProbe.failureThreshold }}
-          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds}}
+        {{- range .Values.hostMounts }}
+        {{- if .mountPath }}
+        - mountPath: {{ .mountPath }}
+        {{- else }}
+        - mountPath: {{ .hostPath }}
         {{- end }}
-        {{- if .Values.readinessProbe.enabled }}
-        readinessProbe:
-          httpGet:
-            path:              /
-            port:              {{ .Values.service.httpPort }}
-            scheme:            HTTP
-          periodSeconds:       {{ .Values.readinessProbe.periodSeconds }}
-          timeoutSeconds:      {{ .Values.readinessProbe.timeoutSeconds }}
-          successThreshold:    {{ .Values.readinessProbe.successThreshold }}
-          failureThreshold:    {{ .Values.readinessProbe.failureThreshold }}
-          initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds}}
+          name: {{ .name }}
         {{- end }}
+
 
       {{- with .Values.nodeSelector }}
       nodeSelector:
-        {{- toYaml . | nindent 8 }}
+      {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- with .Values.affinity }}
       affinity:
-        {{- toYaml . | nindent 8 }}
+      {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- with .Values.tolerations }}
       tolerations:
-        {{- toYaml . | nindent 8 }}
+      {{- toYaml . | nindent 8 }}
       {{- end }}
 
       volumes:
         - name: config-storage
         {{- if .Values.persistence.enabled }}
-          {{- if .Values.persistence.configstorage.hostPath }}
+        {{- if .Values.persistence.configstorage.hostPath }}
           hostPath:
             path: {{.Values.persistence.configstorage.hostPath}}
-          {{- else }}
+        {{- else }}
           persistentVolumeClaim:
             claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ template "lms.fullname" . }}{{- end }}
-          {{- end }}
+        {{- end }}
         {{- else }}
           emptyDir: {}
         {{ end }}
 
         - name: music-storage
         {{- if .Values.persistence.enabled }}
-          {{- if .Values.persistence.musicstorage.hostPath }}
+        {{- if .Values.persistence.musicstorage.hostPath }}
           hostPath:
             path: {{.Values.persistence.musicstorage.hostPath}}
-          {{- else }}
+        {{- else }}
           persistentVolumeClaim:
             claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ template "lms.fullname" . }}{{- end }}
-          {{- end }}
+        {{- end }}
         {{- else }}
           emptyDir: {}
         {{ end }}
 
-        {{- range .Values.hostMounts }}
+      {{- range .Values.hostMounts }}
         - name: {{ .name }}
           hostPath:
             path: {{.hostPath}}
-            {{- if .type }}
+      {{- if .type }}
             type: {{ .type }}
-            {{- end }}
-        {{- end }}
+      {{- end }}
+      {{- end }}
