@@ -10,14 +10,14 @@ fullnameOverride: ""
 revisionHistoryLimit: 2
 hostNetwork: false
 
-strategyType: RollingUpdate
+# strategyType: RollingUpdate
 
 
-# updateStrategy:
-#   type: RollingUpdate
-#   rollingUpdate:
-#     maxUnavailable: 0
-#     maxSurge: 1
+updateStrategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 0
+    maxSurge: 1
 
 
 serviceAccount:
