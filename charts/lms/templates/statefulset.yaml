@@ -11,7 +11,7 @@ spec:
     matchLabels:
     {{- include "lms.selectorLabels" . | nindent 6 }}
   serviceName: {{ include "lms.fullname" . }}
-  strategy:
+  updateStrategy:
     type: {{ .Values.strategyType }}
 {{/*  strategy: {{ toYaml .Values.updateStrategy | nindent 4 }} */}}
   template:
