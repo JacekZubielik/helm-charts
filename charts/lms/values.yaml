@@ -5,13 +5,17 @@ image:
   pullSecrets: []
 
 replicas: 1
-updateStrategy:
-  type: RollingUpdate
-  rollingUpdate: {}
 nameOverride: ""
 fullnameOverride: ""
 revisionHistoryLimit: 2
 hostNetwork: false
+
+updateStrategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 0
+    maxSurge: 1
+
 
 serviceAccount:
   create: true

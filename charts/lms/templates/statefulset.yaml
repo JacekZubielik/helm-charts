@@ -12,9 +12,10 @@ spec:
     matchLabels:
     {{- include "lms.selectorLabels" . | nindent 6 }}
   serviceName: {{ include "lms.fullname" . }}
-  {{- if .Values.updateStrategy }}
-  strategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
-  {{- end }}
+
+  strategy: {{ toYaml .Values.updateStrategy | nindent 4 }}
+
+
 
   template:
     metadata:
