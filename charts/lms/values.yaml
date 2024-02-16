@@ -48,16 +48,16 @@ extraSecretForEnvFrom: []
 #   runAsNonRoot: false
 
 
-podSecurityContext:
-  fsGroup: 1000
+podSecurityContext: {}
+  # fsGroup: 1000
 
-securityContext:
-  capabilities:
-    drop:
-    - ALL
-  readOnlyRootFilesystem: true
-  runAsNonRoot: true
-  runAsUser: 1000
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
 
 
 service:
