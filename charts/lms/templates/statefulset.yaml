@@ -41,8 +41,6 @@ spec:
 
       initContainers:
         - name: init-config
-          securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: ["sh", "-c", "mkdir -pv /config /config/playlists /config/IR; chown -Rc 1000:1000 /config"]
