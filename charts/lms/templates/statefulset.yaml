@@ -100,7 +100,7 @@ spec:
         {{- if .Values.livenessProbe.enabled }}
         livenessProbe:
           httpGet:
-            path:              /metrics
+            path:              /
             port:              http
             scheme:            {{ .Values.livenessProbe.scheme }}
           periodSeconds:       {{ .Values.livenessProbe.periodSeconds }}
@@ -112,7 +112,7 @@ spec:
         {{- if .Values.readinessProbe.enabled }}
         readinessProbe:
           httpGet:
-            path:              /metrics
+            path:              /
             port:              http
             scheme:            {{ .Values.readinessProbe.scheme }}
           periodSeconds:       {{ .Values.readinessProbe.periodSeconds }}
