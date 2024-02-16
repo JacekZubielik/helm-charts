@@ -7,16 +7,11 @@ metadata:
 spec:
   replicas: {{ .Values.replicas }}
   revisionHistoryLimit:  {{ .Values.revisionHistoryLimit }}
-
   selector:
     matchLabels:
     {{- include "lms.selectorLabels" . | nindent 6 }}
   serviceName: {{ include "lms.fullname" . }}
-
 {{/*  strategy: {{ toYaml .Values.updateStrategy | nindent 4 }} */}}
-
-
-
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -28,7 +23,6 @@ spec:
       {{- if .Values.podLabels }}
       {{- toYaml .Values.podLabels | nindent 8 }}
       {{- end }}
-
     spec:
       {{- with .Values.image.PullSecrets }}
       imagePullSecrets:
@@ -36,14 +30,9 @@ spec:
       {{- end }}
       automountServiceAccountToken: {{ .Values.serviceAccount.automountServiceAccountToken }}
       shareProcessNamespace: {{ .Values.sidecarSingleProcessNamespace }}
-
       serviceAccountName: {{ include "lms.serviceAccountName" . }}
-
-
       securityContext:
-      {{- toYaml .Values.podSecurityContext | nindent 8 }}
-
-
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
 
       {{- if .Values.hostNetwork }}
       hostNetwork: {{ .Values.hostNetwork }}
