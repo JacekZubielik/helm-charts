@@ -53,7 +53,7 @@ securityContext: {}
   # runAsUser: 1000
 
 service:
-  annotations: {}
+  annotations:
     prometheus.io/scrape: "false"
     prometheus.io/port: "{{ .Values.service.metricsPort }}"
   labels: {}
