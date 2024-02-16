@@ -1592,6 +1592,25 @@ entries:
   lms:
   - apiVersion: v2
     appVersion: 8.4.1
+    created: "2024-02-16T12:34:20.682848002Z"
+    description: Logitech Media Server
+    digest: ef022df409d4afa31b22ba74b01e471a5742053d0deacf28669b0bb63dff1fb5
+    home: https://github.com/JacekZubielik/helm-charts/tree/master/charts/lms
+    icon: https://truecharts.org/img/hotlink-ok/chart-icons/logitech-media-server.png
+    keywords:
+    - lms
+    maintainers:
+    - email: jack.zu@protonmail.com
+      name: Jacek Zubielik
+    name: lms
+    sources:
+    - https://hub.docker.com/r/lmscommunity/logitechmediaserver
+    type: application
+    urls:
+    - https://github.com/JacekZubielik/helm-charts/releases/download/lms-0.0.74/lms-0.0.74.tgz
+    version: 0.0.74
+  - apiVersion: v2
+    appVersion: 8.4.1
     created: "2024-02-16T03:02:43.591134083Z"
     description: Logitech Media Server
     digest: 06ca3e48b289b2b01d33583cf7b489c2934307ff84a31049e8fb15669874807d
@@ -5139,4 +5158,4 @@ entries:
     urls:
     - https://github.com/JacekZubielik/helm-charts/releases/download/zigbee2mqtt-0.0.1/zigbee2mqtt-0.0.1.tgz
     version: 0.0.1
-generated: "2024-02-16T03:02:43.591605241Z"
+generated: "2024-02-16T12:34:20.683342196Z"
