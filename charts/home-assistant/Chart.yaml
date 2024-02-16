@@ -3,9 +3,9 @@ apiVersion: v2
 appVersion: 2023.11.3
 description: Home Assistant chart
 name: home-assistant
-version: 0.0.56
+version: 0.0.57
 keywords:
-  - home-assistant
+- home-assistant
 type: application
 home: https://github.com/JacekZubielik/helm-charts/tree/master/charts/home-assistant
 icon: https://raw.githubusercontent.com/home-assistant/assets/master/misc/logo-icon_template.png
