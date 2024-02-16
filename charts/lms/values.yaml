@@ -5,7 +5,9 @@ image:
   pullSecrets: []
 
 replicas: 1
-strategyType: RollingUpdate
+updateStrategy:
+  type: RollingUpdate
+  rollingUpdate: {}
 nameOverride: ""
 fullnameOverride: ""
 revisionHistoryLimit: 2
