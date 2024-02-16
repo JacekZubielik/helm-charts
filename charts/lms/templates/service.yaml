@@ -30,25 +30,24 @@ spec:
   publishNotReadyAddresses: {{ .Values.service.publishNotReadyAddresses }}
   ports:
   - name: http
-    containerPort:  {{ .Values.service.httpPort }}
+    port:  {{ .Values.service.httpPort }}
     protocol: TCP
     targetPort: http
   - name: dlna
-    containerPort:  {{ .Values.service.dlnaPort }}
+    port:  {{ .Values.service.dlnaPort }}
     protocol: TCP
     targetPort: dlna
   - name: control
-    containerPort:  {{ .Values.service.controlPort }}
+    port:  {{ .Values.service.controlPort }}
     protocol: TCP
     targetPort: control
   - name: discovery
-    containerPort:  {{ .Values.service.discoveryPort }}
+    port:  {{ .Values.service.discoveryPort }}
     protocol: UDP
     targetPort: discovery
   - name: metrics
-    containerPort: {{ .Values.service.metricsPort }}
+    port: {{ .Values.service.metricsPort }}
     targetPort: metrics
 
   selector:
   {{- include "lms.selectorLabels" . | nindent 4 }}
-
