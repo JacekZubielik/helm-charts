@@ -79,9 +79,11 @@ spec:
 
         resources:
         {{- toYaml .Values.resources | nindent 12 }}
+
         ports:
         - name: http
           containerPort: {{ .Values.service.httpPort }}
+          protocol: TCP
         - name: dlna
           containerPort: {{ .Values.service.dlnaPort }}
           protocol: TCP
