@@ -46,7 +46,7 @@ spec:
     protocol: UDP
     targetPort: discovery
   - name: metrics
-    port: {{ .Values.service.metricsPort }}
+    containerPort: {{ .Values.service.metricsPort }}
     targetPort: metrics
 
   selector:
