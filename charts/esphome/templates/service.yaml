@@ -29,9 +29,9 @@ spec:
   {{- end }}
   publishNotReadyAddresses: {{ .Values.service.publishNotReadyAddresses }}
   ports:
-    - name: api
-      containerPort: {{ .Values.service.httpPort }}
+    - name:     api
+      port:       {{ .Values.service.httpPort }}
       protocol: TCP
-      targetPort:    {{ .Values.service.httpPort }}
+      targetPort: {{ .Values.service.httpPort }}
   selector:
   {{- include "esphome.selectorLabels" . | nindent 4 }}
