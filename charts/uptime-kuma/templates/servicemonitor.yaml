@@ -1,59 +1,64 @@
-{{- if and .Values.serviceMonitor.enabled (.Capabilities.APIVersions.Has "monitoring.coreos.com/v1") }}
+{{- if and ( .Values.monitoring.serviceMonitor.enabled ) ( .Values.monitoring.enabled ) }}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ include "uptime-kuma.fullname" . }}
-  namespace: {{ default .Release.Namespace .Values.serviceMonitor.namespace }}
+  name: {{ template "uptime-kuma.fullname" . }}-prometheus-exporter
   labels:
-    {{- include "uptime-kuma.labels" . | nindent 4 }}
-    {{- with .Values.serviceMonitor.selector }}
-      {{- toYaml . | nindent 4 }}
-    {{- end }}
-    {{- with .Values.serviceMonitor.additionalLabels }}
-      {{- toYaml . | nindent 4 }}
-    {{- end }}
-  {{- with .Values.serviceMonitor.annotations }}
+  {{- include "uptime-kuma.labels" . | nindent 4 }}
+  {{- with .Values.monitoring.serviceMonitor.selector }}
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.monitoring.serviceMonitor.annotations }}
   annotations:
-    {{- toYaml . | nindent 4 }}
+  {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
   selector:
     matchLabels:
-      {{- include "uptime-kuma.selectorLabels" . | nindent 6 }}
+    {{- include "uptime-kuma.selectorLabels" . | nindent 6 }}
+    {{- if .Values.podLabels }}
+    {{- toYaml .Values.podLabels | nindent 6 }}
+    {{- end }}
   namespaceSelector:
     matchNames:
       - {{ .Release.Namespace }}
   endpoints:
-  - port: http
+  - targetPort: {{ .Values.service.metricsPort }}
     path: /metrics
-    interval: {{ .Values.serviceMonitor.interval }}
-    scrapeTimeout: {{ .Values.serviceMonitor.scrapeTimeout }}
-
-    {{- with .Values.serviceMonitor.scheme }}
+    {{- with .Values.monitoring.serviceMonitor.honorLabels }}
+    honorLabels: {{ . }}
+    {{- end }}
+    {{- if .Values.monitoring.serviceMonitor.interval }}
+    interval: {{ .Values.monitoring.serviceMonitor.interval }}
+    {{- end }}
+    {{- if .Values.monitoring.serviceMonitor.scrapeTimeout}}
+    scrapeTimeout: {{ .Values.monitoring.serviceMonitor.scrapeTimeout }}
+    {{- end }}
+    {{- with .Values.monitoring.serviceMonitor.scheme }}
     scheme: {{ . }}
     {{- end }}
-
-    {{- with .Values.serviceMonitor.tlsConfig }}
+    {{- with .Values.monitoring.serviceMonitor.tlsConfig }}
     tlsConfig:
-      {{- toYaml . | nindent 6 }}
+    {{- toYaml . | nindent 6 }}
     {{- end }}
-
-    {{- with .Values.serviceMonitor.relabelings }}
+    {{- with .Values.monitoring.serviceMonitor.relabelings }}
     relabelings:
-      {{- toYaml . | nindent 6 }}
+    {{- toYaml . | nindent 6 }}
     {{- end }}
-
-    {{- with .Values.serviceMonitor.metricRelabelings }}
+    {{- with .Values.monitoring.serviceMonitor.metricRelabelings }}
     metricRelabelings:
-      {{- toYaml . | nindent 6 }}
+    {{- toYaml . | nindent 6 }}
     {{- end }}
-    
-    {{- with .Values.serviceMonitor.basicAuth }}
-    basicAuth:
-    {{- range $key, $value := . }}
-      {{ $key }}:
-        name: {{ include "uptime-kuma.fullname" $ }}-metrics-basic-auth
-        key: {{ $key }}
+    {{- if .Values.monitoring.serviceMonitor.bearerTokenFile }}
+    bearerTokenFile: {{ .Values.monitoring.serviceMonitor.bearerTokenFile }}
     {{- end }}
+    {{- if .Values.monitoring.serviceMonitor.bearerTokenSecret }}
+    bearerTokenSecret:
+      name: {{ .Values.monitoring.serviceMonitor.bearerTokenSecret.name }}
+      key: {{ .Values.monitoring.serviceMonitor.bearerTokenSecret.key }}
+      {{- if .Values.monitoring.serviceMonitor.bearerTokenSecret.optional }}
+      optional: {{ .Values.monitoring.serviceMonitor.bearerTokenSecret.optional }}
+      {{- end }}
     {{- end }}
+  jobLabel: {{ template "uptime-kuma.fullname" . }}-prometheus-exporter
 {{- end }}

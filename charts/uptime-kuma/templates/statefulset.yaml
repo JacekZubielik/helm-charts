@@ -7,109 +7,149 @@ metadata:
     {{- include "uptime-kuma.labels" . | nindent 4 }}
 
 spec:
-  replicas: 1
-  serviceName: {{ include "uptime-kuma.fullname" . }}
+  replicas: {{ .Values.replicas }}
+  revisionHistoryLimit:  {{ .Values.revisionHistoryLimit }}
   selector:
     matchLabels:
-      {{- include "uptime-kuma.selectorLabels" . | nindent 6 }}
-      {{- if .Values.podLabels }}
-        {{- toYaml .Values.podLabels | nindent 6 }}
-      {{- end }}
+    {{- include "uptime-kuma.selectorLabels" . | nindent 6 }}
+  serviceName: {{ include "uptime-kuma.fullname" . }}
+  updateStrategy: {{ toYaml .Values.updateStrategy | nindent 4 }}
+
   template:
     metadata:
       {{- with .Values.podAnnotations }}
       annotations:
-        {{- toYaml . | nindent 8 }}
+      {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "uptime-kuma.selectorLabels" . | nindent 8 }}
-        {{- if .Values.podLabels }}
-          {{- toYaml .Values.podLabels | nindent 8 }}
-        {{- end }}
-
-    spec:
-      {{- with .Values.imagePullSecrets }}
-      imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
+      {{- include "uptime-kuma.selectorLabels" . | nindent 8 }}
+      {{- if .Values.podLabels }}
+      {{- toYaml .Values.podLabels | nindent 8 }}
       {{- end }}
-      enableServiceLinks: false
+    spec:
+      {{- with .Values.image.PullSecrets }}
+      imagePullSecrets:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      automountServiceAccountToken: {{ .Values.serviceAccount.automountServiceAccountToken }}
+      shareProcessNamespace: {{ .Values.sidecarSingleProcessNamespace }}
       serviceAccountName: {{ include "uptime-kuma.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
-      {{- if .Values.dnsPolicy }}
-      dnsPolicy: {{ .Values.dnsPolicy }}
+
+      {{- if .Values.hostNetwork }}
+      hostNetwork: {{ .Values.hostNetwork }}
+      dnsPolicy: ClusterFirstWithHostNet
       {{- end }}
-      {{- if .Values.dnsConfig }}
-      dnsConfig:
-        {{- toYaml .Values.dnsConfig | nindent 8 }}
-      {{- end }}
+      enableServiceLinks: false
+
       containers:
       - name: {{ .Chart.Name }}
         securityContext:
           {{- toYaml .Values.securityContext | nindent 12 }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
-        {{- with .Values.podEnv }}
         env:
-          {{- toYaml . | nindent 12 }}
+          {{- range $key, $value := .Values.extraEnv }}
+          - name: {{ $key | }}
+            value: {{ $value | }}
+          {{- end }}
+          {{- range $name, $opts := .Values.extraEnvSecrets }}
+          - name: {{ $name }}
+            valueFrom:
+              secretKeyRef:
+                name: {{ $opts.secret }}
+                key: {{ $opts.key }}
+          {{- end }}
+        envFrom:
+        {{- range .Values.extraSecretForEnvFrom }}
+          - secretRef:
+              name: {{ . }}
         {{- end }}
+
+        resources:
+        {{- toYaml .Values.resources | nindent 12 }}
+
         ports:
         - name: http
-          containerPort: 3001
+          containerPort: {{ .Values.service.httpPort }}
           protocol: TCP
-        resources:
-          {{- toYaml .Values.resources | nindent 12 }}
-        volumeMounts:
-        - mountPath: /app/data
-          name: uptime-kuma-storage
+        - name: metrics
+          containerPort: {{ .Values.service.metricsPort }}
+          protocol: TCP
+
         {{- if .Values.livenessProbe.enabled }}
         livenessProbe:
           exec:
             command:
             - extra/healthcheck
-          timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds}}
+          periodSeconds:       {{ .Values.livenessProbe.periodSeconds }}
+          timeoutSeconds:      {{ .Values.livenessProbe.timeoutSeconds }}
+          successThreshold:    {{ .Values.livenessProbe.successThreshold }}
+          failureThreshold:    {{ .Values.livenessProbe.failureThreshold }}
           initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds}}
         {{- end }}
         {{- if .Values.readinessProbe.enabled }}
         readinessProbe:
           httpGet:
-            path: /
-            port: http
-            scheme: HTTP
+            path:              /
+            port:              http
+            scheme:            {{ .Values.readinessProbe.scheme }}
+          periodSeconds:       {{ .Values.readinessProbe.periodSeconds }}
+          timeoutSeconds:      {{ .Values.readinessProbe.timeoutSeconds }}
+          successThreshold:    {{ .Values.readinessProbe.successThreshold }}
+          failureThreshold:    {{ .Values.readinessProbe.failureThreshold }}
           initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds}}
         {{- end }}
+
+        volumeMounts:
+        - mountPath: /app/data
+          name: uptime-kuma-storage
+
+        {{- range .Values.hostMounts }}
+        {{- if .mountPath }}
+        - mountPath: {{ .mountPath }}
+        {{- else }}
+        - mountPath: {{ .hostPath }}
+        {{- end }}
+          name: {{ .name }}
+        {{- end }}
+
       {{- with .Values.nodeSelector }}
       nodeSelector:
-        {{- toYaml . | nindent 8 }}
+      {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- with .Values.affinity }}
       affinity:
-        {{- toYaml . | nindent 8 }}
+      {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- with .Values.tolerations }}
       tolerations:
-        {{- toYaml . | nindent 8 }}
+      {{- toYaml . | nindent 8 }}
       {{- end }}
+
       volumes:
-      - name: uptime-kuma-storage
-      {{- if .Values.persistence.enabled }}
-        {{- if .Values.persistence.hostPath }}
-        hostPath:
-          path: {{.Values.persistence.hostPath}}
+        - name: uptime-kuma-storage
+        {{- if .Values.persistence.enabled }}
+        {{- if .Values.persistence.configstorage.hostPath }}
+          hostPath:
+            path: {{.Values.persistence.configstorage.hostPath}}
         {{- else }}
-        persistentVolumeClaim:
-          claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ template "uptime-kuma.fullname" . }}{{- end }}
+          persistentVolumeClaim:
+            claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ template "uptime-kuma.fullname" . }}{{- end }}
         {{- end }}
-      {{- else }}
-        emptyDir: {}
-      {{ end }}
+        {{- else }}
+          emptyDir: {}
+        {{ end }}
+
       {{- range .Values.hostMounts }}
-      - name: {{ .name }}
-        hostPath:
-          path: {{.hostPath}}
-          {{- if .type }}
-          type: {{ .type }}
-          {{- end }}
+        - name: {{ .name }}
+          hostPath:
+            path: {{.hostPath}}
+      {{- if .type }}
+            type: {{ .type }}
       {{- end }}
-      {{- if .Values.extraVolumes  }}{{ toYaml .Values.extraVolumes | trim | nindent 6 }}{{ end }}
-{{- end -}}
+      {{- end }}
+
+
+
