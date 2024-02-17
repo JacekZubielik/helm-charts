@@ -3540,6 +3540,27 @@ entries:
     urls:
     - https://github.com/JacekZubielik/helm-charts/releases/download/minio-console-0.0.1/minio-console-0.0.1.tgz
     version: 0.0.1
+  mosquitto:
+  - apiVersion: v2
+    appVersion: 2.0.15
+    created: "2024-02-17T20:54:47.695712688Z"
+    description: Eclipse Mosquitto MQTT
+    digest: 39186b6ae71e349c5fcad8560f0f471fe40d6a093ce92537f95e1390c2f0e7ea
+    home: https://github.com/JacekZubielik/helm-charts/tree/master/charts/mosquitto
+    icon: https://raw.githubusercontent.com/eclipse/mosquitto/master/logo/mosquitto-logo-min.svg
+    keywords:
+    - MQTT
+    - mosquitto
+    maintainers:
+    - email: jack.zu@protonmail.com
+      name: Jacek Zubielik
+    name: mosquitto
+    sources:
+    - https://github.com/eclipse/mosquitto
+    type: application
+    urls:
+    - https://github.com/JacekZubielik/helm-charts/releases/download/mosquitto-0.0.1/mosquitto-0.0.1.tgz
+    version: 0.0.1
   uptime-kuma:
   - apiVersion: v2
     appVersion: 1.23.11
@@ -5747,4 +5768,4 @@ entries:
     urls:
     - https://github.com/JacekZubielik/helm-charts/releases/download/zigbee2mqtt-0.0.1/zigbee2mqtt-0.0.1.tgz
     version: 0.0.1
-generated: "2024-02-17T18:43:27.97073201Z"
+generated: "2024-02-17T20:54:47.696109538Z"
