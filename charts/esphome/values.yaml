@@ -58,8 +58,8 @@ service:
   externalTrafficPolicy: {}
   loadBalancerSourceRanges: []
   publishNotReadyAddresses: false
-  httpPort:      "6052"
-
+  httpPort:    6052
+  metricsPort: 9113
 monitoring:
   enabled: false
   serviceMonitor:

@@ -33,5 +33,9 @@ spec:
       port:       {{ .Values.service.httpPort }}
       protocol: TCP
       targetPort: {{ .Values.service.httpPort }}
+    - name: metrics
+      port: {{ .Values.service.metricsPort }}
+      protocol: TCP
+      targetPort: metrics
   selector:
   {{- include "esphome.selectorLabels" . | nindent 4 }}
