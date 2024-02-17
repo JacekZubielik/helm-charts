@@ -10,7 +10,6 @@ spec:
   selector:
     matchLabels:
     {{- include "esphome.selectorLabels" . | nindent 6 }}
-  serviceName: {{ include "esphome.fullname" . }}
 
   strategy:
     type: {{ .Values.strategyType }}
