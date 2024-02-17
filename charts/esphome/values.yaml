@@ -1,100 +1,28 @@
-# Default values for esphome.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-
 image:
   repository: esphome/esphome
-  tag: 2023.12.9 #1.14.5
+  tag: ""
   pullPolicy: IfNotPresent
   pullSecrets: []
 
-# upgrade strategy type (e.g. Recreate or RollingUpdate)
-strategyType: Recreate
-
-# Probes configuration
-probes:
-  liveness:
-    enabled: true
-    scheme: HTTP
-    initialDelaySeconds: 60
-    failureThreshold: 5
-    timeoutSeconds: 10
-  readiness:
-    enabled: true
-    scheme: HTTP
-    initialDelaySeconds: 60
-    failureThreshold: 5
-    timeoutSeconds: 10
-  startup:
-    enabled: false
-    scheme: HTTP
-    failureThreshold: 30
-    periodSeconds: 10
-service:
-  type: ClusterIP
-  port: 6052
-  portName: api
-  additionalPorts: []
-  # - name: homematicproxy
-  #   port: 2001
-  #   targetPort: 2001
-  annotations: {}
-  labels: {}
-  clusterIP: ""
-  ## List of IP addresses at which the hass-configurator service is available
-  ## Ref: https://kubernetes.io/docs/user-guide/services/#external-ips
-  ##
-  externalIPs: []
-  loadBalancerIP: ""
-  loadBalancerSourceRanges: []
-  # nodePort: 30000
-  publishNotReadyAddresses: false
-
-ingress:
-  enabled: false
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
-  path: /
-  hosts:
-    - esphome.local
-  tls: []
-  #  - secretName: esphome-tls
-  #    hosts:
-  #      - esphome.local
-
+nameOverride: ""
+fullnameOverride: ""
+revisionHistoryLimit: 2
 hostNetwork: false
 
-persistence:
-  enabled: false
-  ## esphome data Persistent Volume Storage Class
-  ## If defined, storageClassName: <storageClass>
-  ## If set to "-", storageClassName: "", which disables dynamic provisioning
-  ## If undefined (the default) or set to null, no storageClassName spec is
-  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-  ##   GKE, AWS & OpenStack)
-  ##
-  # storageClass: "-"
-  ##
-  ## If you want to reuse an existing claim, you can pass the name of the PVC using
-  ## the existingClaim variable
-  # existingClaim: your-claim
-  ##
-  ## If you want to use a volume on the host machine instead of a PVC:
-  # hostPath: /path/to/the/config/folder
-  # hostPath: /mnt/volume-0/apps/esphome
+replicas: 1
+strategyType: RollingUpdate
 
+serviceAccount:
+  create: true
+  annotations: {}
+  automountServiceAccountToken: false
 
-## Additional hass container environment variable
-## For instance to add a http_proxy
-##
+podAnnotations: {}
+podLabels: {}
+
 extraEnv: {}
 
-## Additional hass container environment variable from k8s secrets
-## For instance to add a password
-## can use `!env_var` in the esphome configuration to reference these variables
 extraEnvSecrets:
-  # Example
   # This will set ${MQTT_PASSWORD} to the 'password' key from the 'mqtt' secret
   # MQTT_PASSWORD:
   #   secret: mqtt
@@ -104,16 +32,139 @@ extraEnvSecrets:
 ## individually, pass in the name of a created + populated Secret.
 ## All secrets will be mounted as environment variables, with each key/value mapping to a
 ## corresponding environment variable.
-##
 extraSecretForEnvFrom: []
 # - esphome-secrets
 
-# Enable pod security context (must be `true` if runAsUser or fsGroup are set)
-usePodSecurityContext: true
-# Set runAsUser to 1000 to let esphome run as non-root user.
-# When setting runAsUser to a different value than 0 also set fsGroup to the same value:
-# runAsUser: <defaults to 0>
-# fsGroup: <will be omitted in deployment if runAsUser is 0>
+podSecurityContext: {}
+  # fsGroup: 2000
+  # privileged: true
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  annotations: {}
+    # prometheus.io/scrape: "false"
+    # prometheus.io/port: {{ .Values.service.metricsPort }}
+  labels: {}
+  type: ClusterIP
+  externalIPs: []
+  loadBalancerIP: ""
+  externalTrafficPolicy: {}
+  loadBalancerSourceRanges: []
+  publishNotReadyAddresses: false
+  httpPort:      "6052"
+
+monitoring:
+  enabled: false
+  serviceMonitor:
+    enabled: false
+    labels: {}
+    honorLabels: true
+    interval:      60s
+    selector: {}
+    namespace: monitoring
+    scrapeTimeout: 10s
+    scheme: http
+    tlsConfig: {}
+    relabelings: []
+    # - sourceLabels: [__meta_kubernetes_pod_node_name]
+    #   separator: ;
+    #   regex: ^(.*)$
+    #   target_label: nodename
+    #   replacement: $1
+    #   action: replace
+    metricRelabelings: []
+    # - action: keep
+    #   regex: 'kube_(daemonset|deployment|pod|namespace|node|statefulset).+'
+    #   sourceLabels: [__name__]
+    bearerTokenFile: {}
+    # (use long lived access tokens)
+    bearerTokenSecret: {}
+      # name:
+      # key:
+      # optional:
+
+livenessProbe:
+  enabled: true
+  scheme: HTTP
+  periodSeconds:       60
+  timeoutSeconds:      10
+  successThreshold:    1
+  failureThreshold:    6
+  initialDelaySeconds: 30
+readinessProbe:
+  enabled: true
+  scheme: HTTP
+  periodSeconds:       60
+  timeoutSeconds:      10
+  successThreshold:    1
+  failureThreshold:    6
+  initialDelaySeconds: 30
+
+ingress:
+  enabled: false
+  # className: ""
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    nginx.ingress.kubernetes.io/server-snippets: |
+      location / {
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_http_version 1.1;
+        proxy_set_header X-Forwarded-Host $http_host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_set_header Host $host;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header   Upgrade $http_upgrade;
+        proxy_cache_bypass $http_upgrade;
+      }
+  hosts:
+    - host: esphome.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+    []
+    # - secretName: letsencrypt-staging
+    #   hosts:
+    #     - esphome.local
+
+resources: {}
+#   requests:
+#     cpu: "1"
+#     memory: "256Mi"
+#   limits:
+#     cpu: "1"
+#     memory: "512Mi"
+
+nodeSelector:
+  kubernetes.io/hostname: {}
+affinity: {}
+tolerations: []
+
+persistence:
+  enabled: false
+  configstorage:
+    hostPath: /mnt/
+  musicstorage:
+    hostPath: /mnt/
+  pvc:
+    enabled: false
+    # accessModes:
+    #   - {}
+    # resources:
+    #   requests:
+    #     storage: 2Gi
+    # storageClassName: ""
 
 # Mount devices or folders from the host machine. Can be used for USB device mounting.
 hostMounts: []
@@ -121,35 +172,10 @@ hostMounts: []
   # - name: zha
   #   hostPath: /dev/serial/by-id/usb-Silicon_Labs_HubZ_Smart_Home_Controller_6120245D-if01-port0
 
-resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #  cpu: 100m
-  #  memory: 128Mi
-  # requests:
-  #  cpu: 100m
-  #  memory: 128Mi
 
-nodeSelector:
-  kubernetes.io/hostname: {}
-
-tolerations: []
-
-affinity: {}
-
-podAnnotations: {}
-
-# Any extra volumes to define for the pod
-extraVolumes: []
-  # - name: example-name
-  #   hostPath:
-  #     path: /path/on/host
-  #     type: DirectoryOrCreate
-
-# Any extra volume mounts to define for the containers
-extraVolumeMounts: []
-#   - name: example-name
-#     mountPath: /path/in/container
+# Enable pod security context (must be `true` if runAsUser or fsGroup are set)
+#usePodSecurityContext: true
+# Set runAsUser to 1000 to let esphome run as non-root user.
+# When setting runAsUser to a different value than 0 also set fsGroup to the same value:
+# runAsUser: <defaults to 0>
+# fsGroup: <will be omitted in deployment if runAsUser is 0>

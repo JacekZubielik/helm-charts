@@ -3,156 +3,148 @@ kind: Deployment
 metadata:
   name: {{ template "esphome.fullname" . }}
   labels:
-    app.kubernetes.io/name: {{ include "esphome.name" . }}
-    helm.sh/chart: {{ include "esphome.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  {{- include "esphome.labels" . | nindent 4 }}
 spec:
-  replicas: 1
-  strategy:
-    type: {{ .Values.strategyType }}
+  replicas: {{ .Values.replicas }}
+  revisionHistoryLimit:  {{ .Values.revisionHistoryLimit }}
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "esphome.name" . }}
-      app.kubernetes.io/instance: {{ .Release.Name }}
+    {{- include "esphome.selectorLabels" . | nindent 6 }}
+  serviceName: {{ include "esphome.fullname" . }}
+
+  strategy:
+    type: {{ .Values.strategyType }}
+
   template:
     metadata:
-      labels:
-        app.kubernetes.io/name: {{ include "esphome.name" . }}
-        app.kubernetes.io/instance: {{ .Release.Name }}
-      {{- if .Values.podAnnotations }}
+      {{- with .Values.podAnnotations }}
       annotations:
-        {{- range $key, $value := .Values.podAnnotations }}
-        {{ $key }}: {{ $value | }}
-        {{- end }}
+      {{- toYaml . | nindent 8 }}
       {{- end }}
+      labels:
+      {{- include "esphome.selectorLabels" . | nindent 8 }}
+      {{- if .Values.podLabels }}
+      {{- toYaml .Values.podLabels | nindent 8 }}
+      {{- end }}
+
     spec:
-      {{- with .Values.image.pullSecrets }}
+      {{- with .Values.image.PullSecrets }}
       imagePullSecrets:
-      {{- range . }}
-        - name: {{ . }}
+      {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- end }}
+      automountServiceAccountToken: {{ .Values.serviceAccount.automountServiceAccountToken }}
+      shareProcessNamespace: {{ .Values.sidecarSingleProcessNamespace }}
+      serviceAccountName: {{ include "esphome.serviceAccountName" . }}
+      securityContext:
+      {{- toYaml .Values.podSecurityContext | nindent 8 }}
       {{- if .Values.hostNetwork }}
       hostNetwork: {{ .Values.hostNetwork }}
       dnsPolicy: ClusterFirstWithHostNet
       {{- end }}
+
       containers:
-        - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          ports:
-            - name: api
-              containerPort: {{ .Values.service.port }}
-              protocol: TCP
-          {{- range .Values.service.additionalPorts }}
-            - name: {{ .name }}
-              containerPort: {{ .targetPort }}
+      - name: {{ .Chart.Name }}
+        securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 12 }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+
+        env:
+          {{- range $key, $value := .Values.extraEnv }}
+          - name: {{ $key | }}
+            value: {{ $value | }}
           {{- end }}
-          {{- if .Values.probes.liveness.enabled }}
-          livenessProbe:
-            httpGet:
-              path: /ping
-              port: api
-              scheme: {{ .Values.probes.liveness.scheme }}
-            initialDelaySeconds: {{ .Values.probes.liveness.initialDelaySeconds }}
-            failureThreshold: {{ .Values.probes.liveness.failureThreshold }}
-            timeoutSeconds: {{ .Values.probes.liveness.timeoutSeconds }}
+          {{- range $name, $opts := .Values.extraEnvSecrets }}
+          - name: {{ $name }}
+            valueFrom:
+              secretKeyRef:
+                name: {{ $opts.secret }}
+                key: {{ $opts.key }}
           {{- end }}
-          {{- if .Values.probes.readiness.enabled }}
-          readinessProbe:
-            httpGet:
-              path: /ping
-              port: api
-              scheme: {{ .Values.probes.readiness.scheme }}
-            initialDelaySeconds: {{ .Values.probes.readiness.initialDelaySeconds }}
-            failureThreshold: {{ .Values.probes.readiness.failureThreshold }}
-            timeoutSeconds: {{ .Values.probes.readiness.timeoutSeconds }}
-          {{- end }}
-          {{- if .Values.probes.startup.enabled }}
-          startupProbe:
-            httpGet:
-              path: /ping
-              port: api
-              scheme: {{ .Values.probes.startup.scheme }}
-            failureThreshold: {{ .Values.probes.startup.failureThreshold }}
-            periodSeconds: {{ .Values.probes.startup.periodSeconds }}
-          {{- end }}
-          env:
-            {{- range $key, $value := .Values.extraEnv }}
-            - name: {{ $key | }}
-              value: {{ $value | }}
-            {{- end }}
-            {{- range $name, $opts := .Values.extraEnvSecrets }}
-            - name: {{ $name }}
-              valueFrom:
-                secretKeyRef:
-                  name: {{ $opts.secret }}
-                  key: {{ $opts.key }}
-            {{- end }}
-          envFrom:
-          {{- range .Values.extraSecretForEnvFrom }}
-            - secretRef:
-                name: {{ . }}
-          {{- end }}
-          volumeMounts:
-          - mountPath: /config
-            name: config
-          {{- range .Values.hostMounts }}
-          {{- if .mountPath }}
-          - mountPath: {{ .mountPath }}
-          {{- else }}
-          - mountPath: {{ .hostPath }}
-          {{- end }}
-            name: {{ .name }}
-          {{- end }}
-          {{- if .Values.extraVolumeMounts }}{{ toYaml .Values.extraVolumeMounts | trim | nindent 10 }}{{ end }}
-          {{- if .Values.usePodSecurityContext }}
-          securityContext:
-            runAsUser: {{ default 0 .Values.runAsUser }}
-          {{- if and (.Values.runAsUser) (.Values.fsGroup) }}
-          {{- if not (eq .Values.runAsUser 0.0) }}
-            fsGroup: {{ .Values.fsGroup }}
-          {{- end }}
-          {{- end }}
-          {{- end }}
-          resources:
-{{ toYaml .Values.resources | indent 12 }}
-          {{- if .Values.hostMounts }}
-          securityContext:
-            privileged: true
-          {{- end }}
-      volumes:
-      - name: config
-      {{- if .Values.persistence.enabled }}
-        {{- if .Values.persistence.hostPath }}
-        hostPath:
-          path: {{.Values.persistence.hostPath}}
-        {{- else }}
-        persistentVolumeClaim:
-          claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ template "esphome.fullname" . }}{{- end }}
+        envFrom:
+        {{- range .Values.extraSecretForEnvFrom }}
+          - secretRef:
+              name: {{ . }}
         {{- end }}
-      {{- else }}
-        emptyDir: {}
-      {{ end }}
-      {{- range .Values.hostMounts }}
-      - name: {{ .name }}
-        hostPath:
-          path: {{.hostPath}}
-          {{- if .type }}
-          type: {{ .type }}
-          {{- end }}
-      {{- end }}
-      {{- if .Values.extraVolumes  }}{{ toYaml .Values.extraVolumes | trim | nindent 6 }}{{ end }}
-    {{- with .Values.nodeSelector }}
+
+        resources:
+        {{- toYaml .Values.resources | nindent 12 }}
+        ports:
+          - name: api
+            containerPort: {{ .Values.service.httpPort }}
+            protocol: TCP
+
+        {{- if .Values.livenessProbe.enabled }}
+        livenessProbe:
+          httpGet:
+            path:              /ping
+            port:              {{ .Values.service.httpPort }}
+            scheme:            {{ .Values.livenessProbe.scheme }}
+          periodSeconds:       {{ .Values.livenessProbe.periodSeconds }}
+          timeoutSeconds:      {{ .Values.livenessProbe.timeoutSeconds }}
+          successThreshold:    {{ .Values.livenessProbe.successThreshold }}
+          failureThreshold:    {{ .Values.livenessProbe.failureThreshold }}
+          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds}}
+        {{- end }}
+        {{- if .Values.readinessProbe.enabled }}
+        readinessProbe:
+          httpGet:
+            path:              /ping
+            port:              {{ .Values.service.httpPort }}
+            scheme:            {{ .Values.livenessProbe.scheme }}
+          periodSeconds:       {{ .Values.readinessProbe.periodSeconds }}
+          timeoutSeconds:      {{ .Values.readinessProbe.timeoutSeconds }}
+          successThreshold:    {{ .Values.readinessProbe.successThreshold }}
+          failureThreshold:    {{ .Values.readinessProbe.failureThreshold }}
+          initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds}}
+        {{- end }}
+
+        volumeMounts:
+        - mountPath: /config
+          name: config-storage
+
+        {{- range .Values.hostMounts }}
+        {{- if .mountPath }}
+        - mountPath: {{ .mountPath }}
+        {{- else }}
+        - mountPath: {{ .hostPath }}
+        {{- end }}
+          name: {{ .name }}
+        {{- end }}
+
+      {{- with .Values.nodeSelector }}
       nodeSelector:
-{{ toYaml . | indent 8 }}
-    {{- end }}
-    {{- with .Values.affinity }}
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
       affinity:
-{{ toYaml . | indent 8 }}
-    {{- end }}
-    {{- with .Values.tolerations }}
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
       tolerations:
-{{ toYaml . | indent 8 }}
-    {{- end }}
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      volumes:
+        - name: config-storage
+        {{- if .Values.persistence.enabled }}
+        {{- if .Values.persistence.configstorage.hostPath }}
+          hostPath:
+            path: {{.Values.persistence.configstorage.hostPath}}
+        {{- else }}
+          persistentVolumeClaim:
+            claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ template "esphome.fullname" . }}{{- end }}
+        {{- end }}
+        {{- else }}
+          emptyDir: {}
+        {{ end }}
+
+      {{- range .Values.hostMounts }}
+        - name: {{ .name }}
+          hostPath:
+            path: {{.hostPath}}
+      {{- if .type }}
+            type: {{ .type }}
+      {{- end }}
+      {{- end }}
+
