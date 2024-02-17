@@ -4165,6 +4165,26 @@ entries:
     - https://github.com/JacekZubielik/helm-charts/releases/download/uptime-kuma-0.0.1/uptime-kuma-0.0.1.tgz
     version: 0.0.1
   zigbee2mqtt:
+  - apiVersion: v2
+    appVersion: 1.35.3
+    created: "2024-02-17T23:01:00.951148578Z"
+    description: Zigbee Bridge via MQTT
+    digest: fa839d1ec49ebd3ade57f0c159203f26c916ac1bfb0ce3139387b99beab0570a
+    home: https://github.com/JacekZubielik/helm-charts/tree/master/charts/zigbee2mqtt
+    icon: https://www.zigbee2mqtt.io/images/logo.png
+    keywords:
+    - zigbee
+    - mqtt
+    maintainers:
+    - email: jack.zu@protonmail.com
+      name: Jacek Zubielik
+    name: zigbee2mqtt
+    sources:
+    - https://github.com/Koenkk/zigbee2mqtt
+    type: application
+    urls:
+    - https://github.com/JacekZubielik/helm-charts/releases/download/zigbee2mqtt-0.0.71/zigbee2mqtt-0.0.71.tgz
+    version: 0.0.71
   - annotations:
       category: Application
     apiVersion: v2
@@ -5808,4 +5828,4 @@ entries:
     urls:
     - https://github.com/JacekZubielik/helm-charts/releases/download/zigbee2mqtt-0.0.1/zigbee2mqtt-0.0.1.tgz
     version: 0.0.1
-generated: "2024-02-17T22:08:49.648765622Z"
+generated: "2024-02-17T23:01:00.951957758Z"
