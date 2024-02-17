@@ -135,19 +135,4 @@ spec:
           {{- end }}
       {{- end }}
       {{- if .Values.extraVolumes  }}{{ toYaml .Values.extraVolumes | trim | nindent 6 }}{{ end }}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 {{- end -}}
