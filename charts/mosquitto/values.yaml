@@ -45,7 +45,8 @@ mosquitto:
   config: ""
   users: ""
   acls: ""
-
+  allow_anonymous:
+    enabled: true
   ssl:
     enabled: false
     portName: "mqttssl"

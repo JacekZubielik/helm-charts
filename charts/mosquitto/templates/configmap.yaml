@@ -13,6 +13,7 @@ data:
     {{- end }}
     persistence_location /mosquitto/data/
     log_dest stdout
+    log_type all
     password_file /mosquitto/config/accounts.conf
     acl_file /mosquitto/config/acls.conf
     listener {{ .Values.service.ports.mqtt }}
@@ -23,6 +24,16 @@ data:
     certfile /mosquitto/ssl/tls.crt
     keyfile /mosquitto/ssl/tls.key
     {{- end }}
+
+
+    {{- if .Values.mosquitto.allow_anonymous.enabled }}
+    allow_anonymous true
+    {{- end }}
+    listener 8080
+    protocol websockets
+    allow_anonymous true
+
+
 {{ .Values.mosquitto.config | indent 4 }}
   accounts.conf: |-
 {{ .Values.mosquitto.users | indent 4 }}
