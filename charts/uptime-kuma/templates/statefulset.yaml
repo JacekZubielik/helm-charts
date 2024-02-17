@@ -150,3 +150,4 @@ spec:
             type: {{ .type }}
       {{- end }}
       {{- end }}
+{{- end }}
