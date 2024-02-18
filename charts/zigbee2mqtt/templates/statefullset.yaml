@@ -53,9 +53,9 @@ spec:
           mountPath: /data
         - name: sniffer
           mountPath: {{ .Values.config.serial.port }}
+          readOnly: false
+
       {{- if .Values.assistant.enabled }}
-
-
       - name: {{ .Chart.Name }}assistant
         image: "{{ .Values.assistant.image.repository }}:{{ .Values.assistant.image.tag | default "latest" }}"
         imagePullPolicy: {{ .Values.assistant.image.pullPolicy }}        
@@ -90,7 +90,7 @@ spec:
           name: {{ include "zigbee2mqtt.fullname" . }}
       - name: sniffer
         hostPath:
-          path: {{ required "You must specify a path to your zigbee sniffer" .Values.config.serial.port }}
+          path: {{ .Values.config.serial.port }}
       {{- if not .Values.persistence.enabled }}
       - name: data
         emptyDir: {}

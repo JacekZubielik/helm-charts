@@ -35,54 +35,6 @@ config:
 
 assistant:
   enabled: true
-  image:
-    repository: carldebilly/zigbee2mqttassistant
-    pullPolicy: IfNotPresent
-    # Overrides the image tag whose default is latest.
-    tag: ""
-  # Config values from https://github.com/yllibed/Zigbee2MqttAssistant
-  # MQTT (connection or topic) parameters are retrieved from general config, but they can be overriden.
-  # All of them are case insensitive.
-  config:
-    lowBatteryThreshold: 30
-    allowJoinTimeout: 20
-    autosetLastSeen: false
-    devicesPollingSchedule: "*/12 * * * *"
-    networkScanSchedule: "0 */3 * * *"
-
-  probes:
-    liveness:
-      initialDelaySeconds: 30
-      failureThreshold: 5
-      timeoutSeconds: 10
-    readiness:
-      initialDelaySeconds: 30
-      failureThreshold: 5
-      timeoutSeconds: 10
-
-  service:
-    type: ClusterIP
-    port: 8091
-    # nodePort:
-    annotations: {}
-    labels: {}
-    loadBalancerIP:
-    # loadBalancerSourceRanges: []
-    ## Set the externalTrafficPolicy in the Service to either Cluster or Local
-    # externalTrafficPolicy: Cluster
-
-  ingress:
-    enabled: false
-    annotations: {}
-      # kubernetes.io/ingress.class: nginx
-      # kubernetes.io/tls-acme: "true"
-    path: /
-    hosts:
-      - chart-example.local
-    tls: []
-    #  - secretName: chart-example-tls
-    #    hosts:
-    #      - chart-example.local
 
 persistence:
   enabled: false
