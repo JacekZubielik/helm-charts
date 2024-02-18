@@ -46,11 +46,18 @@ spec:
         resources:
           {{- toYaml .Values.resources | nindent 12 }}
         volumeMounts:
+        # - name: zigbee2mqtt
+        #   mountPath: /app/configuration.yaml
+        #   subPath: configuration.yaml
+        # - name: data
+        #   mountPath: /data
+
         - name: zigbee2mqtt
-          mountPath: /app/configuration.yaml
+          mountPath: /app/data/configuration.yaml
           subPath: configuration.yaml
         - name: data
           mountPath: /data
+
         - name: sniffer
           mountPath: {{ .Values.config.serial.port }}
           readOnly: false
