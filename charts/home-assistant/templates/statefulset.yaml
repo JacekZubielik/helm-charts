@@ -34,7 +34,7 @@ spec:
       shareProcessNamespace: {{ .Values.sidecarSingleProcessNamespace }}
       serviceAccountName: {{ include "home-assistant.serviceAccountName" . }}
       securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+        {{- toYaml .Values.securityContext  | nindent 8 }}
 
       {{- if .Values.hostNetwork }}
       hostNetwork: {{ .Values.hostNetwork }}
@@ -44,7 +44,7 @@ spec:
       containers:
       - name: {{ .Chart.Name }}
         securityContext:
-          {{- toYaml .Values.securityContext | nindent 12 }}
+          {{- toYaml .Values.podSecurityContext | nindent 12 }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         env:
