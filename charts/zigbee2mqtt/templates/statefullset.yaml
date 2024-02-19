@@ -55,8 +55,10 @@ spec:
         - name: zigbee2mqtt
           mountPath: /data/configuration.yaml
           subPath: configuration.yaml
+          readOnly: false
         - name: data
           mountPath: /data
+          readOnly: false
 
         - name: sniffer
           mountPath: {{ .Values.config.serial.port }}
