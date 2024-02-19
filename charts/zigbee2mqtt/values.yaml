@@ -23,13 +23,13 @@ config:
   serial:
     port: /dev/ttyUSB0
 
+  frontend:
+    port: 8080
+
   advanced:
     network_key: GENERATE
     log_output:
       - console
-
-# assistant:
-#   enabled: true
 
 persistence:
   enabled: false
