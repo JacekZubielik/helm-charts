@@ -53,7 +53,7 @@ spec:
         #   mountPath: /data
 
         - name: zigbee2mqtt
-          mountPath: /app/data/configuration.yaml
+          mountPath: /data/configuration.yaml
           subPath: configuration.yaml
         - name: data
           mountPath: /data
