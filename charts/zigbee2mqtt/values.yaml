@@ -41,9 +41,9 @@ extraEnvSecrets:
 extraSecretForEnvFrom: []
 # - esphome-secrets
 
-podSecurityContext: {}
+podSecurityContext:
+  privileged: true
   # fsGroup: 2000
-  # privileged: true
 
 securityContext: {}
   # capabilities:
@@ -175,47 +175,3 @@ persistence:
 hostMounts:
   - name: sniffer
     hostPath: /dev/ttyUSB0
-
-
-
-
-
-
-
-# {{/*  
-# timezone: "CET"
-# # Enable zigbee-herdsman debuggin
-# # debug: "zigbee-herdsman*"
-# config:
-#   homeassistant: false
-#   permit_join: true
-
-#   mqtt:
-#     base_topic: zigbee2mqtt
-#     server: 'mqtt://localhost'
-#     # user: my_user
-#     # password: my_password
-#     force_disable_retain: false
-#     keepalive: 60
-#     reject_unauthorized: true
-#     version: 4
-
-#   serial:
-#     port: /dev/ttyUSB0
-
-#   frontend:
-#     port: 8080
-
-#   advanced:
-#     network_key: GENERATE
-#     log_output:
-#       - console
-
-# podSecurityContext: {}
-#   # fsGroup: 2000
-
-# securityContext:
-#   privileged: true
-#   # capabilities:
-
-# */}}
