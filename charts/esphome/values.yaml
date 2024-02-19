@@ -35,9 +35,9 @@ extraEnvSecrets:
 extraSecretForEnvFrom: []
 # - esphome-secrets
 
-podSecurityContext: {}
+podSecurityContext:
+  privileged: false
   # fsGroup: 2000
-  # privileged: true
 
 securityContext: {}
   # capabilities:
@@ -154,9 +154,9 @@ tolerations: []
 persistence:
   enabled: false
   configstorage:
-    hostPath: /mnt/
+    hostPath: /mnt/temp
   musicstorage:
-    hostPath: /mnt/
+    hostPath: /mnt/temp
   pvc:
     enabled: false
     # accessModes:

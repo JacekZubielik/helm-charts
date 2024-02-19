@@ -31,7 +31,6 @@ If release name contains chart name it will be used as a full name. */}}
 
 {{- define "esphome.labels" -}}
 helm.sh/chart: {{ include "esphome.chart" . }}
-
 {{ include "esphome.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion }}
