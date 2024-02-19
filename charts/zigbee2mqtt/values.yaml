@@ -21,7 +21,7 @@ updateStrategy:
 serviceAccount:
   create: true
   annotations: {}
-  automountServiceAccountToken: false
+  automountServiceAccountToken: true
 
 podAnnotations: {}
 podLabels: {}
@@ -39,7 +39,7 @@ extraEnvSecrets:
 ## All secrets will be mounted as environment variables, with each key/value mapping to a
 ## corresponding environment variable.
 extraSecretForEnvFrom: []
-# - esphome-secrets
+# - zigbee2mqtt-secrets
 
 podSecurityContext:
   privileged: true
@@ -135,7 +135,7 @@ ingress:
         proxy_cache_bypass $http_upgrade;
       }
   hosts:
-    - host: lms.local
+    - host: zigbee2mqtt.local
       paths:
         - path: /
           pathType: ImplementationSpecific
@@ -143,7 +143,7 @@ ingress:
     []
     # - secretName: letsencrypt-staging
     #   hosts:
-    #     - lms.local
+    #     - zigbee2mqtt.local
 
 resources: {}
 #   requests:
