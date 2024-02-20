@@ -14,10 +14,7 @@ spec:
 {{/*    updateStrategy:
     type: {{ .Values.strategyType }} */}}
 
-
-
   updateStrategy: {{ toYaml .Values.updateStrategy | nindent 4 }}
-
 
   template:
     metadata:

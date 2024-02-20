@@ -47,7 +47,7 @@ spec:
     targetPort: discovery
   - name: metrics
     port: {{ .Values.service.metricsPort }}
+    protocol: TCP
     targetPort: metrics
-
   selector:
   {{- include "lms.selectorLabels" . | nindent 4 }}
