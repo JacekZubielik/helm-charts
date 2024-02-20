@@ -17,11 +17,8 @@ data:
     log_type all
     log_dest file /mosquitto/log/mosquitto.log
     pid_file /mosquitto/mosquitto.pid
-
-
     listener {{ .Values.service.mqttPort }}
     listener {{ .Values.service.mqttwsPort}}
-
     {{- if .Values.mosquitto.ssl.enabled }}
     password_file /mosquitto/config/accounts.conf
     acl_file /mosquitto/config/acls.conf
@@ -30,7 +27,6 @@ data:
     certfile /mosquitto/config/ssl/tls.crt
     keyfile /mosquitto/config/ssl/tls.key
     {{- end }}
-
     {{- if .Values.mosquitto.allow_anonymous.enabled }}
     allow_anonymous true
     {{- end }}
