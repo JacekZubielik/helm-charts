@@ -72,6 +72,9 @@ spec:
           - name: api
             containerPort: {{ .Values.service.httpPort }}
             protocol: TCP
+        - name: metrics
+          containerPort: {{ .Values.service.metricsPort }}
+          protocol: TCP
 
         {{- if .Values.livenessProbe.enabled }}
         livenessProbe:
