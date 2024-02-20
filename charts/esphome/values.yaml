@@ -20,7 +20,6 @@ serviceAccount:
 podAnnotations: {}
 podLabels: {}
 
-env: {}
 extraEnv: {}
 
 extraEnvSecrets:
