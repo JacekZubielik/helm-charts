@@ -70,21 +70,24 @@ spec:
         {{- toYaml .Values.resources | nindent 12 }}
 
         ports:
-          - name: api
+          - name: mqtt
             containerPort: {{ .Values.service.mqttPort }}
             protocol: TCP
-          - name: api
+          - name: mqttssl
             containerPort: {{ .Values.service.mqttsslPort }}
             protocol: TCP
-          - name: api
+          - name: mqttws
             containerPort: {{ .Values.service.mqttwsPort }}
             protocol: TCP
+        - name: metrics
+          containerPort: {{ .Values.service.metricsPort }}
+          protocol: TCP
 
         {{- if .Values.livenessProbe.enabled }}
         livenessProbe:
           httpGet:
             path:              /ping
-            port:              {{ .Values.service.httpPort }}
+            port:              {{ .Values.service.mqttPort }}
             scheme:            {{ .Values.livenessProbe.scheme }}
           periodSeconds:       {{ .Values.livenessProbe.periodSeconds }}
           timeoutSeconds:      {{ .Values.livenessProbe.timeoutSeconds }}
@@ -96,7 +99,7 @@ spec:
         readinessProbe:
           httpGet:
             path:              /ping
-            port:              {{ .Values.service.httpPort }}
+            port:              {{ .Values.service.mqttPort }}
             scheme:            {{ .Values.livenessProbe.scheme }}
           periodSeconds:       {{ .Values.readinessProbe.periodSeconds }}
           timeoutSeconds:      {{ .Values.readinessProbe.timeoutSeconds }}
