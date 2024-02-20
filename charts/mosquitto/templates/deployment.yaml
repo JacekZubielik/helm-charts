@@ -10,10 +10,8 @@ spec:
   selector:
     matchLabels:
     {{- include "mosquitto.selectorLabels" . | nindent 6 }}
-  
   strategy:
     type: {{ .Values.strategyType }}
-
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -25,7 +23,6 @@ spec:
       {{- if .Values.podLabels }}
       {{- toYaml .Values.podLabels | nindent 8 }}
       {{- end }}
-
     spec:
       {{- with .Values.image.PullSecrets }}
       imagePullSecrets:
@@ -40,45 +37,41 @@ spec:
       hostNetwork: {{ .Values.hostNetwork }}
       dnsPolicy: ClusterFirstWithHostNet
       {{- end }}
-
       containers:
       - name: {{ .Chart.Name }}
         securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 12 }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
-
         env:
-          {{- range $key, $value := .Values.extraEnv }}
-          - name: {{ $key | }}
-            value: {{ $value | }}
-          {{- end }}
-          {{- range $name, $opts := .Values.extraEnvSecrets }}
-          - name: {{ $name }}
-            valueFrom:
-              secretKeyRef:
-                name: {{ $opts.secret }}
-                key: {{ $opts.key }}
-          {{- end }}
+        {{- range $key, $value := .Values.extraEnv }}
+        - name: {{ $key | }}
+          value: {{ $value | }}
+        {{- end }}
+        {{- range $name, $opts := .Values.extraEnvSecrets }}
+        - name: {{ $name }}
+          valueFrom:
+            secretKeyRef:
+              name: {{ $opts.secret }}
+              key: {{ $opts.key }}
+        {{- end }}
         envFrom:
         {{- range .Values.extraSecretForEnvFrom }}
-          - secretRef:
-              name: {{ . }}
+        - secretRef:
+            name: {{ . }}
         {{- end }}
-
         resources:
         {{- toYaml .Values.resources | nindent 12 }}
-
         ports:
-          - name: mqtt
-            containerPort: {{ .Values.service.mqttPort }}
-            protocol: TCP
-          - name: mqttssl
-            containerPort: {{ .Values.service.mqttsslPort }}
-            protocol: TCP
-          - name: mqttws
-            containerPort: {{ .Values.service.mqttwsPort }}
-            protocol: TCP
+        - name: mqtt
+          containerPort: {{ .Values.service.mqttPort }}
+          protocol: TCP
+        - name: mqttssl
+          containerPort: {{ .Values.service.mqttsslPort }}
+          protocol: TCP
+        - name: mqttws
+          containerPort: {{ .Values.service.mqttwsPort }}
+          protocol: TCP
         - name: metrics
           containerPort: {{ .Values.service.metricsPort }}
           protocol: TCP
@@ -139,19 +132,19 @@ spec:
       {{- end }}
 
       volumes:
-        - name: config-storage
-        {{- if .Values.persistence.enabled }}
-        {{- if .Values.persistence.configstorage.hostPath }}
-          hostPath:
-            path: {{.Values.persistence.configstorage.hostPath}}
-        {{- else }}
-          persistentVolumeClaim:
-            claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ template "mosquitto.fullname" . }}{{- end }}
-        {{- end }}
+      - name: config-storage
+      {{- if .Values.persistence.enabled }}
+      {{- if .Values.persistence.configstorage.hostPath }}
+        hostPath:
+          path: {{.Values.persistence.configstorage.hostPath}}
+      {{- else }}
+        persistentVolumeClaim:
+          claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ template "mosquitto.fullname" . }}{{- end }}
+      {{- end }}
 
-        {{- else }}
-          emptyDir: {}
-        {{ end }}
+      {{- else }}
+        emptyDir: {}
+      {{ end }}
 
 
 {{/* 
