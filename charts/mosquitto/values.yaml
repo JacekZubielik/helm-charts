@@ -46,8 +46,6 @@ extraEnvSecrets:
   #   secret: mqtt
   #   key: password
 
-## If you'd like to provide your own Kubernetes Secret object instead of passing your values
-## individually, pass in the name of a created + populated Secret.
 ## All secrets will be mounted as environment variables, with each key/value mapping to a
 ## corresponding environment variable.
 extraSecretForEnvFrom: []
@@ -176,16 +174,12 @@ persistence:
   enabled: false
   configstorage:
     hostPath: /mnt/temp
-  musicstorage:
-    hostPath: /mnt/temp
   existingClaim: {}
   pvc:
     enabled: false
     accessModes:
       - ReadWriteOnce
-    resources:
-      requests:
-        storage: 1Gi
+    size: 1Gi
     storageClass: "local-path"
 
 # Mount devices or folders from the host machine. Can be used for USB device mounting.
