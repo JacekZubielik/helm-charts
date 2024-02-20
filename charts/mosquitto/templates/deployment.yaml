@@ -137,15 +137,19 @@ spec:
         {{- end }}
 
       volumes:
-      - name:      config
-        mountPath: /mosquitto/config/mosquitto.conf
-        subPath:   mosquitto.conf
+      - name: config
+        configMap:
+          name: {{ include "mosquitto.fullname" . }}
+          items:
+          - key:  mosquitto.conf
+            path: mosquitto.conf
+            mode: 0640
 
-      - name: data
+      - name: datastorage
       {{- if .Values.persistence.enabled }}
-      {{- if .Values.persistence.configstorage.hostPath }}
+      {{- if .Values.persistence.datastorage.hostPath }}
         hostPath:
-          path: {{.Values.persistence.configstorage.hostPath}}
+          path: {{.Values.persistence.datastorage.hostPath}}
       {{- else }}
         persistentVolumeClaim:
           claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ template "mosquitto.fullname" . }}{{- end }}

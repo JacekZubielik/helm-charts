@@ -141,7 +141,7 @@ tolerations: []
 
 persistence:
   enabled: false
-  configstorage:
+  datastorage:
     hostPath: /mnt/temp
   existingClaim: {}
   pvc:
