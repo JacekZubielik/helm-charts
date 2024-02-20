@@ -69,7 +69,6 @@ spec:
         - name: metrics
           containerPort: {{ .Values.service.metricsPort }}
           protocol: TCP
-
         {{- if .Values.livenessProbe.enabled }}
         livenessProbe:
           httpGet:
@@ -94,14 +93,9 @@ spec:
           failureThreshold:    {{ .Values.readinessProbe.failureThreshold }}
           initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds}}
         {{- end }}
-
         volumeMounts:
         - mountPath: /config
           name: config-storage
-        - mountPath: /config
-          name: config-storage
-
-
         {{- range .Values.hostMounts }}
         {{- if .mountPath }}
         - mountPath: {{ .mountPath }}
@@ -110,7 +104,6 @@ spec:
         {{- end }}
           name: {{ .name }}
         {{- end }}
-
       {{- with .Values.nodeSelector }}
       nodeSelector:
       {{- toYaml . | nindent 8 }}
@@ -123,7 +116,6 @@ spec:
       tolerations:
       {{- toYaml . | nindent 8 }}
       {{- end }}
-
       volumes:
         - name: config-storage
         {{- if .Values.persistence.enabled }}
@@ -137,7 +129,6 @@ spec:
         {{- else }}
           emptyDir: {}
         {{ end }}
-
       {{- range .Values.hostMounts }}
         - name: {{ .name }}
           hostPath:

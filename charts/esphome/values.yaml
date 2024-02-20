@@ -154,9 +154,7 @@ tolerations: []
 persistence:
   enabled: false
   configstorage:
-    hostPath: /mnt/temp
-  musicstorage:
-    hostPath: /mnt/temp
+    hostPath: {}
   pvc:
     enabled: false
     # accessModes:
