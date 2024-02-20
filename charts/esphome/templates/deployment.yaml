@@ -10,10 +10,8 @@ spec:
   selector:
     matchLabels:
     {{- include "esphome.selectorLabels" . | nindent 6 }}
-  
   strategy:
     type: {{ .Values.strategyType }}
-
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -25,7 +23,6 @@ spec:
       {{- if .Values.podLabels }}
       {{- toYaml .Values.podLabels | nindent 8 }}
       {{- end }}
-
     spec:
       {{- with .Values.image.PullSecrets }}
       imagePullSecrets:
@@ -40,7 +37,6 @@ spec:
       hostNetwork: {{ .Values.hostNetwork }}
       dnsPolicy: ClusterFirstWithHostNet
       {{- end }}
-
       containers:
       - name: {{ .Chart.Name }}
         securityContext:
@@ -61,19 +57,15 @@ spec:
         {{- end }}
         envFrom:
         {{- range .Values.extraSecretForEnvFrom }}
-          - secretRef:
-              name: {{ . }}
+        - secretRef:
+            name: {{ . }}
         {{- end }}
-
-
-
-
         resources:
         {{- toYaml .Values.resources | nindent 12 }}
         ports:
-          - name: api
-            containerPort: {{ .Values.service.httpPort }}
-            protocol: TCP
+        - name: api
+          containerPort: {{ .Values.service.httpPort }}
+          protocol: TCP
         - name: metrics
           containerPort: {{ .Values.service.metricsPort }}
           protocol: TCP
