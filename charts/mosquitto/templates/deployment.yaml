@@ -46,7 +46,7 @@ spec:
           runAsUser: 0
           privileged: true
         volumeMounts:
-        - name: data
+        - name: datastorage
           mountPath: /mosquitto/data
 
       containers:
