@@ -76,7 +76,7 @@ service:
   publishNotReadyAddresses: false
   mqttPort:    1883
   mqttsslPort: 8883
-  mqttwsPort:  9001
+  mqttwsPort:  9090 #9001
   metricsPort: 9113
 
 monitoring:

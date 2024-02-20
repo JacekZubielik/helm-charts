@@ -34,7 +34,7 @@ data:
     {{- if .Values.mosquitto.allow_anonymous.enabled }}
     allow_anonymous true
     {{- end }}
-    #protocol websockets
+    protocol websockets
 
 {{ .Values.mosquitto.config | indent 4 }}
   accounts.conf: |-

@@ -91,7 +91,7 @@ spec:
 
         {{- if .Values.livenessProbe.enabled }}
         livenessProbe:
-          httpGet:
+          tcpSocket:
             path:              /
             port:              {{ .Values.service.mqttwsPort }}
             scheme:            {{ .Values.livenessProbe.scheme }}
@@ -103,7 +103,7 @@ spec:
         {{- end }}
         {{- if .Values.readinessProbe.enabled }}
         readinessProbe:
-          httpGet:
+          tcpSocket:
             path:              /
             port:              {{ .Values.service.mqttwsPort }}
             scheme:            {{ .Values.livenessProbe.scheme }}
