@@ -93,7 +93,7 @@ spec:
         livenessProbe:
           httpGet:
             path:              /
-            port:              {{ .Values.service.mqttPort }}
+            port:              {{ .Values.service.mqttwsPort }}
             scheme:            {{ .Values.livenessProbe.scheme }}
           periodSeconds:       {{ .Values.livenessProbe.periodSeconds }}
           timeoutSeconds:      {{ .Values.livenessProbe.timeoutSeconds }}
@@ -105,7 +105,7 @@ spec:
         readinessProbe:
           httpGet:
             path:              /
-            port:              {{ .Values.service.mqttPort }}
+            port:              {{ .Values.service.mqttwsPort }}
             scheme:            {{ .Values.livenessProbe.scheme }}
           periodSeconds:       {{ .Values.readinessProbe.periodSeconds }}
           timeoutSeconds:      {{ .Values.readinessProbe.timeoutSeconds }}
