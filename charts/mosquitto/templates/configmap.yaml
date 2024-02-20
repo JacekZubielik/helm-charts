@@ -11,7 +11,7 @@ data:
     {{- else }}
     persistence false
     {{- end }}
-    persistence_location /mosquitto/config/
+    persistence_location /config/
     log_dest stdout
     log_type all
     password_file /mosquitto/config/accounts.conf
