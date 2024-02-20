@@ -102,11 +102,11 @@ spec:
         {{- end }}
 
         volumeMounts:
-        - mountPath: /config
+        - mountPath: /mosquitto/config
           name: config-storage
         {{- if .Values.mosquitto.ssl.enabled }}
         - name: config-storage
-          mountPath: /config/ssl
+          mountPath: /mosquitto/config/ssl
         {{- end }}
 
         {{- range .Values.hostMounts }}
