@@ -18,13 +18,13 @@ data:
     log_dest file /mosquitto/log/mosquitto.log
     pid_file /mosquitto/mosquitto.pid
 
-    password_file /mosquitto/config/accounts.conf
-    acl_file /mosquitto/config/acls.conf
+
     listener {{ .Values.service.mqttPort }}
-    listener {{ .Values.service.mqttsslPort }}
     listener {{ .Values.service.mqttwsPort}}
 
     {{- if .Values.mosquitto.ssl.enabled }}
+    password_file /mosquitto/config/accounts.conf
+    acl_file /mosquitto/config/acls.conf
     listener {{ .Values.service.mqttsslPort }}
     cafile /mosquitto/config/ssl/tls.crt
     certfile /mosquitto/config/ssl/tls.crt
