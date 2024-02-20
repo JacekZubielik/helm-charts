@@ -1,10 +1,12 @@
 {{ if .Values.mosquitto.ssl.certificate.enabled }}
 apiVersion: cert-manager.io/v1
 kind: Certificate
+
 metadata:
-  labels:
-    {{- include "mosquitto.labels" . | nindent 4 }}
   name: {{ template "mosquitto.fullname" . }}
+  labels:
+  {{- include "mosquitto.labels" . | nindent 4 }}
+
 spec:
   dnsNames:
   {{- toYaml .Values.mosquitto.ssl.certificate.dnsNames | nindent 2 }}

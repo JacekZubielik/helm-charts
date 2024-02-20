@@ -1,34 +1,18 @@
-{{- if and .Values.mosquitto.persistence.enabled (not .Values.mosquitto.persistence.existingClaim) }}
+{{- if and .Values.persistence.pvc.enabled (not .Values.persistence.configstorage.hostPath) }}
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ template "mosquitto.fullname" . }}
+  name: {{ include " mosquitto.fullname" . }}
   labels:
-    {{- include "mosquitto.labels" . | nindent 4 }}
+    {{- include " mosquitto.labels" . | nindent 4 }}
 spec:
   accessModes:
-  {{- range .Values.mosquitto.persistence.accessModes }}
-    - {{ . | quote }}
-  {{- end }}
+    - {{ .Values.persistence.pvc.accessMode }}
   resources:
     requests:
-      storage: {{ .Values.mosquitto.persistence.size }}
-  {{- if .Values.mosquitto.persistence.storageClass }}
-  {{- if (eq "-" .Values.mosquitto.persistence.storageClass) }}
-  storageClassName: ""
-  {{- else }}
-  storageClassName: "{{ .Values.mosquitto.persistence.storageClass }}"
+      storage: {{ .Values.persistence.pvc.size }}
+  {{- if .Values.persistence.pvc.storageClass }}
+
+  storageClassName: "{{ .Values.persistence.pvc.storageClass }}"
   {{- end }}
-  {{- end }}
-  {{- if or .Values.mosquitto.persistence.matchLabels (.Values.mosquitto.persistence.matchExpressions) }}
-  selector:
-  {{- if .Values.mosquitto.persistence.matchLabels }}
-    matchLabels:
-{{ toYaml .Values.mosquitto.persistence.matchLabels | indent 8 }}
-  {{- end -}}
-  {{- if .Values.mosquitto.persistence.matchExpressions }}
-    matchExpressions:
-{{ toYaml .Values.mosquitto.persistence.matchExpressions | indent 8 }}
-  {{- end -}}
-  {{- end }}
-{{- end -}}
+{{- end }}

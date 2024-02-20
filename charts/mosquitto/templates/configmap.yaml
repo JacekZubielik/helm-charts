@@ -6,33 +6,33 @@ metadata:
   name: {{ template "mosquitto.fullname" . }}
 data:
   mosquitto.conf: |-
-    {{- if .Values.mosquitto.persistence.enabled }}
+    {{- if .Values.persistence.enabled }}
     persistence true
     {{- else }}
     persistence false
     {{- end }}
-    persistence_location /mosquitto/data/
+    persistence_location /config/
     log_dest stdout
     log_type all
-    password_file /mosquitto/config/accounts.conf
-    acl_file /mosquitto/config/acls.conf
-    listener {{ .Values.service.ports.mqtt }}
+    password_file /config/accounts.conf
+    acl_file /config/acls.conf
+    listener {{ .Values.service.mqttPort }}
 
     {{- if .Values.mosquitto.ssl.enabled }}
-    listener {{ .Values.service.ports.mqttssl }}
-    cafile /mosquitto/ssl/tls.crt
-    certfile /mosquitto/ssl/tls.crt
-    keyfile /mosquitto/ssl/tls.key
+    listener {{ .Values.service.mqttsslPort }}
+    cafile /config/ssl/tls.crt
+    certfile /config/ssl/tls.crt
+    keyfile /config/ssl/tls.key
     {{- end }}
 
 
     {{- if .Values.mosquitto.allow_anonymous.enabled }}
     allow_anonymous true
     {{- end }}
-    listener 8080
-    protocol websockets
-    allow_anonymous true
-
+    listener 1883
+    listener 8883
+    listener 9001
+    #protocol websockets
 
 {{ .Values.mosquitto.config | indent 4 }}
   accounts.conf: |-

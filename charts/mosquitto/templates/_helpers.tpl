@@ -1,16 +1,13 @@
-{{/* vim: set filetype=mustache: */}}
-{{/*
-Expand the name of the chart.
-*/}}
+{{/* Expand the name of the chart. */}}
+
 {{- define "mosquitto.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
-{{/*
-Create a default fully qualified app name.
+{{/* Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
-*/}}
+If release name contains chart name it will be used as a full name. */}}
+
 {{- define "mosquitto.fullname" -}}
 {{- if .Values.fullnameOverride -}}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
@@ -24,40 +21,37 @@ If release name contains chart name it will be used as a full name.
 {{- end -}}
 {{- end -}}
 
-{{/*
-Create chart name and version as used by the chart label.
-*/}}
+{{/* Create chart name and version as used by the chart label. */}}
+
 {{- define "mosquitto.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end -}}
 
-{{/*
-Common labels
-*/}}
+{{/* Common labels */}}
+
 {{- define "mosquitto.labels" -}}
 helm.sh/chart: {{ include "mosquitto.chart" . }}
+
 {{ include "mosquitto.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
-app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+app.kubernetes.io/version: {{ .Chart.AppVersion }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- end -}}
+{{- end }}
 
-{{/*
-Selector labels
-*/}}
+{{/* Selector labels */}}
+
 {{- define "mosquitto.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "mosquitto.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
-{{- end -}}
+{{- end }}
 
-{{/*
-Create the name of the service account to use
-*/}}
+{{/* Create the name of the service account to use */}}
+
 {{- define "mosquitto.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create -}}
-    {{ default (include "mosquitto.fullname" .) .Values.serviceAccount.name }}
-{{- else -}}
-    {{ default "default" .Values.serviceAccount.name }}
-{{- end -}}
-{{- end -}}
+{{- if .Values.serviceAccount.create }}
+{{- default (include "mosquitto.fullname" .) .Values.serviceAccount.name }}
+{{- else }}
+{{- default "default" .Values.serviceAccount.name }}
+{{- end }}
+{{- end }}

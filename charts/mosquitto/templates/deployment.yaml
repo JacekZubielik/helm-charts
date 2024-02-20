@@ -5,65 +5,169 @@ metadata:
   labels:
     {{- include "mosquitto.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.replicas }}
+  revisionHistoryLimit:  {{ .Values.revisionHistoryLimit }}
   selector:
     matchLabels:
-      {{- include "mosquitto.selectorLabels" . | nindent 6 }}
+    {{- include "mosquitto.selectorLabels" . | nindent 6 }}
+  
+  strategy:
+    type: {{ .Values.strategyType }}
+
   template:
     metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
       labels:
-        {{- include "mosquitto.selectorLabels" . | nindent 8 }}
+      {{- include "mosquitto.selectorLabels" . | nindent 8 }}
+      {{- if .Values.podLabels }}
+      {{- toYaml .Values.podLabels | nindent 8 }}
+      {{- end }}
+
     spec:
-    {{- with .Values.imagePullSecrets }}
+      {{- with .Values.image.PullSecrets }}
       imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-    {{- end }}
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      automountServiceAccountToken: {{ .Values.serviceAccount.automountServiceAccountToken }}
+      shareProcessNamespace: {{ .Values.sidecarSingleProcessNamespace }}
+      serviceAccountName: {{ include "mosquitto.serviceAccountName" . }}
       securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{- toYaml .Values.securityContext | nindent 8 }}
+      {{- if .Values.hostNetwork }}
+      hostNetwork: {{ .Values.hostNetwork }}
+      dnsPolicy: ClusterFirstWithHostNet
+      {{- end }}
+
       containers:
-        - name: {{ .Chart.Name }}
-          securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          ports:
-            {{- range $key, $value := .Values.service.ports }}
-            - name: {{ $key }}
-              containerPort: {{ $value }}
-              protocol: TCP
-            {{- end }}
-          livenessProbe:
-            tcpSocket:
-              port: {{ .Values.service.ports.mqtt }}
-          readinessProbe:
-            httpGet:
-            tcpSocket:
-              port: {{ .Values.service.ports.mqtt }}
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-          volumeMounts:
-          - name: config-volume
-            mountPath: /mosquitto/config
-          - name: mosquitto-data
-            mountPath: {{ .Values.mosquitto.persistence.path }}
-            subPath: {{ .Values.mosquitto.persistence.subPath }}
-          {{- if .Values.mosquitto.ssl.enabled }}
-          - name: ssl-volume
-            mountPath: /mosquitto/ssl
+      - name: {{ .Chart.Name }}
+        securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 12 }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+
+        env:
+          {{- range $key, $value := .Values.extraEnv }}
+          - name: {{ $key | }}
+            value: {{ $value | }}
           {{- end }}
+          {{- range $name, $opts := .Values.extraEnvSecrets }}
+          - name: {{ $name }}
+            valueFrom:
+              secretKeyRef:
+                name: {{ $opts.secret }}
+                key: {{ $opts.key }}
+          {{- end }}
+        envFrom:
+        {{- range .Values.extraSecretForEnvFrom }}
+          - secretRef:
+              name: {{ . }}
+        {{- end }}
+
+        resources:
+        {{- toYaml .Values.resources | nindent 12 }}
+
+        ports:
+          - name: api
+            containerPort: {{ .Values.service.mqttPort }}
+            protocol: TCP
+          - name: api
+            containerPort: {{ .Values.service.mqttsslPort }}
+            protocol: TCP
+          - name: api
+            containerPort: {{ .Values.service.mqttwsPort }}
+            protocol: TCP
+
+        {{- if .Values.livenessProbe.enabled }}
+        livenessProbe:
+          httpGet:
+            path:              /ping
+            port:              {{ .Values.service.httpPort }}
+            scheme:            {{ .Values.livenessProbe.scheme }}
+          periodSeconds:       {{ .Values.livenessProbe.periodSeconds }}
+          timeoutSeconds:      {{ .Values.livenessProbe.timeoutSeconds }}
+          successThreshold:    {{ .Values.livenessProbe.successThreshold }}
+          failureThreshold:    {{ .Values.livenessProbe.failureThreshold }}
+          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds}}
+        {{- end }}
+        {{- if .Values.readinessProbe.enabled }}
+        readinessProbe:
+          httpGet:
+            path:              /ping
+            port:              {{ .Values.service.httpPort }}
+            scheme:            {{ .Values.livenessProbe.scheme }}
+          periodSeconds:       {{ .Values.readinessProbe.periodSeconds }}
+          timeoutSeconds:      {{ .Values.readinessProbe.timeoutSeconds }}
+          successThreshold:    {{ .Values.readinessProbe.successThreshold }}
+          failureThreshold:    {{ .Values.readinessProbe.failureThreshold }}
+          initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds}}
+        {{- end }}
+
+        volumeMounts:
+        - mountPath: /config
+          name: config-storage
+        {{- if .Values.mosquitto.ssl.enabled }}
+        - name: config-storage
+          mountPath: /config/ssl
+        {{- end }}
+
+        {{- range .Values.hostMounts }}
+        {{- if .mountPath }}
+        - mountPath: {{ .mountPath }}
+        {{- else }}
+        - mountPath: {{ .hostPath }}
+        {{- end }}
+          name: {{ .name }}
+        {{- end }}
+
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      volumes:
+        - name: config-storage
+        {{- if .Values.persistence.enabled }}
+        {{- if .Values.persistence.configstorage.hostPath }}
+          hostPath:
+            path: {{.Values.persistence.configstorage.hostPath}}
+        {{- else }}
+          persistentVolumeClaim:
+            claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ template "mosquitto.fullname" . }}{{- end }}
+        {{- end }}
+
+        {{- else }}
+          emptyDir: {}
+        {{ end }}
+
+
+{{/* 
       volumes:
         - name: config-volume
           configMap:
             name: {{ template "mosquitto.fullname" . }}
-        {{- if .Values.mosquitto.ssl.enabled }}
-        - name: ssl-volume
-          secret:
-            secretName: {{ .Values.mosquitto.ssl.secretName }}
-        {{- end }}
+
+        # {{- if .Values.mosquitto.ssl.enabled }}
+        # - name: ssl-volume
+        #   secret:
+        #     secretName: {{ .Values.mosquitto.ssl.secretName }}
+        # {{- end }}
+
         {{- if not .Values.mosquitto.persistence.enabled }}
         - name: "mosquitto-data"
           emptyDir: {}
         {{- else }}
+
         - name: "mosquitto-data"
           persistentVolumeClaim:
         {{- if .Values.mosquitto.persistence.existingClaim }}
@@ -72,15 +176,23 @@ spec:
             claimName: {{ template "mosquitto.fullname" . }}
         {{- end }}
         {{- end }}
-      {{- with .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
+*/}}
+
+
+
+
+
+
+
+
+      {{- range .Values.hostMounts }}
+        - name: {{ .name }}
+          hostPath:
+            path: {{.hostPath}}
+      {{- if .type }}
+            type: {{ .type }}
       {{- end }}
-    {{- with .Values.affinity }}
-      affinity:
-        {{- toYaml . | nindent 8 }}
-    {{- end }}
-    {{- with .Values.tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
-    {{- end }}
+      {{- end }}
+
+
+
