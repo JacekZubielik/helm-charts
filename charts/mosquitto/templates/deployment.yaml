@@ -37,12 +37,25 @@ spec:
       hostNetwork: {{ .Values.hostNetwork }}
       dnsPolicy: ClusterFirstWithHostNet
       {{- end }}
+
+      initContainers:
+      - name: setup-permissions
+        image: busybox
+        command: ["/bin/chown", "-R", "1883:1883", "/mosquitto"]
+        securityContext:
+          runAsUser: 0
+          privileged: true
+        volumeMounts:
+        - name: data
+          mountPath: /mosquitto/data
+
       containers:
       - name: {{ .Chart.Name }}
         securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 12 }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
+        args: [ "mosquitto", "-c", "/mosquitto/config/mosquitto.conf" ]
         env:
         {{- range $key, $value := .Values.extraEnv }}
         - name: {{ $key | }}
@@ -102,10 +115,15 @@ spec:
         {{- end }}
 
         volumeMounts:
-        - mountPath: /mosquitto/config
-          name: config-storage
+        - name:      config
+          mountPath: /mosquitto/config/mosquitto.conf
+          subPath:   mosquitto.conf
+
+        - name:      data
+          mountPath: /mosquitto/data
+
         {{- if .Values.mosquitto.ssl.enabled }}
-        - name: config-storage
+        - name:      ssl-storage
           mountPath: /mosquitto/config/ssl
         {{- end }}
 
@@ -117,6 +135,25 @@ spec:
         {{- end }}
           name: {{ .name }}
         {{- end }}
+
+      volumes:
+      - name:      config
+        mountPath: /mosquitto/config/mosquitto.conf
+        subPath:   mosquitto.conf
+
+      - name: data
+      {{- if .Values.persistence.enabled }}
+      {{- if .Values.persistence.configstorage.hostPath }}
+        hostPath:
+          path: {{.Values.persistence.configstorage.hostPath}}
+      {{- else }}
+        persistentVolumeClaim:
+          claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ template "mosquitto.fullname" . }}{{- end }}
+      {{- end }}
+
+      {{- else }}
+        emptyDir: {}
+      {{ end }}
 
       {{- with .Values.nodeSelector }}
       nodeSelector:
@@ -131,20 +168,7 @@ spec:
       {{- toYaml . | nindent 8 }}
       {{- end }}
 
-      volumes:
-      - name: config-storage
-      {{- if .Values.persistence.enabled }}
-      {{- if .Values.persistence.configstorage.hostPath }}
-        hostPath:
-          path: {{.Values.persistence.configstorage.hostPath}}
-      {{- else }}
-        persistentVolumeClaim:
-          claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ template "mosquitto.fullname" . }}{{- end }}
-      {{- end }}
 
-      {{- else }}
-        emptyDir: {}
-      {{ end }}
 
 
 {{/* 

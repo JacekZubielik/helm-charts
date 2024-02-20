@@ -12,8 +12,12 @@ data:
     persistence false
     {{- end }}
     persistence_location /mosquitto/config/
+    persistence_file mosquitto.db
     log_dest stdout
     log_type all
+    log_dest file /mosquitto/log/mosquitto.log
+    pid_file /mosquitto/mosquitto.pid
+
     password_file /mosquitto/config/accounts.conf
     acl_file /mosquitto/config/acls.conf
     listener {{ .Values.service.mqttPort }}
@@ -26,7 +30,6 @@ data:
     certfile /mosquitto/config/ssl/tls.crt
     keyfile /mosquitto/config/ssl/tls.key
     {{- end }}
-
 
     {{- if .Values.mosquitto.allow_anonymous.enabled }}
     allow_anonymous true
