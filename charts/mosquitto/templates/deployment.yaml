@@ -119,7 +119,7 @@ spec:
           mountPath: /mosquitto/config/mosquitto.conf
           subPath:   mosquitto.conf
 
-        - name:      data
+        - name:      datastorage
           mountPath: /mosquitto/data
 
         {{- if .Values.mosquitto.ssl.enabled }}
