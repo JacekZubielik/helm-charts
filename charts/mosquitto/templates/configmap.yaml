@@ -11,27 +11,26 @@ data:
     {{- else }}
     persistence false
     {{- end }}
-    persistence_location /config/
+    persistence_location /mosquitto/config/
     log_dest stdout
     log_type all
-    password_file /config/accounts.conf
-    acl_file /config/acls.conf
+    password_file /mosquitto/config/accounts.conf
+    acl_file /mosquitto/config/acls.conf
     listener {{ .Values.service.mqttPort }}
+    listener {{ .Values.service.mqttsslPort }}
+    listener {{ .Values.service.mqttwsPort}}
 
     {{- if .Values.mosquitto.ssl.enabled }}
     listener {{ .Values.service.mqttsslPort }}
-    cafile /config/ssl/tls.crt
-    certfile /config/ssl/tls.crt
-    keyfile /config/ssl/tls.key
+    cafile /mosquitto/config/ssl/tls.crt
+    certfile /mosquitto/config/ssl/tls.crt
+    keyfile /mosquitto/config/ssl/tls.key
     {{- end }}
 
 
     {{- if .Values.mosquitto.allow_anonymous.enabled }}
     allow_anonymous true
     {{- end }}
-    listener 1883
-    listener 8883
-    listener 9001
     #protocol websockets
 
 {{ .Values.mosquitto.config | indent 4 }}
