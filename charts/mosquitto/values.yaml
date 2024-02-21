@@ -15,46 +15,36 @@ mosquitto:
         group: cert-manager.io
         kind: ClusterIssuer
         name: letsencrypt
-
 image:
   repository: eclipse-mosquitto
   tag: ""
   pullPolicy: IfNotPresent
   pullSecrets: []
-
 nameOverride: ""
 fullnameOverride: ""
 revisionHistoryLimit: 2
 hostNetwork: false
-
 replicas: 1
 strategyType: RollingUpdate
-
 serviceAccount:
   create: true
   annotations: {}
   automountServiceAccountToken: false
-
 podAnnotations: {}
 podLabels: {}
-
 extraEnv: {}
-
 extraEnvSecrets:
   # This will set ${MQTT_PASSWORD} to the 'password' key from the 'mqtt' secret
   # MQTT_PASSWORD:
   #   secret: mqtt
   #   key: password
-
 ## All secrets will be mounted as environment variables, with each key/value mapping to a
 ## corresponding environment variable.
 extraSecretForEnvFrom: []
 # - mosquitto-secrets
-
 podSecurityContext:
   privileged: false
   # fsGroup: 2000
-
 securityContext: {}
   # capabilities:
   #   drop:
@@ -62,7 +52,6 @@ securityContext: {}
   # readOnlyRootFilesystem: true
   # runAsNonRoot: true
   # runAsUser: 1000
-
 service:
   annotations: {}
     # prometheus.io/scrape: "false"
@@ -78,14 +67,13 @@ service:
   mqttsslPort: 8883
   mqttwsPort:  9090 #9001
   metricsPort: 9113
-
 monitoring:
   enabled: false
   serviceMonitor:
     enabled: false
     labels: {}
     honorLabels: true
-    interval:      60s
+    interval: 60s
     selector: {}
     namespace: monitoring
     scrapeTimeout: 10s
@@ -108,7 +96,9 @@ monitoring:
       # name:
       # key:
       # optional:
-
+  podMonitor:
+    enabled: false
+    interval: 60s
 livenessProbe:
   enabled: true
   periodSeconds:       60
@@ -117,7 +107,6 @@ readinessProbe:
   enabled: true
   periodSeconds:       60
   initialDelaySeconds: 30
-
 resources: {}
 #   requests:
 #     cpu: "1"
@@ -125,12 +114,10 @@ resources: {}
 #   limits:
 #     cpu: "1"
 #     memory: "512Mi"
-
 nodeSelector:
   kubernetes.io/hostname: {}
 affinity: {}
 tolerations: []
-
 persistence:
   enabled: false
   datastorage:
@@ -142,7 +129,6 @@ persistence:
       - ReadWriteOnce
     size: 1Gi
     storageClass: "local-path"
-
 # Mount devices or folders from the host machine. Can be used for USB device mounting.
 hostMounts: []
   # Example
