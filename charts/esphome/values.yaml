@@ -3,42 +3,33 @@ image:
   tag: ""
   pullPolicy: IfNotPresent
   pullSecrets: []
-
 nameOverride: ""
 fullnameOverride: ""
 revisionHistoryLimit: 2
 hostNetwork: false
-
 replicas: 1
 strategyType: RollingUpdate
-
 serviceAccount:
   create: true
   annotations: {}
   automountServiceAccountToken: false
-
 podAnnotations: {}
 podLabels: {}
-
 extraEnv: {}
-
 extraEnvSecrets:
   # This will set ${MQTT_PASSWORD} to the 'password' key from the 'mqtt' secret
   # MQTT_PASSWORD:
   #   secret: mqtt
   #   key: password
-
 ## If you'd like to provide your own Kubernetes Secret object instead of passing your values
 ## individually, pass in the name of a created + populated Secret.
 ## All secrets will be mounted as environment variables, with each key/value mapping to a
 ## corresponding environment variable.
 extraSecretForEnvFrom: []
 # - esphome-secrets
-
 podSecurityContext:
   privileged: false
   # fsGroup: 2000
-
 securityContext: {}
   # capabilities:
   #   drop:
@@ -46,7 +37,6 @@ securityContext: {}
   # readOnlyRootFilesystem: true
   # runAsNonRoot: true
   # runAsUser: 1000
-
 service:
   annotations: {}
     # prometheus.io/scrape: "false"
@@ -89,7 +79,6 @@ monitoring:
       # name:
       # key:
       # optional:
-
 livenessProbe:
   enabled: true
   scheme: HTTP
@@ -106,7 +95,6 @@ readinessProbe:
   successThreshold:    1
   failureThreshold:    6
   initialDelaySeconds: 30
-
 ingress:
   enabled: false
   # className: ""
@@ -137,7 +125,6 @@ ingress:
     # - secretName: letsencrypt-staging
     #   hosts:
     #     - esphome.local
-
 resources: {}
 #   requests:
 #     cpu: "1"
@@ -145,35 +132,23 @@ resources: {}
 #   limits:
 #     cpu: "1"
 #     memory: "512Mi"
-
 nodeSelector:
   kubernetes.io/hostname: {}
 affinity: {}
 tolerations: []
-
 persistence:
   enabled: false
   configstorage:
     hostPath: {}
   pvc:
     enabled: false
-    # accessModes:
-    #   - {}
-    # resources:
-    #   requests:
-    #     storage: 2Gi
-    # storageClassName: ""
-
+    accessModes:
+      - {}
+    resources:
+      requests:
+        storage: 2Gi
+    storageClassName: ""
 # Mount devices or folders from the host machine. Can be used for USB device mounting.
 hostMounts: []
-  # Example
   # - name: zha
   #   hostPath: /dev/serial/by-id/usb-Silicon_Labs_HubZ_Smart_Home_Controller_6120245D-if01-port0
-
-
-# Enable pod security context (must be `true` if runAsUser or fsGroup are set)
-#usePodSecurityContext: true
-# Set runAsUser to 1000 to let esphome run as non-root user.
-# When setting runAsUser to a different value than 0 also set fsGroup to the same value:
-# runAsUser: <defaults to 0>
-# fsGroup: <will be omitted in deployment if runAsUser is 0>
