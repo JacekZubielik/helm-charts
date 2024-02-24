@@ -41,7 +41,7 @@ spec:
       initContainers:
       - name: setup-permissions
         image: busybox
-        command: ["/bin/chown", "-R", "1883:1883", "/mosquitto"]
+        command: ["/bin/chown", "-Rv", "1883:1883", "/mosquitto/*"]
         securityContext:
           runAsUser: 0
           privileged: true
@@ -55,7 +55,7 @@ spec:
         {{- toYaml .Values.podSecurityContext | nindent 12 }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
-        args: [ "mosquitto", "-c", "/mosquitto/config/mosquitto.conf" ]
+        args: [ "mosquitto", "-c", "/mosquitto/config/mosquitto.conf, "/mosquitto/config/accounts.conf" ]
         env:
         {{- range $key, $value := .Values.extraEnv }}
         - name: {{ $key | }}
@@ -109,6 +109,10 @@ spec:
           mountPath: /mosquitto/config/mosquitto.conf
           subPath:   mosquitto.conf
 
+        - name:      accounts
+          mountPath: /mosquitto/config/accounts.conf
+          subPath:   accounts.conf
+
         - name:      datastorage
           mountPath: /mosquitto/data
 
@@ -133,6 +137,14 @@ spec:
           items:
           - key:  mosquitto.conf
             path: mosquitto.conf
+            mode: 0640
+
+      - name: accounts
+        configMap:
+          name: {{ include "mosquitto.fullname" . }}
+          items:
+          - key:  accounts.conf
+            path: accounts.conf
             mode: 0640
 
       - name: datastorage
