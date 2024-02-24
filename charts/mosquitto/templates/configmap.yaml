@@ -6,11 +6,11 @@ metadata:
   name: {{ template "mosquitto.fullname" . }}
 data:
   mosquitto.conf: |-
-    {{- if .Values.persistence.enabled }}
+{{- if .Values.persistence.enabled }}
     persistence true
-    {{- else }}
+{{- else }}
     persistence false
-    {{- end }}
+{{- end }}
     persistence_location /mosquitto/config/
     persistence_file mosquitto.db
     log_dest stdout
@@ -20,21 +20,22 @@ data:
     listener {{ .Values.service.mqttPort }}
     listener {{ .Values.service.mqttwsPort}}
     password_file /mosquitto/config/accounts.conf
-    {{- if .Values.mosquitto.ssl.enabled }}
+{{- if .Values.mosquitto.ssl.enabled }}
     acl_file /mosquitto/config/acls.conf
     listener {{ .Values.service.mqttsslPort }}
     cafile /mosquitto/config/ssl/tls.crt
     certfile /mosquitto/config/ssl/tls.crt
     keyfile /mosquitto/config/ssl/tls.key
-    {{- end }}
-    {{- if .Values.mosquitto.allow_anonymous.enabled }}
+{{- end }}
+{{- if .Values.mosquitto.allow_anonymous.enabled }}
     allow_anonymous true
-    {{- end }}
+{{- end }}
     protocol websockets
     autosave_interval 1800
 
 {{ .Values.mosquitto.config | indent 4 }}
   accounts.conf: |-
+    MQTT_PASSWORD
 {{ .Values.mosquitto.users | indent 4 }}
   acls.conf: |-
 {{ .Values.mosquitto.acls | indent 4 }}
