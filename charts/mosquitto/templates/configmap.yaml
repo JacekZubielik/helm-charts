@@ -19,8 +19,8 @@ data:
     pid_file /mosquitto/mosquitto.pid
     listener {{ .Values.service.mqttPort }}
     listener {{ .Values.service.mqttwsPort}}
-    {{- if .Values.mosquitto.ssl.enabled }}
     password_file /mosquitto/config/accounts.conf
+    {{- if .Values.mosquitto.ssl.enabled }}
     acl_file /mosquitto/config/acls.conf
     listener {{ .Values.service.mqttsslPort }}
     cafile /mosquitto/config/ssl/tls.crt
@@ -31,6 +31,7 @@ data:
     allow_anonymous true
     {{- end }}
     protocol websockets
+    autosave_interval 1800
 
 {{ .Values.mosquitto.config | indent 4 }}
   accounts.conf: |-
