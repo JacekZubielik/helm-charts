@@ -41,7 +41,7 @@ spec:
       initContainers:
       - name: setup-permissions
         image: busybox
-        command: ["/bin/chown", "-Rv", "1883:1883", "/mosquitto/*"]
+        command: ["/bin/chown", "-R", "1883:1883", "/mosquitto"]
         securityContext:
           runAsUser: 0
           privileged: true
