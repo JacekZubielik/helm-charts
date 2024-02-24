@@ -55,7 +55,7 @@ spec:
         {{- toYaml .Values.podSecurityContext | nindent 12 }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
-        args: [ "mosquitto", "-c", "/mosquitto/config/mosquitto.conf", "/mosquitto/config/accounts.conf" ]
+        args: [ "mosquitto", "-c", "/mosquitto/config/mosquitto.conf" ]
         env:
         {{- range $key, $value := .Values.extraEnv }}
         - name: {{ $key | }}

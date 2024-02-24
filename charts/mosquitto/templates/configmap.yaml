@@ -11,7 +11,7 @@ data:
 {{- else }}
     persistence false
 {{- end }}
-    persistence_location /mosquitto/config/
+    persistence_location /mosquitto/data/
     persistence_file mosquitto.db
     log_dest stdout
     log_type all
@@ -35,7 +35,7 @@ data:
 
 {{ .Values.mosquitto.config | indent 4 }}
   accounts.conf: |-
-    MQTT_PASSWORD
+    mqtt:MQTT_PASSWORD
 {{ .Values.mosquitto.users | indent 4 }}
   acls.conf: |-
 {{ .Values.mosquitto.acls | indent 4 }}
