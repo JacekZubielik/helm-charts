@@ -1,4 +1,5 @@
 replicaCount: 1
+revisionHistoryLimit: 2
 
 image:
   repository: eclipse-mosquitto
@@ -36,6 +37,11 @@ container:
 
 service:
   type: ClusterIP
+  externalIPs: []
+  loadBalancerIP: ""
+  externalTrafficPolicy: {}
+  loadBalancerSourceRanges: []
+  publishNotReadyAddresses: false
   ports:
     mqtt:
       name: mqtt
