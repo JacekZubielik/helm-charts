@@ -80,7 +80,6 @@ config: |-
   listener 1883
   protocol mqtt
   listener 8883
-  protocol mqtts
   listener  9001
   protocol websockets
   cafile /mosquitto/config/certs/ca.crt
