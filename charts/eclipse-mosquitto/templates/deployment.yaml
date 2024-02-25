@@ -52,6 +52,10 @@ spec:
               mountPath: /mosquitto/config/mosquitto.conf
               subPath: mosquitto.conf
               readOnly: true
+            - name: mosquitto-passwd
+              mountPath: /mosquitto/config/mosquitto.passwd
+              subPath: mosquitto.passwd
+              readOnly: true
             - name: mosquitto-ca-cert
               mountPath: /mosquitto/config/certs/ca.crt
               subPath: ca.crt
@@ -73,21 +77,26 @@ spec:
       - name: mosquitto-conf
         configMap:
           name: {{ include "eclipse-mosquitto.fullname" . }}-config
+
+      - name: mosquitto-passwd
+        configMap:
+          name: {{ include "eclipse-mosquitto.fullname" . }}-config
+
       - name: mosquitto-ca-cert
         configMap:
-          name: {{ include "eclipse-mosquitto.fullname" . }}-certs
+          name: {{ include "eclipse-mosquitto.fullname" . }}-config
           items:
             - key: ca.crt
               path: ca.crt
       - name: mosquitto-server-cert
         configMap:
-          name: {{ include "eclipse-mosquitto.fullname" . }}-certs
+          name: {{ include "eclipse-mosquitto.fullname" . }}-config
           items:
               - key: server.crt
                 path: server.crt
       - name: mosquitto-server-key
         configMap:
-          name: {{ include "eclipse-mosquitto.fullname" . }}-certs
+          name: {{ include "eclipse-mosquitto.fullname" . }}-config
           items:
               - key: server.key
                 path: server.key
