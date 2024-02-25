@@ -81,6 +81,9 @@ spec:
       - name: mosquitto-passwd
         configMap:
           name: {{ include "eclipse-mosquitto.fullname" . }}-config
+          items:
+            - key: mosquitto.passwd
+              path: mosquitto.passwd
 
       - name: mosquitto-ca-cert
         configMap:
