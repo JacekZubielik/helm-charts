@@ -29,20 +29,20 @@ container:
   ports:
     mqtt:
       name: mqtt
-      port: 1884
+      port: 1883
     mqtts:
       name: mqtts
-      port: 1883
+      port: 8883
 
 service:
   type: ClusterIP
   ports:
     mqtt:
       name: mqtt
-      port: 1884
+      port: 1883
     mqtts:
       name: mqtts
-      port: 1883
+      port: 8883
 
 nodeSelector:
   kubernetes.io/hostname: {}
@@ -71,7 +71,7 @@ config: |-
   persistence true
   persistence_location /mosquitto/data/
   log_dest stdout
-  listener 1884
+  listener 8883
   listener 1883
   protocol mqtt
   cafile /mosquitto/config/certs/ca.crt
