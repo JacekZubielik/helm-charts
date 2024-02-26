@@ -27,50 +27,66 @@ spec:
         fsGroup: {{ .Values.securityContext.fsGroup }}
         runAsUser: {{ .Values.securityContext.runAsUser }}
     {{- end }}
+
+      initContainers:
+      - name: setup-permissions
+        image: busybox
+        command: ["/bin/chown", "-R", "1883:1883", "/mosquitto"]
+        securityContext:
+          runAsUser: 0
+          privileged: true
+        volumeMounts:
+        - name: data
+          mountPath: /mosquitto/data
+
+
+
       containers:
-        - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          ports:
-            - name: {{ .Values.container.ports.mqtt.name }}
-              containerPort: {{ .Values.container.ports.mqtt.port }}
-              protocol: TCP
-            - name: {{ .Values.container.ports.mqtts.name }}
-              containerPort: {{ .Values.container.ports.mqtts.port }}
-              protocol: TCP
-          livenessProbe:
-            tcpSocket:
-              port: {{ .Values.container.ports.mqtt.port }}
-            initialDelaySeconds: 5
-            periodSeconds: 15
-          readinessProbe:
-            tcpSocket:
-              port: {{ .Values.container.ports.mqtt.port }}
-            initialDelaySeconds: 5
-            periodSeconds: 10
-          volumeMounts:
-            - name: mosquitto-conf
-              mountPath: /mosquitto/config/mosquitto.conf
-              subPath: mosquitto.conf
-            - name: mosquitto-passwd
-              mountPath: /mosquitto/config/password_file
-              subPath: password_file
-              mode: 0700
-            - name: mosquitto-ca-cert
-              mountPath: /mosquitto/config/certs/ca.crt
-              subPath: ca.crt
-            - name: mosquitto-server-cert
-              mountPath: /mosquitto/config/certs/server.crt
-              subPath: server.crt
-            - name: mosquitto-server-key
-              mountPath: /mosquitto/config/certs/server.key
-              subPath: server.key
-              readOnly: true
-            - name: mosquitto-data
-              mountPath: /mosquitto/data
-              subPath: mosquitto/data
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+      - name: {{ .Chart.Name }}
+        securityContext:
+          {{- toYaml .Values.podSecurityContext | nindent 12 }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        args: [ "mosquitto", "-c", "/mosquitto/config/mosquitto.conf" ]
+        ports:
+          - name: {{ .Values.container.ports.mqtt.name }}
+            containerPort: {{ .Values.container.ports.mqtt.port }}
+            protocol: TCP
+          - name: {{ .Values.container.ports.mqtts.name }}
+            containerPort: {{ .Values.container.ports.mqtts.port }}
+            protocol: TCP
+        livenessProbe:
+          tcpSocket:
+            port: {{ .Values.container.ports.mqtt.port }}
+          initialDelaySeconds: 5
+          periodSeconds: 15
+        readinessProbe:
+          tcpSocket:
+            port: {{ .Values.container.ports.mqtt.port }}
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        volumeMounts:
+          - name: mosquitto-conf
+            mountPath: /mosquitto/config/mosquitto.conf
+            subPath: mosquitto.conf
+          - name: mosquitto-passwd
+            mountPath: /mosquitto/config/password_file
+            subPath: password_file
+          - name: mosquitto-ca-cert
+            mountPath: /mosquitto/config/certs/ca.crt
+            subPath: ca.crt
+          - name: mosquitto-server-cert
+            mountPath: /mosquitto/config/certs/server.crt
+            subPath: server.crt
+          - name: mosquitto-server-key
+            mountPath: /mosquitto/config/certs/server.key
+            subPath: server.key
+            readOnly: true
+          - name: mosquitto-data
+            mountPath: /mosquitto/data
+            subPath: mosquitto/data
+        resources:
+          {{- toYaml .Values.resources | nindent 12 }}
       volumes:
       - name: mosquitto-passwd
         configMap:
