@@ -4,7 +4,6 @@ metadata:
   name:  {{ template "zigbee2mqtt.fullname" . }}
   labels:
   {{- include "zigbee2mqtt.labels" . | nindent 4 }}
-
 spec:
   replicas: {{ .Values.replicas }}
   revisionHistoryLimit:  {{ .Values.revisionHistoryLimit }}
@@ -12,11 +11,7 @@ spec:
     matchLabels:
     {{- include "zigbee2mqtt.selectorLabels" . | nindent 6 }}
   serviceName: {{ include "zigbee2mqtt.fullname" . }}
-{{/*    updateStrategy:
-    type: {{ .Values.strategyType }} */}}
-
   updateStrategy: {{ toYaml .Values.updateStrategy | nindent 4 }}
-
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -38,12 +33,10 @@ spec:
       serviceAccountName: {{ include "zigbee2mqtt.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.securityContext | nindent 8 }}
-
       {{- if .Values.hostNetwork }}
       hostNetwork: {{ .Values.hostNetwork }}
       dnsPolicy: ClusterFirstWithHostNet
       {{- end }}
-
       containers:
       - name: {{ .Chart.Name }}
         securityContext:
@@ -51,10 +44,13 @@ spec:
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         env:
+{{/* Common labels 
         - name: ZIGBEE2MQTT_DATA
           value: "/data"
         - name: TZ
           value: {{ .Values.timezone }}
+*/}}
+
         {{- if .Values.debug }}
         - name: DEBUG
           value: {{ .Values.debug }}
@@ -75,10 +71,8 @@ spec:
           - secretRef:
               name: {{ . }}
         {{- end }}
-
         resources:
         {{- toYaml .Values.resources | nindent 12 }}
-
         ports:
         - name: http
           containerPort: {{ .Values.service.httpPort }}
@@ -86,7 +80,6 @@ spec:
         - name: metrics
           containerPort: {{ .Values.service.metricsPort }}
           protocol: TCP
-
         {{- if .Values.livenessProbe.enabled }}
         livenessProbe:
           httpGet:
@@ -111,12 +104,10 @@ spec:
           failureThreshold:    {{ .Values.readinessProbe.failureThreshold }}
           initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds}}
         {{- end }}
-
         volumeMounts:
         - name: config-storage
           mountPath: /data
           readOnly: false
-
         {{- range .Values.hostMounts }}
         {{- if .mountPath }}
         - mountPath: {{ .mountPath }}
@@ -125,7 +116,6 @@ spec:
         {{- end }}
           name: {{ .name }}
         {{- end }}
-
       {{- with .Values.nodeSelector }}
       nodeSelector:
       {{- toYaml . | nindent 8 }}
@@ -138,7 +128,6 @@ spec:
       tolerations:
       {{- toYaml . | nindent 8 }}
       {{- end }}
-
       volumes:
         - name: config-storage
         {{- if .Values.persistence.enabled }}
@@ -157,7 +146,6 @@ spec:
           persistentVolumeClaim:
             claimName: {{ .Values.persistence.existingClaim }}
         {{- end }}
-
         {{- range .Values.hostMounts }}
         - name: {{ .name }}
           hostPath:
