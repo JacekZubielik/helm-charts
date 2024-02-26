@@ -43,6 +43,10 @@ spec:
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         args: [ "mosquitto", "-c", "/mosquitto/config/mosquitto.conf" ]
+        command:
+          - ls
+          - "-l"
+          - "/mosquitto/config"
         ports:
           - name: {{ .Values.container.ports.mqtt.name }}
             containerPort: {{ .Values.container.ports.mqtt.port }}
@@ -65,8 +69,8 @@ spec:
             mountPath: /mosquitto/config/mosquitto.conf
             subPath: mosquitto.conf
           - name: mosquitto-passwd
-            mountPath: /mosquitto/config/password_file
-            subPath: password_file
+            readOnly: true
+            mountPath: "/mosquitto/config"
           - name: mosquitto-ca-cert
             mountPath: /mosquitto/config/certs/ca.crt
             subPath: ca.crt
@@ -84,11 +88,8 @@ spec:
           {{- toYaml .Values.resources | nindent 12 }}
       volumes:
       - name: mosquitto-passwd
-        configMap:
-          name: {{ include "eclipse-mosquitto.fullname" . }}-config
-          items:
-            - key: password_file
-              path: password_file
+        secret:
+          secretName: mosquitto-secrets
       - name: mosquitto-conf
         configMap:
           name: {{ include "eclipse-mosquitto.fullname" . }}-config
