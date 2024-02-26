@@ -81,6 +81,7 @@ spec:
           items:
             - key: mosquitto.passwd
               path: mosquitto.passwd
+              mode: 0700
 
       - name: mosquitto-ca-cert
         configMap:
