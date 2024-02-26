@@ -45,12 +45,12 @@ spec:
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         env:
 {{/* Common labels 
-        - name: ZIGBEE2MQTT_DATA
-          value: "/data"
+
         - name: TZ
           value: {{ .Values.timezone }}
 */}}
-
+        - name: ZIGBEE2MQTT_DATA
+          value: "/data"
         {{- if .Values.debug }}
         - name: DEBUG
           value: {{ .Values.debug }}
@@ -107,7 +107,6 @@ spec:
         volumeMounts:
         - name: config-storage
           mountPath: /data
-          readOnly: false
         {{- range .Values.hostMounts }}
         {{- if .mountPath }}
         - mountPath: {{ .mountPath }}
