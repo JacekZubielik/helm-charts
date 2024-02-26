@@ -34,3 +34,20 @@ app.kubernetes.io/version: {{ .Chart.AppVersion }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}
+
+{{/* Selector labels */}}
+
+{{- define "eclipse-mosquitto.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "eclipse-mosquitto.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+{{/* Create the name of the service account to use */}}
+
+{{- define "eclipse-mosquitto.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create }}
+{{- default (include "eclipse-mosquitto.fullname" .) .Values.serviceAccount.name }}
+{{- else }}
+{{- default "default" .Values.serviceAccount.name }}
+{{- end }}
+{{- end }}
