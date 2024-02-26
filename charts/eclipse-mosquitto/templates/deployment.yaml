@@ -26,7 +26,6 @@ spec:
         fsGroup: {{ .Values.securityContext.fsGroup }}
         runAsUser: {{ .Values.securityContext.runAsUser }}
     {{- end }}
-
       initContainers:
       - name: setup-permissions
         image: busybox
@@ -37,9 +36,6 @@ spec:
         volumeMounts:
         - name: mosquitto-data
           mountPath: /mosquitto/data
-
-
-
       containers:
       - name: {{ .Chart.Name }}
         securityContext:
@@ -71,7 +67,6 @@ spec:
           - name: mosquitto-passwd
             mountPath: /mosquitto/config/password_file
             subPath: password_file
-            mode: 0666
           - name: mosquitto-ca-cert
             mountPath: /mosquitto/config/certs/ca.crt
             subPath: ca.crt
