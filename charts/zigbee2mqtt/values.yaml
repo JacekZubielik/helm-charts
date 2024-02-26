@@ -21,7 +21,7 @@ updateStrategy:
 serviceAccount:
   create: true
   annotations: {}
-  automountServiceAccountToken: true
+  automountServiceAccountToken: false
 
 podAnnotations: {}
 podLabels: {}
@@ -64,8 +64,8 @@ service:
   externalTrafficPolicy: {}
   loadBalancerSourceRanges: []
   publishNotReadyAddresses: false
-  httpPort:    8080
-  metricsPort: 9100
+  httpPort:    "8080"
+  metricsPort: "9100"
 
 monitoring:
   enabled: false
