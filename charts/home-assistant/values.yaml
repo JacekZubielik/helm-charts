@@ -65,7 +65,7 @@ service:
   loadBalancerSourceRanges: []
   publishNotReadyAddresses: false
   httpPort:      "8123"
-  metricsPort:   "9113"
+  metricsPort:   "9100"
 
 monitoring:
   enabled: false
@@ -135,7 +135,7 @@ ingress:
         proxy_cache_bypass $http_upgrade;
       }
   hosts:
-    - host: home-assistant.local
+    - host: hass.<secret:private-domain>
       paths:
         - path: /
           pathType: ImplementationSpecific

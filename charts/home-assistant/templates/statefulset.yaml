@@ -13,7 +13,6 @@ spec:
     {{- include "home-assistant.selectorLabels" . | nindent 6 }}
   serviceName: {{ include "home-assistant.fullname" . }}
   updateStrategy: {{ toYaml .Values.updateStrategy | nindent 4 }}
-
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -35,12 +34,10 @@ spec:
       serviceAccountName: {{ include "home-assistant.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.securityContext  | nindent 8 }}
-
       {{- if .Values.hostNetwork }}
       hostNetwork: {{ .Values.hostNetwork }}
       dnsPolicy: ClusterFirstWithHostNet
       {{- end }}
-
       containers:
       - name: {{ .Chart.Name }}
         securityContext:
@@ -64,10 +61,8 @@ spec:
           - secretRef:
               name: {{ . }}
         {{- end }}
-
         resources:
         {{- toYaml .Values.resources | nindent 12 }}
-
         ports:
         - name: http
           containerPort: {{ .Values.service.httpPort }}
@@ -75,7 +70,6 @@ spec:
         - name: metrics
           containerPort: {{ .Values.service.metricsPort }}
           protocol: TCP
-
         {{- if .Values.livenessProbe.enabled }}
         livenessProbe:
           httpGet:
@@ -100,12 +94,10 @@ spec:
           failureThreshold:    {{ .Values.readinessProbe.failureThreshold }}
           initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds}}
         {{- end }}
-
         volumeMounts:
         - mountPath: /config
           name: data
           #subPath: config
-
         {{- range .Values.hostMounts }}
         {{- if .mountPath }}
         - mountPath: {{ .mountPath }}
@@ -114,7 +106,6 @@ spec:
         {{- end }}
           name: {{ .name }}
         {{- end }}
-
       {{- with .Values.nodeSelector }}
       nodeSelector:
       {{- toYaml . | nindent 8 }}
@@ -127,7 +118,6 @@ spec:
       tolerations:
       {{- toYaml . | nindent 8 }}
       {{- end }}
-
       volumes:
         - name: data
         {{- if .Values.persistence.enabled }}
@@ -141,7 +131,6 @@ spec:
         {{- else }}
           emptyDir: {}
         {{ end }}
-
       {{- range .Values.hostMounts }}
         - name: {{ .name }}
           hostPath:
