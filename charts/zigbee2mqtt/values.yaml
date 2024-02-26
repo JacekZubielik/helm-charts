@@ -65,7 +65,7 @@ service:
   loadBalancerSourceRanges: []
   publishNotReadyAddresses: false
   httpPort:    8080
-  metricsPort: 9113
+  metricsPort: 9100
 
 monitoring:
   enabled: false
