@@ -65,8 +65,8 @@ spec:
             mountPath: /mosquitto/config/mosquitto.conf
             subPath: mosquitto.conf
           - name: mosquitto-passwd
-            mountPath: /mosquitto/config/password_file
-            subPath: password_file
+            mountPath: /mosquitto/config/passwd
+            subPath: passwd
           - name: mosquitto-ca-cert
             mountPath: /mosquitto/config/certs/ca.crt
             subPath: ca.crt
@@ -90,23 +90,14 @@ spec:
         configMap:
           name: {{ include "eclipse-mosquitto.fullname" . }}-config
       - name: mosquitto-ca-cert
-        configMap:
-          name: {{ include "eclipse-mosquitto.fullname" . }}-config
-          items:
-            - key: ca.crt
-              path: ca.crt
+        secret:
+          secretName: mosquitto-ca-cert
       - name: mosquitto-server-cert
-        configMap:
-          name: {{ include "eclipse-mosquitto.fullname" . }}-config
-          items:
-              - key: server.crt
-                path: server.crt
+        secret:
+          secretName: mosquitto-server-cert
       - name: mosquitto-server-key
-        configMap:
-          name: {{ include "eclipse-mosquitto.fullname" . }}-config
-          items:
-              - key: server.key
-                path: server.key
+        secret:
+          secretName: mosquitto-server-key
       - name: mosquitto-data
       {{- if .Values.persistence.enabled }}
         persistentVolumeClaim:
