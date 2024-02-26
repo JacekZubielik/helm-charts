@@ -86,7 +86,7 @@ spec:
           items:
             - key: mosquitto.passwd
               path: mosquitto.passwd
-              mode: 0775
+              mode: 0700
 
       - name: mosquitto-ca-cert
         configMap:
@@ -94,21 +94,21 @@ spec:
           items:
             - key: ca.crt
               path: ca.crt
-              mode: 0640
+              mode: 0700
       - name: mosquitto-server-cert
         configMap:
           name: {{ include "eclipse-mosquitto.fullname" . }}-config
           items:
               - key: server.crt
                 path: server.crt
-                mode: 0640
+                mode: 0700
       - name: mosquitto-server-key
         configMap:
           name: {{ include "eclipse-mosquitto.fullname" . }}-config
           items:
               - key: server.key
                 path: server.key
-                mode: 0640
+                mode: 0700
       - name: mosquitto-data
       {{- if .Values.persistence.enabled }}
         persistentVolumeClaim:
