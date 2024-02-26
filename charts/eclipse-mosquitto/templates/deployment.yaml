@@ -43,10 +43,6 @@ spec:
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         args: [ "mosquitto", "-c", "/mosquitto/config/mosquitto.conf" ]
-        command:
-          - ls
-          - "-l"
-          - "/mosquitto/config"
         ports:
           - name: {{ .Values.container.ports.mqtt.name }}
             containerPort: {{ .Values.container.ports.mqtt.port }}
