@@ -135,7 +135,7 @@ ingress:
         proxy_cache_bypass $http_upgrade;
       }
   hosts:
-    - host: hass.<secret:private-domain>
+    - host: hass.local
       paths:
         - path: /
           pathType: ImplementationSpecific

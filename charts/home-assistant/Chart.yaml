@@ -3,7 +3,7 @@ apiVersion: v2
 appVersion: 2024.2.0
 description: Home Assistant chart
 name: home-assistant
-version: 0.0.63
+version: 0.0.64
 keywords:
 - home-assistant
 type: application
