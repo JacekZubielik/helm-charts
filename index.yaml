@@ -3,6 +3,26 @@ entries:
   eclipse-mosquitto:
   - apiVersion: v2
     appVersion: 2.0.18
+    created: "2024-02-27T01:01:50.145161855Z"
+    description: Eclipse Mosquitto MQTT
+    digest: 0bf0ddf46fbb231d16dbd39a51ef87c69cd8a8810b2746d47a6debbc2190e4e9
+    home: https://github.com/JacekZubielik/helm-charts/tree/master/charts/eclipse-mosquitto
+    icon: https://raw.githubusercontent.com/eclipse/mosquitto/master/logo/mosquitto-logo-min.svg
+    keywords:
+    - mqtt
+    - mosquitto
+    maintainers:
+    - email: jack.zu@protonmail.com
+      name: Jacek Zubielik
+    name: eclipse-mosquitto
+    sources:
+    - https://github.com/eclipse/mosquitto
+    type: application
+    urls:
+    - https://github.com/JacekZubielik/helm-charts/releases/download/eclipse-mosquitto-0.0.33/eclipse-mosquitto-0.0.33.tgz
+    version: 0.0.33
+  - apiVersion: v2
+    appVersion: 2.0.18
     created: "2024-02-27T00:54:52.310690186Z"
     description: Eclipse Mosquitto MQTT
     digest: e7a9783c5250e98ac0054f1f1dc749238212bfa515c4fe88c6d6c873a83ddf3c
@@ -7734,4 +7754,4 @@ entries:
     urls:
     - https://github.com/JacekZubielik/helm-charts/releases/download/zigbee2mqtt-0.0.1/zigbee2mqtt-0.0.1.tgz
     version: 0.0.1
-generated: "2024-02-27T00:54:52.311374149Z"
+generated: "2024-02-27T01:01:50.145944117Z"
