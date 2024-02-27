@@ -65,7 +65,7 @@ spec:
             mountPath: /mosquitto/config/mosquitto.conf
             subPath: mosquitto.conf
           - name: mosquitto-passwd
-            mountPath: /etc/mosquitto/password_file
+            mountPath: /mosquitto/password_file
             subPath: passwd
           - name: mosquitto-ca-cert
             mountPath: /mosquitto/config/certs/ca.crt
