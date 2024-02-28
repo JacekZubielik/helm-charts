@@ -1,9 +1,9 @@
 ---
 apiVersion: v2
-appVersion: 1.2.2
+appVersion: v1.2.2
 description: Mikrotik MKTXP Prometheus exporter chart
 name: mktxp-exporter
-version: 0.0.2
+version: 0.0.3
 keywords:
 - mikrotik-exporter
 - mktxp-exporter
