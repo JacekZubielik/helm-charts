@@ -1,0 +1,25 @@
+{{- if and .Values.ingress .Values.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "mktxp-exporter.fullname" . }}
+  labels:
+    {{- include "mktxp-exporter.labels" . | nindent 4 }}
+spec:
+  ingressClassName: {{ $.Values.ingress.ingressClassName }}
+  rules:
+    - host: {{ include "mktxp-exporter.fullname" . }}.{{ $.Values.ingress.domainName }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "mktxp-exporter.fullname" . }}
+                port:
+                  name: http
+  tls:
+    - secretName: {{ .Values.ingress.secretName }}
+      hosts:
+        - {{ include "mktxp-exporter.fullname" . }}.{{ $.Values.ingress.domainName }}
+{{- end }}

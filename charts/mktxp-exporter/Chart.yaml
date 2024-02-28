@@ -1,0 +1,16 @@
+---
+apiVersion: v2
+appVersion: 1.2.2
+description: Mikrotik MKTXP Prometheus exporter chart
+name: mktxp-exporter
+version: 0.0.1
+keywords:
+- mikrotik-exporter
+type: application
+home: https://github.com/JacekZubielik/helm-charts/tree/master/charts/mikrotik-exporter
+sources:
+- ghcr.io/akpw/mktxp
+- https://github.com/akpw/mktxp
+maintainers:
+- name: Jacek Zubielik
+  email: jack.zu@protonmail.com

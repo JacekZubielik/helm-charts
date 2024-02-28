@@ -1,0 +1,41 @@
+{{- if and ( .Values.monitoring.serviceMonitor.enabled ) ( .Values.monitoring.enabled ) }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+{{- if .Values.monitoring.serviceMonitor.labels }}
+  labels:
+{{ toYaml .Values.monitoring.serviceMonitor.labels | indent 4}}
+{{- end }}
+  name: {{ template "mktxp-exporter.fullname" . }}-prometheus-exporter
+{{- if .Values.monitoring.serviceMonitor.namespace }}
+  namespace: {{ .Values.monitoring.serviceMonitor.namespace }}
+{{- end }}
+spec:
+  endpoints:
+  - port: http
+    path: /
+    scheme: http
+    honorLabels: true
+{{- if .Values.monitoring.serviceMonitor.interval }}
+    interval: {{ .Values.monitoring.serviceMonitor.interval }}
+{{- end }}
+{{- if .Values.monitoring.serviceMonitor.bearerTokenFile }}
+    bearerTokenFile: {{ .Values.monitoring.serviceMonitor.bearerTokenFile }}
+{{- end }}
+{{- if .Values.monitoring.serviceMonitor.bearerTokenSecret }}
+    bearerTokenSecret:
+      name: {{ .Values.monitoring.serviceMonitor.bearerTokenSecret.name }}
+      key: {{ .Values.monitoring.serviceMonitor.bearerTokenSecret.key }}
+      {{- if .Values.monitoring.serviceMonitor.bearerTokenSecret.optional }}
+      optional: {{ .Values.monitoring.serviceMonitor.bearerTokenSecret.optional }}
+      {{- end }}
+{{- end }}
+  jobLabel: {{ .Values.monitoring.serviceMonitor.jobLabel }}
+  namespaceSelector:
+    matchNames:
+    - {{ .Release.Namespace }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "mktxp-exporter.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}

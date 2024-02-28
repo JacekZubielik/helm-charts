@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "mktxp-exporter.fullname" . }}
+  labels:
+    {{- include "mktxp-exporter.labels" . | nindent 4 }}
+data:
+  mktxp.conf: |
+    [dev]
+      pool = True
+      wireless_clients = True
+      capsman = False
+      netwatch = True
+      dhcp_lease = True
+      firewall = True
+      use_comments_over_names = True
+      enabled = True
+      monitor = True
+      interface = True
+      capsman_clients = True
+      use_ssl = True
+      route = True
+      poe = True
+      ssl_certificate_verify = False
+      no_ssl_certificate = False
+      wireless = True
+      dhcp = True
+      hostname = 192.168.40.1
+      username = mktxp_user
+      password = 3lHqXHWW8DF3dCJRhldfU1TCnFDBjw
+      port = 8729
+      installed_packages = True
+      ipv6_firewall = True
+      public_ip = True
+      user = True
+      queue = True
+      connection_stats = True
+      check_for_updates = True
+      ipv6_neighbor = True
+      connections = True
+      remote_dhcp_entry = True
+

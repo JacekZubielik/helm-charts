@@ -1,0 +1,108 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "mktxp-exporter.fullname" . }}
+  labels:
+    {{- include "mktxp-exporter.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  podManagementPolicy: Parallel
+  selector:
+    matchLabels:
+      {{- include "mktxp-exporter.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "mktxp-exporter.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.securityContext | nindent 8 }}
+      automountServiceAccountToken: false
+      initContainers:
+      - name: init-config
+        image: busybox
+        command: ["/bin/cp", "-v", "/tmp/mktxp.conf", "/home/mktxp/mktxp/mktxp.conf"]
+        securityContext:
+          runAsNonRoot: false
+          privileged: true
+        volumeMounts:
+        - name:      config
+          mountPath: /tmp/mktxp.conf
+          subPath:   mktxp.conf
+        - name:      data
+          mountPath: /home/mktxp/mktxp
+      - name: setup-permissions
+        image: busybox
+        command: ["/bin/chown", "-R", "100:101", "/home/mktxp/mktxp"]
+        securityContext:
+          runAsNonRoot: false
+          privileged: true
+        volumeMounts:
+        - name:      data
+          mountPath: /home/mktxp/mktxp
+      containers:
+      - name: {{ .Chart.Name }}
+        securityContext:
+          {{- toYaml .Values.podSecurityContext | nindent 12 }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - name: http
+          containerPort: {{ .Values.service.port }}
+          protocol: TCP
+        resources:
+          {{- toYaml .Values.resources | nindent 12 }}
+        livenessProbe:
+          httpGet:
+            path:              /
+            port:              {{ .Values.service.port }}
+            scheme:            HTTP
+          periodSeconds:       60
+          timeoutSeconds:      10
+          successThreshold:    1
+          failureThreshold:    6
+          initialDelaySeconds: 10
+        readinessProbe:
+          httpGet:
+            path:              /
+            port:              {{ .Values.service.port }}
+            scheme:            HTTP
+          periodSeconds:       60
+          timeoutSeconds:      10
+          successThreshold:    1
+          failureThreshold:    2
+          initialDelaySeconds: 10
+        volumeMounts:
+        - name:      data
+          mountPath: /home/mktxp/mktxp
+      volumes:
+      - name: config
+        configMap:
+          name: {{ include "mktxp-exporter.fullname" . }}
+          items:
+          - key:  mktxp.conf
+            path: mktxp.conf
+            mode: 0644
+      - name: data
+        persistentVolumeClaim:
+          claimName: {{ include "mktxp-exporter.fullname" . }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
