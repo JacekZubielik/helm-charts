@@ -30,12 +30,13 @@ spec:
       optional: {{ .Values.monitoring.serviceMonitor.bearerTokenSecret.optional }}
       {{- end }}
 {{- end }}
-  jobLabel: {{ .Values.monitoring.serviceMonitor.jobLabel }}
+  jobLabel: {{ template "mktxp-exporter.fullname" . }}-prometheus-exporter
+
   namespaceSelector:
     matchNames:
     - {{ .Release.Namespace }}
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "mktxp-exporter.name" . }}
+      app.kubernetes.io/name: {{ template "mktxp-exporter.name" . }}
       app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}

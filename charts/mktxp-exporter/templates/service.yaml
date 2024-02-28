@@ -5,6 +5,9 @@ metadata:
   name: {{ include "mktxp-exporter.fullname" . }}
   labels:
     {{- include "mktxp-exporter.labels" . | nindent 4 }}
+  annotations:
+    prometheus.io/port: {{ .Values.service.port }}
+    prometheus.io/scrape: "true"
 spec:
   ports:
     - port: {{ .Values.service.port }}

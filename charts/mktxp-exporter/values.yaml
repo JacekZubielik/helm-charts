@@ -1,7 +1,7 @@
 image:
   repository: ghcr.io/akpw/mktxp
   pullPolicy: IfNotPresent
-  tag: latest
+  tag: ""
 
 imagePullSecrets: []
 nameOverride: ""
@@ -35,7 +35,7 @@ persistence:
 # ingress:
 #   enabled: false
 #   ingressClassName: traefik
-#   domainName: anotherlife.pl
+#   domainName: {}
 #   secretName: cluster-tls
 
 monitoring:
