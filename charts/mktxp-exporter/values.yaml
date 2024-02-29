@@ -6,6 +6,14 @@ image:
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
+revisionHistoryLimit: 4
+
+replicas: 1
+updateStrategy:
+  type: RollingUpdate
+  # rollingUpdate:
+  #   maxUnavailable: 0
+  #   maxSurge: 1
 
 serviceAccount:
   create: true

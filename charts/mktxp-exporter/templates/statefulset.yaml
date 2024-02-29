@@ -5,27 +5,34 @@ metadata:
   labels:
     {{- include "mktxp-exporter.labels" . | nindent 4 }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.replicas }}
+  revisionHistoryLimit:  {{ .Values.revisionHistoryLimit }}
   podManagementPolicy: Parallel
   selector:
     matchLabels:
-      {{- include "mktxp-exporter.selectorLabels" . | nindent 6 }}
+    {{- include "mktxp-exporter.selectorLabels" . | nindent 6 }}
+  serviceName: {{ include "mktxp-exporter.fullname" . }}
+  updateStrategy: {{ toYaml .Values.updateStrategy | nindent 4 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
       annotations:
-        {{- toYaml . | nindent 8 }}
+      {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "mktxp-exporter.selectorLabels" . | nindent 8 }}
+      {{- include "mktxp-exporter.selectorLabels" . | nindent 8 }}
+      {{- if .Values.podLabels }}
+      {{- toYaml .Values.podLabels | nindent 8 }}
+      {{- end }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
+      {{- toYaml . | nindent 8 }}
       {{- end }}
+      automountServiceAccountToken: {{ .Values.serviceAccount.automountServiceAccountToken }}
+      serviceAccountName: {{ include "mktxp-exporter.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.securityContext | nindent 8 }}
-      automountServiceAccountToken: false
       initContainers:
       - name: init-config
         image: busybox
