@@ -27,6 +27,19 @@ spec:
         runAsUser: {{ .Values.securityContext.runAsUser }}
     {{- end }}
       initContainers:
+      - name: init-config
+        image: busybox
+        command: ["/bin/cp", "-v", "/tmp/password_file", "/mosquitto/password_file"]
+        securityContext:
+          runAsNonRoot: false
+          privileged: true
+        volumeMounts:
+        - name:      mosquitto-passwd
+          mountPath: /tmp/password_file
+          subPath:   password_file
+        - name:      mosquitto-data
+          mountPath: /mosquitto
+
       - name: setup-permissions
         image: busybox
         command: ["/bin/chown", "-R", "1883:1883", "/mosquitto"]
@@ -34,8 +47,8 @@ spec:
           runAsUser: 0
           privileged: true
         volumeMounts:
-        - name: mosquitto-data
-          mountPath: /mosquitto/data
+        - name:      mosquitto-data
+          mountPath: /mosquitto
       containers:
       - name: {{ .Chart.Name }}
         securityContext:
@@ -66,7 +79,7 @@ spec:
             subPath: mosquitto.conf
           - name: mosquitto-passwd
             mountPath: /mosquitto/password_file
-            subPath: passwd
+            subPath: password_file
           - name: mosquitto-ca-cert
             mountPath: /mosquitto/config/certs/ca.crt
             subPath: ca.crt
@@ -78,8 +91,8 @@ spec:
             subPath: server.key
             readOnly: true
           - name: mosquitto-data
-            mountPath: /mosquitto/data
-            subPath: mosquitto/data
+            mountPath: /mosquitto
+            subPath: mosquitto
         resources:
           {{- toYaml .Values.resources | nindent 12 }}
       volumes:
