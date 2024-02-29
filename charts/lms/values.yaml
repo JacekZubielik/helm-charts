@@ -65,10 +65,10 @@ service:
   loadBalancerSourceRanges: []
   publishNotReadyAddresses: false
   httpPort:      "9000"
-  cliPort:      "9090"
+  cliPort:       "9090"
   controlPort:   "3483"
   discoveryPort: "3483"
-  metricsPort:   "9113"
+  metricsPort:   "9100"
 
 monitoring:
   enabled: false

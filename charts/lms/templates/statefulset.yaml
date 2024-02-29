@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name:  {{ template "lms.fullname" . }}
+  name: {{ template "lms.fullname" . }}
   labels:
-  {{- include "lms.labels" . | nindent 4 }}
+    {{- include "lms.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicas }}
   revisionHistoryLimit:  {{ .Values.revisionHistoryLimit }}
@@ -11,11 +11,7 @@ spec:
     matchLabels:
     {{- include "lms.selectorLabels" . | nindent 6 }}
   serviceName: {{ include "lms.fullname" . }}
-{{/*    updateStrategy:
-    type: {{ .Values.strategyType }} */}}
-
   updateStrategy: {{ toYaml .Values.updateStrategy | nindent 4 }}
-
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -37,12 +33,10 @@ spec:
       serviceAccountName: {{ include "lms.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
-
       {{- if .Values.hostNetwork }}
       hostNetwork: {{ .Values.hostNetwork }}
       dnsPolicy: ClusterFirstWithHostNet
       {{- end }}
-
       initContainers:
         - name: init-config
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
@@ -74,10 +68,8 @@ spec:
           - secretRef:
               name: {{ . }}
         {{- end }}
-
         resources:
         {{- toYaml .Values.resources | nindent 12 }}
-
         ports:
         - name: http
           containerPort: {{ .Values.service.httpPort }}
@@ -94,12 +86,11 @@ spec:
         - name: metrics
           containerPort: {{ .Values.service.metricsPort }}
           protocol: TCP
-
         {{- if .Values.livenessProbe.enabled }}
         livenessProbe:
           httpGet:
             path:              /
-            port:              http
+            port:              {{ .Values.service.httpPort }}
             scheme:            {{ .Values.livenessProbe.scheme }}
           periodSeconds:       {{ .Values.livenessProbe.periodSeconds }}
           timeoutSeconds:      {{ .Values.livenessProbe.timeoutSeconds }}
@@ -111,7 +102,7 @@ spec:
         readinessProbe:
           httpGet:
             path:              /
-            port:              http
+            port:              {{ .Values.service.httpPort }}
             scheme:            {{ .Values.readinessProbe.scheme }}
           periodSeconds:       {{ .Values.readinessProbe.periodSeconds }}
           timeoutSeconds:      {{ .Values.readinessProbe.timeoutSeconds }}
@@ -119,7 +110,6 @@ spec:
           failureThreshold:    {{ .Values.readinessProbe.failureThreshold }}
           initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds}}
         {{- end }}
-
         volumeMounts:
         - mountPath: /config
           name: config-storage
@@ -133,7 +123,6 @@ spec:
         - mountPath: /music
           name: music-storage
           readOnly: true
-
         {{- range .Values.hostMounts }}
         {{- if .mountPath }}
         - mountPath: {{ .mountPath }}
@@ -142,8 +131,6 @@ spec:
         {{- end }}
           name: {{ .name }}
         {{- end }}
-
-
       {{- with .Values.nodeSelector }}
       nodeSelector:
       {{- toYaml . | nindent 8 }}
@@ -156,7 +143,6 @@ spec:
       tolerations:
       {{- toYaml . | nindent 8 }}
       {{- end }}
-
       volumes:
         - name: config-storage
         {{- if .Values.persistence.enabled }}
@@ -170,7 +156,6 @@ spec:
         {{- else }}
           emptyDir: {}
         {{ end }}
-
         - name: music-storage
         {{- if .Values.persistence.enabled }}
         {{- if .Values.persistence.musicstorage.hostPath }}
@@ -183,7 +168,6 @@ spec:
         {{- else }}
           emptyDir: {}
         {{ end }}
-
       {{- range .Values.hostMounts }}
         - name: {{ .name }}
           hostPath:
