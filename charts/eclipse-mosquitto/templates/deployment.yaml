@@ -58,7 +58,7 @@ spec:
           {{- toYaml .Values.podSecurityContext | nindent 12 }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
-        args: [ "mosquitto", "-c", "/mosquitto/config/mosquitto.conf"; "mosquitto", "-c", "/mosquitto/password_file" ]
+        args: [ "mosquitto", "-c", "/mosquitto/config/mosquitto.conf", "mosquitto", "-c", "/mosquitto/password_file" ]
         ports:
           - name: {{ .Values.container.ports.mqtt.name }}
             containerPort: {{ .Values.container.ports.mqtt.port }}
