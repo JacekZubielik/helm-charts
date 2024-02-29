@@ -58,7 +58,7 @@ monitoring:
     honorLabels: true
     interval:      60s
     selector: {}
-    namespace: monitoring
+    namespace: {}
     scrapeTimeout: 10s
     scheme: http
     tlsConfig: {}
