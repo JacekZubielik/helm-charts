@@ -74,7 +74,7 @@ spec:
         livenessProbe:
           httpGet:
             path:              /
-            port:              http
+            port:              {{ .Values.service.httpPort }}
             scheme:            {{ .Values.livenessProbe.scheme }}
           periodSeconds:       {{ .Values.livenessProbe.periodSeconds }}
           timeoutSeconds:      {{ .Values.livenessProbe.timeoutSeconds }}
@@ -86,7 +86,7 @@ spec:
         readinessProbe:
           httpGet:
             path:              /
-            port:              http
+            port:              {{ .Values.service.httpPort }}
             scheme:            {{ .Values.readinessProbe.scheme }}
           periodSeconds:       {{ .Values.readinessProbe.periodSeconds }}
           timeoutSeconds:      {{ .Values.readinessProbe.timeoutSeconds }}
