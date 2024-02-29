@@ -86,6 +86,10 @@ spec:
       - name: mosquitto-passwd
         secret:
           secretName: mosquitto-secrets
+          items:
+          - key:  password_file
+            path: password_file
+            mode: 0700
       - name: mosquitto-conf
         configMap:
           name: {{ include "eclipse-mosquitto.fullname" . }}-config
