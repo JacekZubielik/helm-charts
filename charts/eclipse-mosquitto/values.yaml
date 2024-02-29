@@ -1,15 +1,19 @@
-replicaCount: 1
-revisionHistoryLimit: 2
-
 image:
   repository: eclipse-mosquitto
   tag: ""
   pullPolicy: IfNotPresent
-
+nameOverride: ""
+fullnameOverride: ""
+revisionHistoryLimit: 2
+replicas: 1
+strategyType: RollingUpdate
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
-
+serviceAccount:
+  create: true
+  annotations: {}
+  automountServiceAccountToken: false
 podAnnotations: {}
 
 podSecurityContext:
@@ -73,28 +77,3 @@ persistence:
   size: 2Gi
   annotations: {}
 
-# config:
-#   allow_anonymous true
-#   persistence true
-#   persistence_location /mosquitto/data/
-#   log_dest stdout
-#   listener 1883
-#   protocol mqtt
-#   listener 8883
-#   cafile /mosquitto/config/certs/ca.crt
-#   certfile /mosquitto/config/certs/server.crt
-#   keyfile /mosquitto/config/certs/server.key
-#   require_certificate false
-
-# certs:
-#   ca:
-#     crt: |-
-#       -----BEGIN CERTIFICATE-----
-#       -----END CERTIFICATE-----
-#   server:
-#     crt: |-
-#       -----BEGIN CERTIFICATE-----
-#       -----END CERTIFICATE-----
-#     key: |-
-#       -----BEGIN CERTIFICATE-----
-#       -----END CERTIFICATE-----
