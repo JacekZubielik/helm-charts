@@ -7,6 +7,10 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
+serviceAccount:
+  create: true
+  annotations: {}
+  automountServiceAccountToken: false
 podAnnotations: {}
 
 podSecurityContext:
@@ -39,9 +43,10 @@ persistence:
 #   secretName: cluster-tls
 
 monitoring:
-  enabled: true
+  enabled: false
   serviceMonitor:
-    enabled: true
+    enabled: false
     interval: 60s
-    labels:
-      prometheus: "true"
+    labels: {}
+    selector: {}
+    namespace: {}

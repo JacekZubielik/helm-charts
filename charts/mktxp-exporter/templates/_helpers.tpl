@@ -29,7 +29,7 @@ If release name contains chart name it will be used as a full name. */}}
 helm.sh/chart: {{ include "mktxp-exporter.chart" . }}
 {{ include "mktxp-exporter.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
-app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+app.kubernetes.io/version: {{ .Chart.AppVersion }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
@@ -38,4 +38,13 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- define "mktxp-exporter.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "mktxp-exporter.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+{{/* Create the name of the service account to use */}}
+{{- define "mktxp-exporter.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create }}
+{{- default (include "mktxp-exporter.fullname" .) .Values.serviceAccount.name }}
+{{- else }}
+{{- default "default" .Values.serviceAccount.name }}
+{{- end }}
 {{- end }}
