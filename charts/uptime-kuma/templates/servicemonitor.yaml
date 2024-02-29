@@ -12,6 +12,9 @@ metadata:
   annotations:
   {{- toYaml . | nindent 4 }}
   {{- end }}
+  {{- if .Values.monitoring.serviceMonitor.namespace }}
+  namespace: {{ .Values.monitoring.serviceMonitor.namespace }}
+  {{- end }}
 spec:
   selector:
     matchLabels:
