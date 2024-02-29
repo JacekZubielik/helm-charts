@@ -49,7 +49,7 @@ service:
   loadBalancerSourceRanges: []
   publishNotReadyAddresses: false
   httpPort:    6052
-  metricsPort: 9113
+  metricsPort: 9100
 monitoring:
   enabled: false
   serviceMonitor:
