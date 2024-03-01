@@ -1,9 +1,14 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  {{- if .Values.service.annotations }}
+  annotations:
+  {{- toYaml .Values.service.annotations | nindent 4 }}
+  {{- end }}
   name: {{ include "eclipse-mosquitto.fullname" . }}
   labels:
-{{ include "eclipse-mosquitto.labels" . | indent 4 }}
+    app.kubernetes.io/name: {{ include "eclipse-mosquitto.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
 spec:
   replicas: {{ .Values.replicas }}
   revisionHistoryLimit:  {{ .Values.revisionHistoryLimit }}
@@ -11,10 +16,19 @@ spec:
     matchLabels:
       app.kubernetes.io/name: {{ include "eclipse-mosquitto.name" . }}
       app.kubernetes.io/instance: {{ .Release.Name }}
+
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+
   strategy:
     type: {{ .Values.strategyType }}
   template:
     metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
       labels:
         app.kubernetes.io/name: {{ include "eclipse-mosquitto.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
@@ -25,11 +39,12 @@ spec:
       {{- end }}
       automountServiceAccountToken: {{ .Values.serviceAccount.automountServiceAccountToken }}
       serviceAccountName: {{ include "eclipse-mosquitto.serviceAccountName" . }}
-    {{- if .Values.securityContext.enabled }}
+      {{- if .Values.securityContext.enabled }}
       securityContext:
-        fsGroup: {{ .Values.securityContext.fsGroup }}
         runAsUser: {{ .Values.securityContext.runAsUser }}
-    {{- end }}
+        runAsGroup: {{ .Values.securityContext.runAsGrop }}
+        fsGroup: {{ .Values.securityContext.fsGroup }}
+      {{- end }}
       initContainers:
       - name: init-config
         image: busybox
@@ -60,44 +75,61 @@ spec:
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         args: [ "mosquitto", "-c", "/mosquitto/config/mosquitto.conf" ]
         ports:
-          - name: {{ .Values.container.ports.mqtt.name }}
-            containerPort: {{ .Values.container.ports.mqtt.port }}
-            protocol: TCP
-          - name: {{ .Values.container.ports.mqtts.name }}
-            containerPort: {{ .Values.container.ports.mqtts.port }}
-            protocol: TCP
+        - name: mqtt
+          containerPort: {{ .Values.service.mqttPort }}
+          protocol: TCP
+        - name: mqtts
+          containerPort: {{ .Values.service.mqttsPort }}
+          protocol: TCP
+        - name: metrics
+          containerPort: {{ .Values.service.metricsPort }}
+          protocol: TCP
+        {{- if .Values.livenessProbe.enabled }}
         livenessProbe:
-          tcpSocket:
-            port: {{ .Values.container.ports.mqtt.port }}
-          initialDelaySeconds: 5
-          periodSeconds: 15
+          httpGet:
+            path:              /metrics
+            port:              {{ .Values.service.mqttPort }}
+            scheme:            {{ .Values.livenessProbe.scheme }}
+          periodSeconds:       {{ .Values.livenessProbe.periodSeconds }}
+          timeoutSeconds:      {{ .Values.livenessProbe.timeoutSeconds }}
+          successThreshold:    {{ .Values.livenessProbe.successThreshold }}
+          failureThreshold:    {{ .Values.livenessProbe.failureThreshold }}
+          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds}}
+        {{- end }}
+        {{- if .Values.readinessProbe.enabled }}
         readinessProbe:
-          tcpSocket:
-            port: {{ .Values.container.ports.mqtt.port }}
-          initialDelaySeconds: 5
-          periodSeconds: 10
+          httpGet:
+            path:              /metrics
+            port:              {{ .Values.service.mqttPort }}
+            scheme:            {{ .Values.livenessProbe.scheme }}
+          periodSeconds:       {{ .Values.readinessProbe.periodSeconds }}
+          timeoutSeconds:      {{ .Values.readinessProbe.timeoutSeconds }}
+          successThreshold:    {{ .Values.readinessProbe.successThreshold }}
+          failureThreshold:    {{ .Values.readinessProbe.failureThreshold }}
+          initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds}}
+        {{- end }}
         volumeMounts:
-          - name: mosquitto-conf
-            mountPath: /mosquitto/config/mosquitto.conf
-            subPath: mosquitto.conf
-          - name: mosquitto-passwd
-            mountPath: /mosquitto/password_file
-            subPath: password_file
-          - name: mosquitto-ca-cert
-            mountPath: /mosquitto/config/certs/ca.crt
-            subPath: ca.crt
-          - name: mosquitto-server-cert
-            mountPath: /mosquitto/config/certs/server.crt
-            subPath: server.crt
-          - name: mosquitto-server-key
-            mountPath: /mosquitto/config/certs/server.key
-            subPath: server.key
-            readOnly: true
-          - name: mosquitto-data
-            mountPath: /mosquitto
-            subPath: mosquitto
+        - name: mosquitto-conf
+          mountPath: /mosquitto/config/mosquitto.conf
+          subPath: mosquitto.conf
+        - name: mosquitto-passwd
+          mountPath: /mosquitto/password_file
+          subPath: password_file
+        - name: mosquitto-ca-cert
+          mountPath: /mosquitto/config/certs/ca.crt
+          subPath: ca.crt
+        - name: mosquitto-server-cert
+          mountPath: /mosquitto/config/certs/server.crt
+          subPath: server.crt
+        - name: mosquitto-server-key
+          mountPath: /mosquitto/config/certs/server.key
+          subPath: server.key
+          readOnly: true
+        - name: mosquitto-data
+          mountPath: /mosquitto
+          subPath: mosquitto
         resources:
-          {{- toYaml .Values.resources | nindent 12 }}
+        {{- toYaml .Values.resources | nindent 12 }}
       volumes:
       - name: mosquitto-passwd
         secret:
@@ -127,13 +159,13 @@ spec:
       {{- end -}}
       {{- with .Values.nodeSelector }}
       nodeSelector:
-        {{- toYaml . | nindent 8 }}
+      {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- with .Values.affinity }}
       affinity:
-        {{- toYaml . | nindent 8 }}
+      {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- with .Values.tolerations }}
       tolerations:
-        {{- toYaml . | nindent 8 }}
+      {{- toYaml . | nindent 8 }}
       {{- end }}

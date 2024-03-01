@@ -1,0 +1,66 @@
+{{- if and ( .Values.monitoring.serviceMonitor.enabled ) ( .Values.monitoring.enabled ) }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  {{- if .Values.monitoring.serviceMonitor.annotations }}
+  annotations:
+  {{- toYaml .Values.monitoring.serviceMonitor.annotations | nindent 4 }}
+  {{- end }}
+  name: {{ template "eclipse-mosquitto.fullname" . }}-prometheus-exporter
+  labels:
+    app.kubernetes.io/name: {{ include "eclipse-mosquitto.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+  {{- with .Values.monitoring.serviceMonitor.selector }}
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- if .Values.monitoring.serviceMonitor.namespace }}
+  namespace: {{ .Values.monitoring.serviceMonitor.namespace }}
+  {{- end }}
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "eclipse-mosquitto.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+  endpoints:
+  - targetPort: {{ .Values.service.metricsPort }}
+    path: /metrics
+    {{- with .Values.monitoring.serviceMonitor.honorLabels }}
+    honorLabels: {{ . }}
+    {{- end }}
+    {{- if .Values.monitoring.serviceMonitor.interval }}
+    interval: {{ .Values.monitoring.serviceMonitor.interval }}
+    {{- end }}
+    {{- if .Values.monitoring.serviceMonitor.scrapeTimeout}}
+    scrapeTimeout: {{ .Values.monitoring.serviceMonitor.scrapeTimeout }}
+    {{- end }}
+    {{- with .Values.monitoring.serviceMonitor.scheme }}
+    scheme: {{ . }}
+    {{- end }}
+    {{- with .Values.monitoring.serviceMonitor.tlsConfig }}
+    tlsConfig:
+    {{- toYaml . | nindent 6 }}
+    {{- end }}
+    {{- with .Values.monitoring.serviceMonitor.relabelings }}
+    relabelings:
+    {{- toYaml . | nindent 6 }}
+    {{- end }}
+    {{- with .Values.monitoring.serviceMonitor.metricRelabelings }}
+    metricRelabelings:
+    {{- toYaml . | nindent 6 }}
+    {{- end }}
+    {{- if .Values.monitoring.serviceMonitor.bearerTokenFile }}
+    bearerTokenFile: {{ .Values.monitoring.serviceMonitor.bearerTokenFile }}
+    {{- end }}
+    {{- if .Values.monitoring.serviceMonitor.bearerTokenSecret }}
+    bearerTokenSecret:
+      name: {{ .Values.monitoring.serviceMonitor.bearerTokenSecret.name }}
+      key: {{ .Values.monitoring.serviceMonitor.bearerTokenSecret.key }}
+      {{- if .Values.monitoring.serviceMonitor.bearerTokenSecret.optional }}
+      optional: {{ .Values.monitoring.serviceMonitor.bearerTokenSecret.optional }}
+      {{- end }}
+    {{- end }}
+  jobLabel: {{ template "eclipse-mosquitto.fullname" . }}-prometheus-exporter
+{{- end }}
