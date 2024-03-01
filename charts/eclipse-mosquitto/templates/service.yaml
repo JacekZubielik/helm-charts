@@ -29,11 +29,11 @@ spec:
   ports:
   - name: mqtt
     port: {{ .Values.service.mqttPort }}
-    targetPort: {{ .Values.service.metricsPort }}
+    targetPort: {{ .Values.service.mqtt }}
     protocol: TCP
   - name: mqtts
     port: {{ .Values.service.mqttsPort }}
-    targetPort: {{ .Values.service.metricsPort }}
+    targetPort: {{ .Values.service.mqttsPort }}
     protocol: TCP
   - name: metrics
     port: {{ .Values.service.metricsPort }}
