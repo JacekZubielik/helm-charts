@@ -1,12 +1,12 @@
 {{- if .Values.ingress.enabled -}}
-{{- $fullName := include "eclipse-mosquitto.fullname" . -}}
+{{- $fullName := include "app.fullname" . -}}
 {{- $portName := .Values.service.ports.mqtts.name -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: {{ $fullName }}-mqtt
   labels:
-{{ include "eclipse-mosquitto.labels" . | indent 4 }}
+{{ include "app.labels" . | indent 4 }}
   {{- with .Values.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}

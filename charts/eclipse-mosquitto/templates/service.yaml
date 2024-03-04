@@ -5,9 +5,9 @@ metadata:
   annotations:
   {{- toYaml .Values.service.annotations | nindent 4 }}
   {{- end }}
-  name: {{ include "eclipse-mosquitto.fullname" . }}
+  name: {{ include "app.fullname" . }}
   labels:
-    app.kubernetes.io/name: {{ include "eclipse-mosquitto.name" . }}
+    app.kubernetes.io/name: {{ include "app.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
 spec:
   type: {{ .Values.service.type }}
@@ -40,5 +40,5 @@ spec:
     targetPort: {{ .Values.service.metricsPort }}
     protocol: TCP
   selector:
-    app.kubernetes.io/name: {{ include "eclipse-mosquitto.name" . }}
+    app.kubernetes.io/name: {{ include "app.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}

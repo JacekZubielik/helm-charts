@@ -6,9 +6,9 @@ metadata:
   annotations:
   {{- toYaml .Values.monitoring.serviceMonitor.annotations | nindent 4 }}
   {{- end }}
-  name: {{ template "eclipse-mosquitto.fullname" . }}-prometheus-exporter
+  name: {{ template "app.fullname" . }}
   labels:
-    app.kubernetes.io/name: {{ include "eclipse-mosquitto.name" . }}
+    app.kubernetes.io/name: {{ include "app.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
   {{- with .Values.monitoring.serviceMonitor.selector }}
   {{- toYaml . | nindent 4 }}
@@ -19,7 +19,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "eclipse-mosquitto.name" . }}
+      app.kubernetes.io/name: {{ include "app.name" . }}
       app.kubernetes.io/instance: {{ .Release.Name }}
   namespaceSelector:
     matchNames:
@@ -62,5 +62,5 @@ spec:
       optional: {{ .Values.monitoring.serviceMonitor.bearerTokenSecret.optional }}
       {{- end }}
     {{- end }}
-  jobLabel: {{ template "eclipse-mosquitto.fullname" . }}-prometheus-exporter
+  jobLabel: {{ template "app.fullname" . }}
 {{- end }}

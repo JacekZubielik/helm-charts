@@ -5,16 +5,16 @@ metadata:
   annotations:
   {{- toYaml .Values.service.annotations | nindent 4 }}
   {{- end }}
-  name: {{ include "eclipse-mosquitto.fullname" . }}
+  name: {{ include "app.fullname" . }}
   labels:
-    app.kubernetes.io/name: {{ include "eclipse-mosquitto.name" . }}
+    app.kubernetes.io/name: {{ include "app.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
 spec:
   replicas: {{ .Values.replicas }}
   revisionHistoryLimit:  {{ .Values.revisionHistoryLimit }}
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "eclipse-mosquitto.name" . }}
+      app.kubernetes.io/name: {{ include "app.name" . }}
       app.kubernetes.io/instance: {{ .Release.Name }}
   strategy:
     type: {{ .Values.strategyType }}
@@ -25,7 +25,7 @@ spec:
       {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        app.kubernetes.io/name: {{ include "eclipse-mosquitto.name" . }}
+        app.kubernetes.io/name: {{ include "app.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
       {{- with .Values.imagePullSecrets }}
@@ -33,7 +33,7 @@ spec:
       {{- toYaml . | nindent 8 }}
       {{- end }}
       automountServiceAccountToken: {{ .Values.serviceAccount.automountServiceAccountToken }}
-      serviceAccountName: {{ include "eclipse-mosquitto.serviceAccountName" . }}
+      serviceAccountName: {{ include "app.serviceAccountName" . }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
         runAsUser: {{ .Values.securityContext.runAsUser }}
@@ -135,7 +135,7 @@ spec:
             mode: 0644
       - name: mosquitto-conf
         configMap:
-          name: {{ include "eclipse-mosquitto.fullname" . }}-config
+          name: {{ include "app.fullname" . }} #
       - name: mosquitto-ca-cert
         secret:
           secretName: mosquitto-ca-cert
@@ -148,7 +148,7 @@ spec:
       - name: mosquitto-data
       {{- if .Values.persistence.enabled }}
         persistentVolumeClaim:
-          claimName: {{ include "eclipse-mosquitto.fullname" . }}-pvc
+          claimName: {{ include "app.fullname" . }} # 
       {{- else }}
         emptyDir: {}
       {{- end -}}
