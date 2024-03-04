@@ -135,7 +135,7 @@ spec:
             mode: 0644
       - name: mosquitto-conf
         configMap:
-          name: {{ include "app.fullname" . }} #
+          name: {{ include "app.fullname" . }}
       - name: mosquitto-ca-cert
         secret:
           secretName: mosquitto-ca-cert
@@ -148,7 +148,7 @@ spec:
       - name: mosquitto-data
       {{- if .Values.persistence.enabled }}
         persistentVolumeClaim:
-          claimName: {{ include "app.fullname" . }} # 
+          claimName: {{ include "app.fullname" . }}
       {{- else }}
         emptyDir: {}
       {{- end -}}
