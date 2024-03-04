@@ -5,9 +5,9 @@ metadata:
   annotations:
   {{- toYaml .Values.service.annotations | nindent 4 }}
   {{- end }}
-  name: {{ template "uptime-kuma.fullname" . }}
+  name: {{ template "app.fullname" . }}
   labels:
-  {{- include "uptime-kuma.labels" . | nindent 4 }}
+  {{- include "app.labels" . | nindent 4 }}
   {{- if .Values.service.labels }}
   {{ toYaml .Values.service.labels | indent 4 }}
   {{- end }}
@@ -38,4 +38,4 @@ spec:
     targetPort: metrics
 
   selector:
-  {{- include "uptime-kuma.selectorLabels" . | nindent 4 }}
+  {{- include "app.selectorLabels" . | nindent 4 }}

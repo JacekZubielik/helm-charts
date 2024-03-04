@@ -2,9 +2,9 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ template "uptime-kuma.fullname" . }}
+  name: {{ template "app.fullname" . }}
   labels:
-    {{- include "uptime-kuma.labels" . | nindent 4 }}
+    {{- include "app.labels" . | nindent 4 }}
 spec:
   accessModes:
     - {{ .Values.persistence.pvc.accessMode }}

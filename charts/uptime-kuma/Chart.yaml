@@ -3,7 +3,7 @@ apiVersion: v2
 appVersion: 1.23.11
 description: Monitoring tool
 name: uptime-kuma
-version: 0.0.33
+version: 0.0.34
 keywords:
 - uptime-kuma
 type: application

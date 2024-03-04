@@ -2,13 +2,13 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "uptime-kuma.fullname" . }}
+  name: {{ include "app.fullname" . }}
   labels:
-    {{- include "uptime-kuma.labels" . | nindent 4 }}
-    # helm.sh/chart: {{ include "uptime-kuma.chart" . }}
+    {{- include "app.labels" . | nindent 4 }}
+    # helm.sh/chart: {{ include "app.chart" . }}
     # app.kubernetes.io/instance: {{ .Release.Name }}
     # app.kubernetes.io/managed-by: {{ .Release.Service }}
-    # app.kubernetes.io/name: {{ include "uptime-kuma.name" . }}
+    # app.kubernetes.io/name: {{ include "app.name" . }}
 {{- with .Values.ingress.annotations }}
   annotations:
 {{ toYaml . | indent 4 }}
@@ -23,7 +23,7 @@ spec:
           - path: {{ .Values.ingress.path }}
             pathType: Prefix
             backend:
-              serviceName: {{ include "uptime-kuma.fullname" . }}
+              serviceName: {{ include "app.fullname" . }}
               servicePort: {{ .Values.service.port }}
   {{- end }}
 
