@@ -5,9 +5,9 @@ metadata:
   annotations:
   {{- toYaml .Values.service.annotations | nindent 4 }}
   {{- end }}
-  name: {{ template "esphome.fullname" . }}
+  name: {{ template "app.fullname" . }}
   labels:
-  {{- include "esphome.labels" . | nindent 4 }}
+  {{- include "app.labels" . | nindent 4 }}
   {{- if .Values.service.labels }}
   {{ toYaml .Values.service.labels | indent 4 }}
   {{- end }}
@@ -29,13 +29,13 @@ spec:
   {{- end }}
   publishNotReadyAddresses: {{ .Values.service.publishNotReadyAddresses }}
   ports:
-    - name:     api
-      port:       {{ .Values.service.httpPort }}
-      protocol: TCP
-      targetPort: {{ .Values.service.httpPort }}
-    - name: metrics
-      port: {{ .Values.service.metricsPort }}
-      protocol: TCP
-      targetPort: metrics
+  - name:     api
+    port:       {{ .Values.service.httpPort }}
+    protocol: TCP
+    targetPort: {{ .Values.service.httpPort }}
+  - name: metrics
+    port: {{ .Values.service.metricsPort }}
+    protocol: TCP
+    targetPort: metrics
   selector:
-  {{- include "esphome.selectorLabels" . | nindent 4 }}
+    {{- include "app.selectorLabels" . | nindent 4 }}

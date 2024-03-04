@@ -1,5 +1,5 @@
 {{- if .Values.ingress.enabled -}} 
-{{- $fullName := include "esphome.fullname" . -}}
+{{- $fullName := include "app.fullname" . -}}
 {{- $servicePort := .Values.service.http -}} 
 {{- $ingressPath := .Values.ingress.path -}} 
 {{- $new := false }}
@@ -13,7 +13,7 @@ kind: Ingress
 metadata:
   name: {{ $fullName }}
   labels:
-    {{- include "esphome.labels" . | nindent 4 }}
+    {{- include "app.labels" . | nindent 4 }}
   annotations:
     {{- if not $new }}
     kubernetes.io/ingress.class: {{ required "If ingress.enabled is set to true, ingress.class is required" .Values.ingress.class }}

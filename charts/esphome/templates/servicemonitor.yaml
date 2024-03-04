@@ -2,9 +2,9 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ template "esphome.fullname" . }}-prometheus-exporter
+  name: {{ template "app.fullname" . }}-prometheus-exporter
   labels:
-  {{- include "esphome.labels" . | nindent 4 }}
+  {{- include "app.labels" . | nindent 4 }}
   {{- with .Values.monitoring.serviceMonitor.selector }}
   {{- toYaml . | nindent 4 }}
   {{- end }}
@@ -18,7 +18,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-    {{- include "esphome.selectorLabels" . | nindent 6 }}
+    {{- include "app.selectorLabels" . | nindent 6 }}
     {{- if .Values.podLabels }}
     {{- toYaml .Values.podLabels | nindent 6 }}
     {{- end }}
@@ -63,5 +63,5 @@ spec:
       optional: {{ .Values.monitoring.serviceMonitor.bearerTokenSecret.optional }}
       {{- end }}
     {{- end }}
-  jobLabel: {{ template "esphome.fullname" . }}-prometheus-exporter
+  jobLabel: {{ template "app.fullname" . }}-prometheus-exporter
 {{- end }}

@@ -1,15 +1,15 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ template "esphome.fullname" . }}
+  name: {{ template "app.fullname" . }}
   labels:
-  {{- include "esphome.labels" . | nindent 4 }}
+  {{- include "app.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicas }}
   revisionHistoryLimit:  {{ .Values.revisionHistoryLimit }}
   selector:
     matchLabels:
-    {{- include "esphome.selectorLabels" . | nindent 6 }}
+    {{- include "app.selectorLabels" . | nindent 6 }}
   strategy:
     type: {{ .Values.strategyType }}
   template:
@@ -19,7 +19,7 @@ spec:
       {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-      {{- include "esphome.selectorLabels" . | nindent 8 }}
+      {{- include "app.selectorLabels" . | nindent 8 }}
       {{- if .Values.podLabels }}
       {{- toYaml .Values.podLabels | nindent 8 }}
       {{- end }}
@@ -30,7 +30,7 @@ spec:
       {{- end }}
       automountServiceAccountToken: {{ .Values.serviceAccount.automountServiceAccountToken }}
       shareProcessNamespace: {{ .Values.sidecarSingleProcessNamespace }}
-      serviceAccountName: {{ include "esphome.serviceAccountName" . }}
+      serviceAccountName: {{ include "app.serviceAccountName" . }}
       securityContext:
       {{- toYaml .Values.securityContext | nindent 8 }}
       {{- if .Values.hostNetwork }}
@@ -124,7 +124,7 @@ spec:
             path: {{.Values.persistence.configstorage.hostPath}}
         {{- else }}
           persistentVolumeClaim:
-            claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ template "esphome.fullname" . }}{{- end }}
+            claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ template "app.fullname" . }}{{- end }}
         {{- end }}
         {{- else }}
           emptyDir: {}

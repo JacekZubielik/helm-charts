@@ -2,9 +2,9 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ template "esphome.fullname" . }}
+  name: {{ template "app.fullname" . }}
   labels:
-    {{- include "esphome.labels" . | nindent 4 }}
+    {{- include "app.labels" . | nindent 4 }}
 spec:
   accessModes:
     - {{ .Values.persistence.pvc.accessMode }}
