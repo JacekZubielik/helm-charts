@@ -9,8 +9,6 @@ fullnameOverride: ""
 revisionHistoryLimit: 4
 hostNetwork: false
 
-# strategyType: RollingUpdate
-
 replicas: 1
 updateStrategy:
   type: RollingUpdate

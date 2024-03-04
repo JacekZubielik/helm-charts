@@ -2,9 +2,9 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ template "zigbee2mqtt.fullname" . }}-prometheus-exporter
+  name: {{ template "app.fullname" . }}
   labels:
-  {{- include "zigbee2mqtt.labels" . | nindent 4 }}
+  {{- include "app.labels" . | nindent 4 }}
   {{- with .Values.monitoring.serviceMonitor.selector }}
   {{- toYaml . | nindent 4 }}
   {{- end }}
@@ -15,7 +15,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-    {{- include "zigbee2mqtt.selectorLabels" . | nindent 6 }}
+    {{- include "app.selectorLabels" . | nindent 6 }}
     {{- if .Values.podLabels }}
     {{- toYaml .Values.podLabels | nindent 6 }}
     {{- end }}
@@ -60,5 +60,5 @@ spec:
       optional: {{ .Values.monitoring.serviceMonitor.bearerTokenSecret.optional }}
       {{- end }}
     {{- end }}
-  jobLabel: {{ template "zigbee2mqtt.fullname" . }}-prometheus-exporter
+  jobLabel: {{ template "app.fullname" . }}
 {{- end }}

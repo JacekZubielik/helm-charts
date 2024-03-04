@@ -5,9 +5,9 @@ metadata:
   annotations:
   {{- toYaml .Values.service.annotations | nindent 4 }}
   {{- end }}
-  name: {{ template "zigbee2mqtt.fullname" . }}
+  name: {{ template "app.fullname" . }}
   labels:
-  {{- include "zigbee2mqtt.labels" . | nindent 4 }}
+  {{- include "app.labels" . | nindent 4 }}
   {{- if .Values.service.labels }}
   {{ toYaml .Values.service.labels | indent 4 }}
   {{- end }}
@@ -38,4 +38,4 @@ spec:
     protocol: TCP
     targetPort: metrics
   selector:
-  {{- include "zigbee2mqtt.selectorLabels" . | nindent 4 }}
+  {{- include "app.selectorLabels" . | nindent 4 }}
