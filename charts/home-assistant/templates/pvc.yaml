@@ -2,9 +2,9 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ template "home-assistant.fullname" . }}
+  name: {{ template "app.fullname" . }}
   labels:
-    {{- include "home-assistant.labels" . | nindent 4 }}
+    {{- include "app.labels" . | nindent 4 }}
 spec:
   accessModes:
     - {{ .Values.persistence.pvc.accessMode }}
