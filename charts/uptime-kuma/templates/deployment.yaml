@@ -112,7 +112,6 @@ spec:
           {{- toYaml . | nindent 6 }}
         {{- end }}
       {{- end -}}
-
       volumes:
       - name: uptime-kuma-storage
       {{- if .Values.persistence.enabled }}
