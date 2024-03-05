@@ -18,11 +18,11 @@ data:
       monitor = True
       interface = True
       capsman_clients = True
-      use_ssl = True
+      use_ssl = False
       route = True
       poe = True
       ssl_certificate_verify = False
-      no_ssl_certificate = true
+      no_ssl_certificate = True
       wireless = True
       dhcp = True
       hostname = 192.168.40.1
