@@ -2,9 +2,9 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ template "mktxp-exporter.fullname" . }}-prometheus-exporter
+  name: {{ template "app.fullname" . }}
   labels:
-  {{- include "mktxp-exporter.labels" . | nindent 4 }}
+  {{- include "app.labels" . | nindent 4 }}
   {{- with .Values.monitoring.serviceMonitor.selector }}
   {{- toYaml . | nindent 4 }}
   {{- end }}
@@ -18,7 +18,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ template "mktxp-exporter.name" . }}
+      app.kubernetes.io/name: {{ template "app.name" . }}
       app.kubernetes.io/instance: {{ .Release.Name }}
   namespaceSelector:
     matchNames:
@@ -42,5 +42,5 @@ spec:
       optional: {{ .Values.monitoring.serviceMonitor.bearerTokenSecret.optional }}
       {{- end }}
     {{- end }}
-  jobLabel: {{ template "mktxp-exporter.fullname" . }}-prometheus-exporter
+  jobLabel: {{ template "app.fullname" . }}
 {{- end }}

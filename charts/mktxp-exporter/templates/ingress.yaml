@@ -2,24 +2,24 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "mktxp-exporter.fullname" . }}
+  name: {{ include "app.fullname" . }}
   labels:
-    {{- include "mktxp-exporter.labels" . | nindent 4 }}
+    {{- include "app.labels" . | nindent 4 }}
 spec:
   ingressClassName: {{ $.Values.ingress.ingressClassName }}
   rules:
-    - host: {{ include "mktxp-exporter.fullname" . }}.{{ $.Values.ingress.domainName }}
+    - host: {{ include "app.fullname" . }}.{{ $.Values.ingress.domainName }}
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: {{ include "mktxp-exporter.fullname" . }}
+                name: {{ include "app.fullname" . }}
                 port:
                   name: http
   tls:
     - secretName: {{ .Values.ingress.secretName }}
       hosts:
-        - {{ include "mktxp-exporter.fullname" . }}.{{ $.Values.ingress.domainName }}
+        - {{ include "app.fullname" . }}.{{ $.Values.ingress.domainName }}
 {{- end }}

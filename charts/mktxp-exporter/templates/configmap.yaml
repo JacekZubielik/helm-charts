@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "mktxp-exporter.fullname" . }}
+  name: {{ include "app.fullname" . }}
   labels:
-    {{- include "mktxp-exporter.labels" . | nindent 4 }}
+    {{- include "app.labels" . | nindent 4 }}
 data:
   mktxp.conf: |
     [dev]
@@ -27,7 +27,7 @@ data:
       dhcp = True
       hostname = 192.168.40.1
       username = mktxp_user
-      password = 3lHqXHWW8DF3dCJRhldfU1TCnFDBjw
+      password = pass
       port = 8728
       installed_packages = True
       ipv6_firewall = True
