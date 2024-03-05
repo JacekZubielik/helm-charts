@@ -15,11 +15,11 @@ updateStrategy:
   #   maxUnavailable: 0
   #   maxSurge: 1
 
-serviceAccount:
-  create: false
-  annotations: {}
-  automountServiceAccountToken: false
-podAnnotations: {}
+# serviceAccount:
+#   create: false
+#   annotations: {}
+#   automountServiceAccountToken: false
+# podAnnotations: {}
 
 podSecurityContext:
   runAsUser: 100
