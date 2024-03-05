@@ -3,12 +3,13 @@ apiVersion: v2
 appVersion: gha-7614306238
 description: Mikrotik MKTXP Prometheus exporter chart
 name: mktxp-exporter
-version: 0.0.8
+version: 0.0.9
 keywords:
 - mikrotik-exporter
 - mktxp-exporter
 type: application
 home: https://github.com/JacekZubielik/helm-charts/tree/master/charts/mikrotik-exporter
+icon: 
 sources:
 - ghcr.io/akpw/mktxp
 - https://github.com/akpw/mktxp

@@ -16,7 +16,7 @@ updateStrategy:
   #   maxSurge: 1
 
 serviceAccount:
-  create: true
+  create: false
   annotations: {}
   automountServiceAccountToken: false
 podAnnotations: {}
