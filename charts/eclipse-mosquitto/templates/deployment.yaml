@@ -17,7 +17,7 @@ spec:
       app.kubernetes.io/name: {{ include "app.name" . }}
       app.kubernetes.io/instance: {{ .Release.Name }}
   strategy:
-    type: {{ .Values.strategyType }}
+    type: {{ toYaml .Values.updateStrategy | nindent 4 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}

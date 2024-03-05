@@ -7,7 +7,14 @@ nameOverride: ""
 fullnameOverride: ""
 revisionHistoryLimit: 2
 replicas: 1
-strategyType: RollingUpdate
+#strategyType: RollingUpdate
+
+
+updateStrategy:
+  type: RollingUpdate
+  # rollingUpdate:
+  #   maxUnavailable: 0
+  #   maxSurge: 1
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
