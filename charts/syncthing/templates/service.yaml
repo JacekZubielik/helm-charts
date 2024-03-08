@@ -1,0 +1,84 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "app.fullname" . }}-web
+  labels:
+    {{- include "app.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.web.type }}
+  ports:
+    - port: {{ .Values.service.web.port }}
+      targetPort: {{ .Values.service.web.targetPort }}
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "app.selectorLabels" . | nindent 4 }}
+{{- if .Values.service.web.loadBalancerIP }}
+  loadBalancerIP: {{ .Values.service.web.loadBalancerIP }}
+  ExternalTrafficPolicy: {{ .Values.service.web.externalTrafficPolicy }}
+{{- end }}
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "app.fullname" . }}-tcp
+  labels:
+    {{- include "app.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.tcp.type }}
+  ports:
+    - port: {{ .Values.service.tcp.port }}
+      targetPort: {{ .Values.service.tcp.targetPort }}
+      protocol: TCP
+      name: tcp
+  selector:
+    {{- include "app.selectorLabels" . | nindent 4 }}
+{{- if .Values.service.tcp.loadBalancerIP }}
+  loadBalancerIP: {{ .Values.service.tcp.loadBalancerIP }}
+  ExternalTrafficPolicy: {{ .Values.service.tcp.externalTrafficPolicy }}
+{{- end }}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "app.fullname" . }}-udp
+  labels:
+    {{- include "app.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.udp.type }}
+  ports:
+    - port: {{ .Values.service.udp.port }}
+      targetPort: {{ .Values.service.udp.targetPort }}
+      protocol: UDP
+      name: udp
+  selector:
+    {{- include "app.selectorLabels" . | nindent 4 }}
+{{- if .Values.service.udp.loadBalancerIP }}
+  loadBalancerIP: {{ .Values.service.udp.loadBalancerIP }}
+  ExternalTrafficPolicy: {{ .Values.service.udp.externalTrafficPolicy }}
+{{- end }}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "app.fullname" . }}-discovery
+  labels:
+    {{- include "app.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.discovery.type }}
+  ports:
+    - port: {{ .Values.service.discovery.port }}
+      targetPort: {{ .Values.service.discovery.targetPort }}
+      protocol: UDP
+      name: discovery
+  selector:
+    {{- include "app.selectorLabels" . | nindent 4 }}
+{{- if .Values.service.discovery.loadBalancerIP }}
+  loadBalancerIP: {{ .Values.service.discovery.loadBalancerIP }}
+  ExternalTrafficPolicy: {{ .Values.service.discovery.externalTrafficPolicy }}
+{{- end }}
