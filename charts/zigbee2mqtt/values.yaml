@@ -52,9 +52,9 @@ securityContext: {}
   # runAsUser: 1000
 
 service:
-  annotations: {}
-    # prometheus.io/scrape: "false"
-    # prometheus.io/port: {{ .Values.service.metricsPort }}
+  annotations:
+    prometheus.io/scrape: "false"
+    prometheus.io/port: 9100
   labels: {}
   type: ClusterIP
   externalIPs: []
@@ -68,11 +68,13 @@ monitoring:
   enabled: false
   serviceMonitor:
     enabled: false
+    annotations:
+      prometheus.io/scrape: "false"
+      prometheus.io/port: 9100
     labels: {}
     honorLabels: true
     interval:      60s
     selector: {}
-    namespace: monitoring
     scrapeTimeout: 10s
     scheme: http
     tlsConfig: {}
@@ -95,7 +97,6 @@ monitoring:
       # name:
       # key:
       # optional:
-
 livenessProbe:
   enabled: true
   scheme: HTTP
@@ -112,7 +113,6 @@ readinessProbe:
   successThreshold:    1
   failureThreshold:    6
   initialDelaySeconds: 30
-
 ingress:
   enabled: false
   # className: ""
