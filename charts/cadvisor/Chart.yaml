@@ -1,0 +1,17 @@
+apiVersion: v2
+appVersion: 0.49.1
+description: A chart for a Cadvisor deployment
+name: cadvisor
+version: 0.0.1
+type: application
+keywords:
+- prometheus
+- cadvisor
+- monitoring
+home: https://github.com/JacekZubielik/helm-charts/tree/master/charts/cadvisor
+icon: 
+sources:
+- https://github.com/google/cadvisor
+maintainers:
+- name: Jacek Zubielik
+  email: jack.zu@protonmail.com
