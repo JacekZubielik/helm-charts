@@ -8,13 +8,9 @@ metadata:
   {{- end }}
   name: {{ template "app.fullname" . }}
   labels:
-    app.kubernetes.io/name: {{ include "app.name" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
+  {{- include "app.labels" . | nindent 4 }}
   {{- with .Values.monitoring.serviceMonitor.selector }}
   {{- toYaml . | nindent 4 }}
-  {{- end }}
-  {{- if .Values.monitoring.serviceMonitor.namespace }}
-  namespace: {{ .Values.monitoring.serviceMonitor.namespace }}
   {{- end }}
 spec:
   selector:
