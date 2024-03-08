@@ -2,15 +2,17 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
+  {{- if .Values.monitoring.serviceMonitor.annotations }}
+  annotations:
+  {{- toYaml .Values.monitoring.serviceMonitor.annotations | nindent 4 }}
+  {{- end }}
   name: {{ template "app.fullname" . }}
   labels:
   {{- include "app.labels" . | nindent 4 }}
   {{- with .Values.monitoring.serviceMonitor.selector }}
   {{- toYaml . | nindent 4 }}
   {{- end }}
-  {{- with .Values.monitoring.serviceMonitor.annotations }}
-  annotations:
-  {{- toYaml . | nindent 4 }}
+  namespace: {{ .Values.monitoring.serviceMonitor.namespace }}
   {{- end }}
 spec:
   selector:

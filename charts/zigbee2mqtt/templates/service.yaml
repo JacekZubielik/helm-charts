@@ -32,10 +32,10 @@ spec:
   - name: http
     port:  {{ .Values.service.httpPort }}
     protocol: TCP
-    targetPort: http
+    targetPort: {{ .Values.service.httpPort }}
   - name: metrics
     port: {{ .Values.service.metricsPort }}
     protocol: TCP
-    targetPort: metrics
+    targetPort: {{ .Values.service.metricsPort }}
   selector:
   {{- include "app.selectorLabels" . | nindent 4 }}
