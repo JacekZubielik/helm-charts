@@ -1,8 +1,8 @@
 apiVersion: v2
-appVersion: 0.49.1
+appVersion: v0.49.1
 description: A chart for a Cadvisor deployment
 name: cadvisor
-version: 0.0.1
+version: 0.0.2
 type: application
 keywords:
 - prometheus
