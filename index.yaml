@@ -1643,6 +1643,32 @@ entries:
     urls:
     - https://github.com/JacekZubielik/helm-charts/releases/download/esphome-0.0.2/esphome-0.0.2.tgz
     version: 0.0.2
+  external-dns:
+  - apiVersion: v2
+    appVersion: 0.14.0
+    created: "2024-03-08T15:55:05.970138563Z"
+    description: ExternalDNS synchronizes exposed Kubernetes Services and Ingresses
+      with DNS providers.
+    digest: 6a465842ca58e64c15226347b0cc28e4241d93c50779a9c8ec0370d8b6756174
+    home: https://github.com/JacekZubielik/helm-charts/tree/master/charts/external-dns
+    icon: https://github.com/kubernetes-sigs/external-dns/raw/master/docs/img/external-dns.png
+    keywords:
+    - kubernetes
+    - externaldns
+    - external-dns
+    - dns
+    - service
+    - ingress
+    maintainers:
+    - email: jack.zu@protonmail.com
+      name: Jacek Zubielik
+    name: external-dns
+    sources:
+    - https://github.com/kubernetes-sigs/external-dns/
+    type: application
+    urls:
+    - https://github.com/JacekZubielik/helm-charts/releases/download/external-dns-0.0.1/external-dns-0.0.1.tgz
+    version: 0.0.1
   ha:
   - annotations:
       category: Application
@@ -8749,4 +8775,4 @@ entries:
     urls:
     - https://github.com/JacekZubielik/helm-charts/releases/download/zigbee2mqtt-0.0.1/zigbee2mqtt-0.0.1.tgz
     version: 0.0.1
-generated: "2024-03-08T14:58:03.984260978Z"
+generated: "2024-03-08T15:55:05.970775437Z"
