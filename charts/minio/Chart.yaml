@@ -4,11 +4,11 @@ description: High Performance Object Storage
 name: minio
 version: 0.0.1
 keywords:
-  - minio
-  - storage
-  - object-storage
-  - s3
-  - cluster
+- minio
+- storage
+- object-storage
+- s3
+- cluster
 home: https://github.com/JacekZubielik/helm-charts/tree/master/charts/minio
 icon: https://min.io/resources/img/logo/MINIO_wordmark.png
 sources:
