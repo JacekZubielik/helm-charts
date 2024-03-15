@@ -1,0 +1,9 @@
+annotations:
+  category: Application
+apiVersion: v2
+name: joplin-server
+description: Allows you to sync any Joplin client.
+icon: https://truecharts.org/img/hotlink-ok/chart-icons/joplin-server.png
+
+type: application
+version: 0.0.1

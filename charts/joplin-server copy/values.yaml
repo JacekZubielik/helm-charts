@@ -1,0 +1,110 @@
+image:
+  repository: joplin/server
+  pullPolicy: IfNotPresent
+  tag: "2.13.4-beta"
+
+replicaCount: 1
+
+joplin:
+  APP_PORT: 22300
+  APP_BASE_URL: http://localhost:22300
+  externalPostgres:
+    enabled: false
+    POSTGRES_PASSWORD: joplin
+    POSTGRES_DATABASE: joplin
+    POSTGRES_USER: joplin
+    POSTGRES_PORT: 5432
+    POSTGRES_HOST: localhost
+    POSTGRES_SSL_MODE_NO_VERIFY: false
+  mailer:
+    enabled: false
+    existingSecretName: joplin-mailer
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext:
+  fsGroup: 1001
+
+securityContext:
+  capabilities:
+    drop:
+    - ALL
+  readOnlyRootFilesystem: false
+  runAsNonRoot: true
+  runAsUser: 1001
+  runAsGroup: 1001
+
+service:
+  type: ClusterIP
+  port: 80
+
+# ingress:
+#   enabled: false
+#   className: "nginx"
+#   annotations: {}
+#     # kubernetes.io/tls-acme: "true"
+#     # cert-manager.io/cluster-issuer: letsencrypt-prod
+#   hosts:
+#     - host: chart-example.local
+#       paths:
+#         - path: /
+#           pathType: ImplementationSpecific
+#   tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources:
+  limits:
+    memory: 256Mi
+    cpu: 250m
+  requests:
+    memory: 256Mi
+    cpu: 250m
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+postgresql:
+  enabled: true
+  primary:
+    resources:
+      limits:
+        memory: 256Mi
+        cpu: 250m
+      requests:
+        memory: 256Mi
+        cpu: 250m
+    persistence:
+      size: 1Gi
+  auth:
+    # Password for the "postgres" admin user. Ignored if auth.existingSecret with key postgres-password is provided
+    postgresPassword: joplin
+    # Name for a custom user to create
+    username: joplin
+    # Password for the custom user to create. Ignored if auth.existingSecret with key password is provided
+    password: joplin
+    database: joplin-server
+    # Password for the replication user. Ignored if auth.existingSecret with key replication-password is provided
+    replicationPassword: joplin
+    # Name of existing secret to use for PostgreSQL credentials. auth.postgresPassword, auth.password, and auth.replicationPassword will be ignored and picked up from this secret. The secret might also contains the key ldap-password if LDAP is enabled. ldap.bind_password will be ignored and picked from this secret in this case.
+    existingSecret: ""
