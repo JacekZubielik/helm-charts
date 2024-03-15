@@ -5113,6 +5113,28 @@ entries:
   minio:
   - apiVersion: v1
     appVersion: RELEASE.2024-03-03T17-50-39Z
+    created: "2024-03-15T20:46:34.018356696Z"
+    description: High Performance Object Storage
+    digest: e758239376ba9882f275783eab4fa1ec14f42a1ac8c02bd22981f3733f67c064
+    home: https://github.com/JacekZubielik/helm-charts/tree/master/charts/minio
+    icon: https://min.io/resources/img/logo/MINIO_wordmark.png
+    keywords:
+    - minio
+    - storage
+    - object-storage
+    - s3
+    - cluster
+    maintainers:
+    - email: jack.zu@protonmail.com
+      name: Jacek Zubielik
+    name: minio
+    sources:
+    - https://github.com/minio/minio
+    urls:
+    - https://github.com/JacekZubielik/helm-charts/releases/download/minio-0.0.6/minio-0.0.6.tgz
+    version: 0.0.6
+  - apiVersion: v1
+    appVersion: RELEASE.2024-03-03T17-50-39Z
     created: "2024-03-15T20:42:42.245515824Z"
     description: High Performance Object Storage
     digest: 7e9738a96f65209391aa181b9ee72367f37d6a28bb89317a2d58148935a1bf90
@@ -8993,4 +9015,4 @@ entries:
     urls:
     - https://github.com/JacekZubielik/helm-charts/releases/download/zigbee2mqtt-0.0.1/zigbee2mqtt-0.0.1.tgz
     version: 0.0.1
-generated: "2024-03-15T20:42:42.246114372Z"
+generated: "2024-03-15T20:46:34.018911876Z"
