@@ -44,6 +44,26 @@ entries:
   eclipse-mosquitto:
   - apiVersion: v2
     appVersion: 2.0.18
+    created: "2024-03-15T20:14:41.665418368Z"
+    description: Eclipse Mosquitto MQTT
+    digest: 65c6d9024082b16f16f1f8ee68d4d4c28965c73c28bbdd6d3d471552692996e5
+    home: https://github.com/JacekZubielik/helm-charts/tree/master/charts/eclipse-mosquitto
+    icon: https://raw.githubusercontent.com/eclipse/mosquitto/master/logo/mosquitto-logo-min.svg
+    keywords:
+    - mqtt
+    - mosquitto
+    maintainers:
+    - email: jack.zu@protonmail.com
+      name: Jacek Zubielik
+    name: eclipse-mosquitto
+    sources:
+    - https://github.com/eclipse/mosquitto
+    type: application
+    urls:
+    - https://github.com/JacekZubielik/helm-charts/releases/download/eclipse-mosquitto-0.0.54/eclipse-mosquitto-0.0.54.tgz
+    version: 0.0.54
+  - apiVersion: v2
+    appVersion: 2.0.18
     created: "2024-03-08T00:52:18.462954697Z"
     description: Eclipse Mosquitto MQTT
     digest: 7084c987c7ad7f1907248aa6088b41e0bb508408653f16aef4a0dc78d48ee6f5
@@ -3229,6 +3249,33 @@ entries:
     urls:
     - https://github.com/JacekZubielik/helm-charts/releases/download/home-assistant-0.0.1/home-assistant-0.0.1.tgz
     version: 0.0.1
+  joplin-server:
+  - apiVersion: v2
+    appVersion: 2.10.5-beta
+    created: "2024-03-15T20:14:41.902471066Z"
+    dependencies:
+    - name: postgres
+      repository: https://diademiemi.github.io/charts
+      version: 0.2.2
+    description: A Helm chart to deploy Joplin Server
+    digest: a4f7e42b672b2382d9942f54d38301be63d6fd59f670744a374b8052abf0cc5f
+    name: joplin-server
+    type: application
+    urls:
+    - https://github.com/JacekZubielik/helm-charts/releases/download/joplin-server-0.2.3/joplin-server-0.2.3.tgz
+    version: 0.2.3
+  - annotations:
+      category: Application
+    apiVersion: v2
+    created: "2024-03-15T20:14:41.793233013Z"
+    description: Allows you to sync any Joplin client.
+    digest: 1413c2d2e19e1e5e6044174ab09578b3245a44f578c6f7acce877f73b6ea78a9
+    icon: https://truecharts.org/img/hotlink-ok/chart-icons/joplin-server.png
+    name: joplin-server
+    type: application
+    urls:
+    - https://github.com/JacekZubielik/helm-charts/releases/download/joplin-server-0.0.1/joplin-server-0.0.1.tgz
+    version: 0.0.1
   lms:
   - apiVersion: v2
     appVersion: 8.4.1
@@ -5063,6 +5110,29 @@ entries:
     urls:
     - https://github.com/JacekZubielik/helm-charts/releases/download/lms-0.0.1/lms-0.0.1.tgz
     version: 0.0.1
+  minio:
+  - apiVersion: v1
+    appVersion: RELEASE.2024-03-03T17-50-39Z
+    created: "2024-03-15T20:14:41.996802071Z"
+    description: High Performance Object Storage
+    digest: 8b1ef547fbef98699583d4b53be6970d7264780db15437a3d6e455da633879c0
+    home: https://github.com/JacekZubielik/helm-charts/tree/master/charts/minio
+    icon: https://min.io/resources/img/logo/MINIO_wordmark.png
+    keywords:
+    - minio
+    - storage
+    - object-storage
+    - s3
+    - cluster
+    maintainers:
+    - email: jack.zu@protonmail.com
+      name: Jacek Zubielik
+    name: minio
+    sources:
+    - https://github.com/minio/minio
+    urls:
+    - https://github.com/JacekZubielik/helm-charts/releases/download/minio-0.0.3/minio-0.0.3.tgz
+    version: 0.0.3
   minio-console:
   - apiVersion: v2
     appVersion: v0.43.0
@@ -5986,6 +6056,25 @@ entries:
     urls:
     - https://github.com/JacekZubielik/helm-charts/releases/download/mosquitto-0.0.1/mosquitto-0.0.1.tgz
     version: 0.0.1
+  qbittorrent:
+  - apiVersion: v1
+    appVersion: 14.2.0.99201912180418-6819-118af03ubuntu18.04.1-ls62
+    created: "2024-03-15T20:14:42.106714801Z"
+    deprecated: true
+    description: DEPRECATED - qBittorrent is a cross-platform free and open-source
+      BitTorrent client
+    digest: cb8772217d7017982d71d9ae511b4c2ec010497699af78f1563c6c26b0d3b1df
+    home: https://github.com/billimek/billimek-charts/tree/master/charts/qbittorrent
+    icon: https://cloud.githubusercontent.com/assets/14862437/23586868/89ef2922-01c4-11e7-869c-52aafcece17f.png
+    keywords:
+    - qbittorrent
+    - torrrent
+    name: qbittorrent
+    sources:
+    - https://hub.docker.com/r/linuxserver/qbittorrent/
+    urls:
+    - https://github.com/JacekZubielik/helm-charts/releases/download/qbittorrent-3.2.3/qbittorrent-3.2.3.tgz
+    version: 3.2.3
   syncthing:
   - apiVersion: v2
     appVersion: 1.27.4
@@ -8860,4 +8949,4 @@ entries:
     urls:
     - https://github.com/JacekZubielik/helm-charts/releases/download/zigbee2mqtt-0.0.1/zigbee2mqtt-0.0.1.tgz
     version: 0.0.1
-generated: "2024-03-15T16:52:05.027881233Z"
+generated: "2024-03-15T20:14:42.10745741Z"
