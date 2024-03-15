@@ -192,16 +192,15 @@ spec:
       {{- end }}
       volumes:
         - name: export
-          {{- if .Values.persistence.enabled }}
-
+        {{- if .Values.persistence.enabled }}
         {{- if .Values.persistence.configstorage.hostPath }}
           hostPath:
             path: {{.Values.persistence.configstorage.hostPath}}
         {{- else }}
-
           persistentVolumeClaim:
             claimName: {{ .Values.persistence.existingClaim | default (include "minio.fullname" .) }}
-          {{- else }}
+        {{- end }}
+        {{- else }}
           emptyDir: {}
           {{- end }}
         {{- if .Values.extraSecret }}
@@ -216,4 +215,4 @@ spec:
         {{- if .Values.extraVolumes }}
           {{ toYaml .Values.extraVolumes | nindent 8 }}
         {{- end }}
-{{- end }}
+        {{- end }}
