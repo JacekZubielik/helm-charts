@@ -63,12 +63,18 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
       volumes:
         - name: data
-          {{- if .Values.persistence.enabled }}
+        {{- if .Values.persistence.enabled }}
+        {{- if .Values.persistence.configstorage.hostPath }}
+          hostPath:
+            path: {{.Values.persistence.configstorage.hostPath}}
+        {{- else }}
           persistentVolumeClaim:
             claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ template "app.fullname" . }}{{- end }}
-          {{- else }}
+        {{- end }}
+        {{- else }}
           emptyDir: {}
-          {{- end }}
+        {{ end }}
+
         {{- range .Values.persistence.extraVolumes }}
         - name: {{ .name }}
           persistentVolumeClaim:
