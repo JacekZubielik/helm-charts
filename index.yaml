@@ -5989,6 +5989,27 @@ entries:
   syncthing:
   - apiVersion: v2
     appVersion: 1.27.4
+    created: "2024-03-15T16:52:05.027396908Z"
+    description: Syncthing Continuous File Synchronization
+    digest: 71a4dac3e998b09b143496977644ac2254ed8832084f2cf0fc9c191a2ff1c0da
+    home: https://github.com/JacekZubielik/helm-charts/tree/master/charts/syncthing
+    icon: https://raw.githubusercontent.com/syncthing/syncthing/main/assets/logo-only.svg
+    keywords:
+    - synchronization
+    - peer-to-peer
+    - p2p
+    maintainers:
+    - email: jack.zu@protonmail.com
+      name: Jacek Zubielik
+    name: syncthing
+    sources:
+    - https://github.com/syncthing/syncthing
+    type: application
+    urls:
+    - https://github.com/JacekZubielik/helm-charts/releases/download/syncthing-0.0.4/syncthing-0.0.4.tgz
+    version: 0.0.4
+  - apiVersion: v2
+    appVersion: 1.27.4
     created: "2024-03-08T17:53:18.134715401Z"
     description: Syncthing Continuous File Synchronization
     digest: f272cfe019a810cd74fc9ce21d7d573c49c034a9684bc70f238c5e4b1e04cacd
@@ -8839,4 +8860,4 @@ entries:
     urls:
     - https://github.com/JacekZubielik/helm-charts/releases/download/zigbee2mqtt-0.0.1/zigbee2mqtt-0.0.1.tgz
     version: 0.0.1
-generated: "2024-03-08T17:53:18.135384351Z"
+generated: "2024-03-15T16:52:05.027881233Z"
