@@ -1,9 +1,9 @@
 ---
 apiVersion: v2
-appVersion: 2024.2.2 #2023.12.9
+appVersion: 2024.2.1 #2023.12.9
 description: ESPHome
 name: esphome
-version: 0.0.33
+version: 0.0.35
 keywords:
 - esphome
 type: application
